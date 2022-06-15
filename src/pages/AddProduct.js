@@ -147,7 +147,7 @@ const AddProduct = () => {
 
 	return (
 		<>
-			<Navbar	/>
+			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<div className="mx-auto position-relative" style={{ maxWidth: "500px", marginTop: "var(--navbar-height)"}}>
 				
 				<Link to='/' className="back-icon py-3" style={{ position: "absolute", top: "0", left: "-10vw"}}>
