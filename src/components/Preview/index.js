@@ -1,16 +1,19 @@
 import React from 'react'
+
+// components
 import ActiveButton from '../ActionButton'
 import BorderOnlyButton from '../BorderOnlyButton'
 import Image from '../../200774.jpg'
-import { Wrapper, Content, LeftSection, RightSection } from './Preview.styles'
 
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation, Autoplay } from "swiper";
+
+// styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import { Pagination, Navigation, Autoplay } from "swiper";
-
+import { Wrapper, Content, LeftSection, RightSection } from './Preview.styles'
 
 const Preview = ({ active, images, name, price, category, description, onClick, onSubmit }) => {
 

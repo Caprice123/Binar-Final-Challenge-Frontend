@@ -1,6 +1,10 @@
 import React from 'react'
+
+// hooks
 import { useDropzone } from 'react-dropzone'
-import { Wrapper } from '../DragAndDrop/DragAndDrop.styles'
+
+// styles
+import { Wrapper } from './DragAndDrop.styles'
 
 const DragAndDrop = ({ onDrop }) => {
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})

@@ -1,23 +1,28 @@
-import React, { useState } from 'react'
-import { useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
+
+// components
 import ActiveButton from '../components/ActionButton'
 import BorderOnlyButton from '../components/BorderOnlyButton'
 import DragAndDrop from '../components/DragAndDrop'
 import Dropdown from '../components/Dropdown'
 import Grid from '../components/Grid'
 import ImagePreview from '../components/ImagePreview'
-
 import Input from '../components/Input'
 import Textarea from '../components/Textarea'
 import Preview from '../components/Preview'
+import Navbar from '../components/Navbar'
+
 import { Link, useNavigate } from 'react-router-dom'
 
-
+// helpers
 import { validateNumber } from '../helpers/validateNumber'
-import Navbar from '../components/Navbar'
 import { validateSizeFile } from '../helpers/validateSizeFile'
+
+// redux
 import { useDispatch } from 'react-redux'
 import { addProduct } from '../store/product'
+
+import { Wrapper, Content } from '../pagesStyle/AddProduct.styles'
 const options = [ 
 	{
 		id: 1,
@@ -146,11 +151,10 @@ const AddProduct = () => {
 	}, [])
 
 	return (
-		<>
+		<Wrapper>
 			<Navbar	centeredText="Lengkapi Detail Product"/>
-			<div className="mx-auto position-relative" style={{ maxWidth: "500px", marginTop: "var(--navbar-height)"}}>
-				
-				<Link to='/' className="back-icon py-3" style={{ position: "absolute", top: "0", left: "-10vw"}}>
+			<Content className="mx-auto position-relative">
+				<Link to='/' className="back-icon py-3">
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
 				<Input type="text" 
@@ -194,11 +198,8 @@ const AddProduct = () => {
 											/> 
 						))
 					}
-					<DragAndDrop 
-						onDrop={onDrop} 
-						/>
+					<DragAndDrop onDrop={onDrop} />
 				</Grid>
-
 
 				<div className='d-flex justify-content-between py-5'>
 					<BorderOnlyButton text="Preview"
@@ -212,7 +213,7 @@ const AddProduct = () => {
 									onClick={onSubmit}
 									/>
 				</div>
-			</div>
+			</Content>
 			<Preview active={preview}
 						images={productImages}
 						name={name}
@@ -222,7 +223,7 @@ const AddProduct = () => {
 						onSubmit={onSubmit}
 						onClick={onClosePreview}
 						/>
-		</>
+		</Wrapper>
 	)
 }
 

@@ -1,6 +1,9 @@
 import React from 'react'
+
+// components
 import { Link } from 'react-router-dom'
 
+// styles
 import { Wrapper, Content, Actions } from './Navbar.styles'
 
 const Navbar = ({ withSearchBar, centeredText, navLinks }) => {

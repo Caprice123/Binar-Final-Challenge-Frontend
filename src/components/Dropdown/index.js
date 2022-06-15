@@ -1,7 +1,8 @@
-import React, { useRef } from 'react'
-import { useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 
+// styles
 import { Wrapper, Options } from "./Dropdown.styles"
+
 const Dropdown = ({ text, placeholder, value, options, onSelect, required }) => {
     const dropdownOptions = useRef(null)
     const dropdown = useRef(null)

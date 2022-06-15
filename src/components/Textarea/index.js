@@ -1,5 +1,6 @@
 import React from 'react'
 
+// styles
 import { Wrapper } from './Textarea.styles'
 
 const Textarea = ({ text, placeholder, value, onChange }) => {

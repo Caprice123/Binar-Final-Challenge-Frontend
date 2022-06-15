@@ -1,5 +1,6 @@
 import React from 'react'
 
+// styles
 import { Wrapper } from './Input.styles'
 
 const Input = ({ type, text, placeholder, value, onChange, styles, required }) => {

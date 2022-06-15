@@ -1,5 +1,6 @@
 import React from 'react'
 
+// styles
 import { Wrapper } from './BorderOnlyButton.styles'
 
 const BorderOnlyButton = ({ width, color, text, onClick }) => {
@@ -10,7 +11,7 @@ const BorderOnlyButton = ({ width, color, text, onClick }) => {
                     color={color}
                     onClick={onClick}
                     >
-            { text }
+                    { text }
         </Wrapper>
     )
 }

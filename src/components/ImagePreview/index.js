@@ -1,5 +1,5 @@
 import React from 'react'
-import { Wrapper } from '../ImagePreview/ImagePreview.styles'
+import { Wrapper } from './ImagePreview.styles'
 
 const ImagePreview = ({ url, imageIndex, onDelete }) => {
     return (

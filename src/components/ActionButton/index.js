@@ -1,5 +1,6 @@
 import React from 'react'
 
+// styles
 import { Wrapper } from './ActiveButton.styles'
 
 const ActiveButton = ({ width, color, text, onClick }) => {
