@@ -9,7 +9,49 @@ export const Wrapper = styled.nav`
 
 export const Content = styled.div`
     max-width: 90%;
-    margin: 0 auto;
+    
+    .centered-text{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-weight: 900;
+    }
+
+    .offcanvas{
+        width: 50vw;
+    }
+    .offcanvas-header,
+    .offcanvas-body{
+        width: 75%;
+        margin: 0 auto;
+    }
+    
+    .offcanvas-header{
+        margin-top: calc(var(--navbar-height) / 2);
+    }
+
+    .offcanvas-body{
+        a{
+            padding: 0;
+        }
+    }
+
+    @media screen and (min-width: 769px) {
+        
+        .offcanvas{
+            display: none;
+        }        
+    }
+
+    @media screen and (max-width: 768px){
+        max-width: 100vw;
+
+        .centered-text{
+            font-size: 12px;
+        }
+    }
 `
 
 export const Actions = styled.div`
@@ -18,11 +60,7 @@ export const Actions = styled.div`
         height: 35px;
         background-color: var(--primary-purple-05);
     }
-    .centered-text{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+    @media screen and (max-width: 768px) {
+        display: none;
     }
-
 `
