@@ -26,15 +26,20 @@ import { Wrapper, Content } from '../pagesStyle/AddProduct.styles'
 const options = [ 
 	{
 		id: 1,
-		name: "Jakarta"
+		name: "Hobi"
 	}, {
 		id: 2,
-		name: "Bandung"
+		name: "Kendaraan"
 	}, {
 		id: 3,
-		name: "Bogor",
-
-	}
+		name: "Baju",
+	}, {
+		id: 4,
+		name: "Elektronik",
+	}, {
+		id: 5,
+		name: "Kesehatan",
+	}, 
 ]
 
 const AddProduct = () => {
@@ -142,13 +147,13 @@ const AddProduct = () => {
 			}
 			return null
 		})
-		setProductImages((prev) => (
-			[
-				...prev, 
-				...additionalImages.filter(image => image)
-			]
-		))
-	}, [])
+		const productImagesUpdated = [ ...productImages, ...additionalImages.filter(image => image)]
+		if (productImagesUpdated.length > 4){
+			alert("Maximum image yang dapat diupload berjumlah 4. Image yang berlebih tidak akan ditampilkan")
+		}
+
+		setProductImages(productImagesUpdated.slice(0, 4))
+	}, [productImages])
 
 	return (
 		<Wrapper>
@@ -187,7 +192,7 @@ const AddProduct = () => {
 							onChange={onChange}
 							/>
 
-				<label className='py-2'>Foto Produk</label>
+				<label className='py-2'>Foto Produk (max 4 gambar)</label>
 				<Grid>
 					{
 						productImages?.map((productImage, id) => (
