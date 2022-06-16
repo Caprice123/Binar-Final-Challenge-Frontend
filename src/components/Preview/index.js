@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 // components
 import ActiveButton from '../ActionButton'
@@ -16,10 +16,19 @@ import "swiper/css/navigation";
 import { Wrapper, Content, LeftSection, RightSection } from './Preview.styles'
 
 const Preview = ({ active, images, name, price, category, description, onClick, onSubmit }) => {
-
+    const [isMobile, setIsMobile] = useState(false)
+    useEffect(() => {
+        const checkMobile = () => {
+            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+            console.log(vw, vw<=768)
+            setIsMobile(vw <= 768)
+        }
+        window.addEventListener("resize", checkMobile)
+        checkMobile()
+    }, [])
     return (
-        <Wrapper className={active && "active"} style={{ marginTop: "var(--navbar-height)"}}>
-            <Content className="py-5">
+        <Wrapper className={active && "active"}>
+            <Content className="position-relative py-5">
                 <LeftSection className='d-flex'>
                     <div className="image-preview d-flex position-relative">
                         <Swiper
@@ -69,18 +78,20 @@ const Preview = ({ active, images, name, price, category, description, onClick, 
                                             />
                         </div>
 
-                        <div className="users my-5 d-flex align-items-center">
-                            <img src={Image} alt="profile" />
-                            <div className="mx-3 d-flex flex-column justify-content-center">
-                                <h5>Nama Penjual</h5>
-                                <p>Kota</p>
+                        <div className="users my-5 ">
+                            <div className="container-users py-3 d-flex align-items-center">
+                                <img src={Image} alt="profile" />
+                                <div className="mx-3 d-flex flex-column justify-content-center">
+                                    <h5>Nama Penjual</h5>
+                                    <p>Kota</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </LeftSection>
                 
                 <RightSection className='d-flex'>
-                    <div className='description my-5'>
+                    <div className='description d-flex flex-column align-items-center my-5'>
                         <label>Description</label>
                         <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -92,8 +103,27 @@ const Preview = ({ active, images, name, price, category, description, onClick, 
                 </RightSection>
                 <i className="fa-solid fa-xmark" 
                     onClick={onClick}>
-
                 </i>
+                { 
+                    isMobile && (
+                        <ActiveButton text="Terbitakan"
+                                        width="92.5%"
+                                        color="#7126B5"
+                                        onClick={onSubmit}
+                                        style={
+                                                { 
+                                                    position: "fixed", 
+                                                    bottom: "10px", 
+                                                    left: `${active ? '50%' : '100%'}`, 
+                                                    transform: `${active ? 'translateX(-48.5%)' : 'translateX(0)'}`, 
+                                                    zIndex: "1000", 
+                                                    transition: "0.5s" 
+                                                }
+                                            }
+                                        />
+                        
+                    )
+                }
             </Content>
         </Wrapper>
     )
