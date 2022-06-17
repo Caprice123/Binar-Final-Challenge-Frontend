@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // components
-import ActiveButton from '../ActionButton'
+import ActionButton from '../ActionButton'
 import BorderOnlyButton from '../BorderOnlyButton'
 import Image from '../../200774.jpg'
 
@@ -66,7 +66,7 @@ const Preview = ({ active, images, name, price, category, description, onClick, 
                             <h5>{name}</h5>
                             <p className="my-1">{category}</p>
                             <h5 className="mt-2">{price.toLocaleString()}</h5>
-                            <ActiveButton text="Terbitakan"
+                            <ActionButton text="Terbitakan"
                                             width="90%"
                                             color="#7126B5"
                                             onClick={onSubmit}
@@ -106,7 +106,7 @@ const Preview = ({ active, images, name, price, category, description, onClick, 
                 </i>
                 { 
                     isMobile && (
-                        <ActiveButton text="Terbitakan"
+                        <ActionButton text="Terbitakan"
                                         width="92.5%"
                                         color="#7126B5"
                                         onClick={onSubmit}

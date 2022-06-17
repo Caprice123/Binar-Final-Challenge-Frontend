@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 
 // components
-import ActiveButton from '../components/ActionButton'
+import ActionButton from '../components/ActionButton'
 import BorderOnlyButton from '../components/BorderOnlyButton'
 import DragAndDrop from '../components/DragAndDrop'
 import Dropdown from '../components/Dropdown'
@@ -212,7 +212,7 @@ const AddProduct = () => {
 									color="#7126B5"
 									onClick={onPreview}
 									/>
-					<ActiveButton text="Terbitkan"
+					<ActionButton text="Terbitkan"
 									width="40%"
 									color="#7126B5"
 									onClick={onSubmit}
