@@ -1,7 +1,7 @@
 import React from 'react';
 
-import '../../assets/css/auth.style.css'
-import imageCover from '../../assets/images/cover.png'
+import '../assets/css/auth.style.css'
+import imageCover from '../assets/images/cover.png'
 
 const Registrasi = () => {
     return (
