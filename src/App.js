@@ -7,7 +7,7 @@ import store from './store';
 import AddProduct from './pages/AddProduct';
 
 import GlobalStyle from './GlobalStyle';
-import Grid from './components/Grid';
+import InfoProfile from './pages/InfoProfile';
 
 function App() {
 	return (
@@ -15,7 +15,7 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path='/' element={<AddProduct />} />
-					<Route path='/nav' element={<Grid />} />
+					<Route path='/user/profile' element={<InfoProfile />} />
 				</Routes>
 			</Router>
 			<GlobalStyle />
