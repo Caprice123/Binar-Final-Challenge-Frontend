@@ -59,17 +59,17 @@ export const Wrapper = styled.div`
             background: #555; 
         }
     
-        // @keyframes open {
-        //     0%{
-        //         height: 0;
-        //         opacity: 0;
-        //         z-index: -1;
-        //     }
-        //     100%{
-        //         opacity: 1;
-        //         z-index: 10;
-        //     }
-        // }
+        @keyframes open {
+            0%{
+                height: 0;
+                opacity: 0;
+                z-index: -1;
+            }
+            100%{
+                opacity: 1;
+                z-index: 10;
+            }
+        }
     
         // @keyframes close {
         //     0%{
