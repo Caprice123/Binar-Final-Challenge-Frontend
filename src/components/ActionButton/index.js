@@ -1,9 +1,9 @@
 import React from 'react'
 
 // styles
-import { Wrapper } from './ActiveButton.styles'
+import { Wrapper } from './ActionButton.styles'
 
-const ActiveButton = ({ width, color, text, onClick, ...additionalProps }) => {
+const ActionButton = ({ width, color, text, onClick, ...additionalProps }) => {
     return (
         <Wrapper type="button" 
                 className="btn btn-primary"
@@ -17,4 +17,4 @@ const ActiveButton = ({ width, color, text, onClick, ...additionalProps }) => {
     )
 }
 
-export default ActiveButton
+export default ActionButton

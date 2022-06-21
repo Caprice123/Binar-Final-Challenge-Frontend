@@ -10,4 +10,7 @@ export const Wrapper = styled.div`
         border-radius: 16px;
         resize: vertical;
     }
+    span{
+        color: red;
+    }
 `
