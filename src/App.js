@@ -8,6 +8,7 @@ import AddProduct from './pages/AddProduct';
 
 import GlobalStyle from './GlobalStyle';
 import InfoProfile from './pages/InfoProfile';
+import InfoProduct from './pages/InfoProduct';
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 				<Routes>
 					<Route path='/' element={<AddProduct />} />
 					<Route path='/user/profile' element={<InfoProfile />} />
+					<Route path='/product/:productId' element={<InfoProduct />} />
 				</Routes>
 			</Router>
 			<GlobalStyle />

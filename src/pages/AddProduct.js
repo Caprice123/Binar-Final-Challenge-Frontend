@@ -193,7 +193,7 @@ const AddProduct = () => {
 							/>
 
 				<label className='py-2'>Foto Produk (max 4 gambar)</label>
-				<Grid>
+				<Grid maxSize="100px">
 					{
 						productImages?.map((productImage, id) => (
 							<ImagePreview key={id} 
@@ -225,8 +225,38 @@ const AddProduct = () => {
 						price={price}
 						category={category}
 						description={description}
-						onSubmit={onSubmit}
-						onClick={onClosePreview}
+						onClose={onClosePreview}
+						actionButtons={[
+							<ActionButton text="Terbitakan"
+                                            width="90%"
+                                            color="#7126B5"
+                                            onClick={onSubmit}
+                                            />,
+
+                            <BorderOnlyButton text="Edit"
+                                            width="90%" 
+                                            color="#7126B5"
+                                            onClick={onClosePreview}
+                                            />
+						]}
+						mobileButton={
+							<ActionButton text="Terbitakan"
+                                        width="92.5%"
+                                        color="#7126B5"
+                                        onClick={onSubmit}
+                                        style={
+                                                { 
+                                                    position: "fixed", 
+                                                    bottom: "10px", 
+													display: `${preview ? 'initial' : 'none'}`,
+                                                    left: `${preview ? '50%' : '100%'}`, 
+                                                    transform: `${preview ? 'translateX(-48.5%)' : 'translateX(0)'}`, 
+                                                    zIndex: "1000", 
+                                                    transition: "0.5s" 
+                                                }
+                                            }
+                                        />
+						}
 						/>
 		</Wrapper>
 	)

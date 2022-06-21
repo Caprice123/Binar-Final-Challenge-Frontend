@@ -8,7 +8,9 @@ const GlobalStyle = createGlobalStyle`
         --primary-purple-04: #7126B5;
         --primary-purple-05: #4B1979;
 
-        --navbar-height: 50px;
+        --alert-success: #73CA5C;
+
+        --navbar-height: 67.5px;
     }
     html{
         scroll-behavior: smooth;

@@ -2,11 +2,12 @@ import React from 'react'
 
 // components
 import { Link } from 'react-router-dom'
+import ActionButton from '../ActionButton'
 
 // styles
 import { Wrapper, Content, Actions } from './Navbar.styles'
 
-const Navbar = ({ withSearchBar, centeredText, navLinks }) => {
+const Navbar = ({ withSearchBar, centeredText, navLinks, ...styles }) => {
     return (
         <Wrapper className="fixed-top navbar navbar-expand-lg navbar-light">
             <Content className="container-fluid position-relative mx-auto">
@@ -24,7 +25,7 @@ const Navbar = ({ withSearchBar, centeredText, navLinks }) => {
                     {centeredText}
                 </p>
                 <Actions className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div className="navbar-nav w-100 d-flex justify-content-between">
+                    <div className="navbar-nav w-100 d-flex justify-content-between align-items-center">
                         <div className="d-flex navbar-nav">
                             <Link className="navbar-brand" 
                                     to='/'>        
@@ -45,16 +46,49 @@ const Navbar = ({ withSearchBar, centeredText, navLinks }) => {
                                 )
                             }
                         </div>
-                        <div className="nav-links">
+                        <div className="nav-links d-flex align-items-center">
                             { 
                                 navLinks?.map((navLink, id) => (
-                                    <Link key={id} 
-                                            className="nav-link active" 
-                                            aria-current="page" 
-                                            to={navLink.to}
-                                            >
-                                                { navLink.text }
-                                    </Link>
+                                    navLink.type === "others" ? (
+                                        <div className='nav-link d-flex align-items-center active'>
+                                            <span>
+                                                { navLink.additionalIcon }
+                                            </span>
+                                            { navLink.text }
+                                        </div>
+                                    ) : (
+
+                                        <Link key={id} 
+                                                className="nav-link d-flex align-items-center active" 
+                                                aria-current="page" 
+                                                to={navLink.to}
+                                                {...styles}
+                                                >
+                                                    {
+                                                        navLink.type === "text" && (
+                                                            <>
+                                                                <span>
+                                                                    { navLink.additionalIcon }
+                                                                </span>
+                                                                { navLink.text }
+                                                            </>
+                                                        )
+                                                    }
+    
+                                                    {
+                                                        navLink.type === "button" && (
+                                                        
+                                                            <ActionButton width="100%"
+                                                                            color="#7126B5"
+                                                                            icon={navLink.additionalIcon}
+                                                                            text={navLink.text}
+                                                                            {...styles}
+                                                                            />
+                                                        )
+                                                    }
+                                        </Link>
+                                    )
+                                    
                                 ))
                             }
                         </div>
@@ -70,11 +104,25 @@ const Navbar = ({ withSearchBar, centeredText, navLinks }) => {
                         { 
                             navLinks?.map((navLink, id) => (
                                 <Link key={id} 
-                                        className="nav-link active" 
+                                        className="nav-link d-flex align-items-center active" 
                                         aria-current="page" 
                                         to={navLink.to}
+                                        {...styles}
                                         >
-                                            { navLink.text }
+                                            {
+                                                navLink.type === "button" ? (
+                                                    <ActionButton width="100%"
+                                                                    color="#7126B5"
+                                                                    icon={navLink.additionalIcon}
+                                                                    text={navLink.text}
+                                                                    {...styles}
+                                                                    />
+                                                ) : (
+                                                    
+                                                    navLink.text 
+                                                    
+                                                )
+                                            }
                                 </Link>
                             ))
                         }

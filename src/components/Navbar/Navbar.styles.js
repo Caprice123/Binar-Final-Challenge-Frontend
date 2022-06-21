@@ -60,6 +60,17 @@ export const Actions = styled.div`
         height: 35px;
         background-color: var(--primary-purple-05);
     }
+
+    .nav-link{
+        padding: 0;
+        i{
+            font-size: 1.5rem;
+            transition: 0.25s; 
+            &:hover{
+                color: var(--primary-purple-04);
+            }  
+        }
+    }
     @media screen and (max-width: 768px) {
         display: none;
     }

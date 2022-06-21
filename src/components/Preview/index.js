@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
 // components
-import ActionButton from '../ActionButton'
-import BorderOnlyButton from '../BorderOnlyButton'
 import Image from '../../200774.jpg'
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -14,8 +12,9 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import { Wrapper, Content, LeftSection, RightSection } from './Preview.styles'
+import SellerInfo from '../SellerInfo';
 
-const Preview = ({ active, images, name, price, category, description, onClick, onSubmit }) => {
+const Preview = ({ active, images, name, price, category, description, onClose, actionButtons, mobileButton }) => {
     const [isMobile, setIsMobile] = useState(false)
     useEffect(() => {
         const checkMobile = () => {
@@ -66,27 +65,20 @@ const Preview = ({ active, images, name, price, category, description, onClick, 
                             <h5>{name}</h5>
                             <p className="my-1">{category}</p>
                             <h5 className="mt-2">{price.toLocaleString()}</h5>
-                            <ActionButton text="Terbitakan"
-                                            width="90%"
-                                            color="#7126B5"
-                                            onClick={onSubmit}
-                                            />
-                            <BorderOnlyButton text="Edit"
-                                            width="90%" 
-                                            color="#7126B5"
-                                            onClick={onClick}
-                                            />
+                            {
+                                actionButtons.map((button) => (
+                                    button
+                                ))
+                            }
                         </div>
+                        
 
-                        <div className="users my-5 ">
-                            <div className="container-users py-3 d-flex align-items-center">
-                                <img src={Image} alt="profile" />
-                                <div className="mx-3 d-flex flex-column justify-content-center">
-                                    <h5>Nama Penjual</h5>
-                                    <p>Kota</p>
-                                </div>
-                            </div>
-                        </div>
+                        <SellerInfo width="90%"
+                                    imageUrl={Image}
+                                    sellerName="Nama Penjual"
+                                    sellerCity="Kota"
+                                    additionalClass="my-5"
+                                    />
                     </div>
                 </LeftSection>
                 
@@ -101,26 +93,16 @@ const Preview = ({ active, images, name, price, category, description, onClick, 
                     <div className='empty'>&nbsp;</div>
 
                 </RightSection>
-                <i className="fa-solid fa-xmark" 
-                    onClick={onClick}>
-                </i>
+                {
+                    onClose && (
+                        <i className="fa-solid fa-xmark" 
+                            onClick={onClose}>
+                        </i>
+                    )
+                }
                 { 
                     isMobile && (
-                        <ActionButton text="Terbitakan"
-                                        width="92.5%"
-                                        color="#7126B5"
-                                        onClick={onSubmit}
-                                        style={
-                                                { 
-                                                    position: "fixed", 
-                                                    bottom: "10px", 
-                                                    left: `${active ? '50%' : '100%'}`, 
-                                                    transform: `${active ? 'translateX(-48.5%)' : 'translateX(0)'}`, 
-                                                    zIndex: "1000", 
-                                                    transition: "0.5s" 
-                                                }
-                                            }
-                                        />
+                        mobileButton
                         
                     )
                 }
