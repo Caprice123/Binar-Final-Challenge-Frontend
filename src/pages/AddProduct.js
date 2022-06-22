@@ -241,7 +241,7 @@ const AddProduct = () => {
 						]}
 						mobileButton={
 							<ActionButton text="Terbitakan"
-                                        width="92.5%"
+                                        width="calc(90% + 5px)"
                                         color="#7126B5"
                                         onClick={onSubmit}
                                         style={
@@ -250,7 +250,7 @@ const AddProduct = () => {
                                                     bottom: "10px", 
 													display: `${preview ? 'initial' : 'none'}`,
                                                     left: `${preview ? '50%' : '100%'}`, 
-                                                    transform: `${preview ? 'translateX(-48.5%)' : 'translateX(0)'}`, 
+                                                    transform: `${preview ? 'translateX(calc(-50% + 2.5px))' : 'translateX(0)'}`, 
                                                     zIndex: "1000", 
                                                     transition: "0.5s" 
                                                 }

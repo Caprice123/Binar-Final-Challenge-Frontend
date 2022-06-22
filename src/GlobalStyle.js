@@ -28,6 +28,16 @@ const GlobalStyle = createGlobalStyle`
         width: 100vw;
         overflow-x: hidden;
     }
+    
+    body::-webkit-scrollbar {
+        width: 5px;               /* width of the entire scrollbar */
+    }
+    body::-webkit-scrollbar-track {
+        background: transparent;     /* color of the tracking area */
+    }
+    body::-webkit-scrollbar-thumb {
+        background: #555;
+    }
 
     a{
         text-decoration: none !important;

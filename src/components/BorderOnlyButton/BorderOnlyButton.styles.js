@@ -5,6 +5,7 @@ export const Wrapper = styled.button`
     color: black !important;
     padding: 12px 24px;
     width: ${({ width }) => width};
+    border-radius: 16px;
     
     &:hover{
         background-color: white !important;
