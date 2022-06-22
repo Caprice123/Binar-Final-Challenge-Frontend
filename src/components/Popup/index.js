@@ -26,7 +26,7 @@ const Popup = ({ show, onClick, children }) => {
             </button>
             <div className="modal fade" 
                     id="exampleModal" 
-                    tabindex="-1" 
+                    tabIndex="-1" 
                     aria-labelledby="exampleModalLabel" 
                     aria-modal="true"
                     >
