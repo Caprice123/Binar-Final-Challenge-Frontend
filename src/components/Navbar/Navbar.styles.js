@@ -8,7 +8,7 @@ export const Wrapper = styled.nav`
 `
 
 export const Content = styled.div`
-    max-width: 90%;
+    width: 90%;
     
     .centered-text{
         position: absolute;
@@ -26,6 +26,7 @@ export const Content = styled.div`
     .offcanvas-body{
         width: 75%;
         margin: 0 auto;
+        padding: 1rem 0;
     }
     
     .offcanvas-header{
@@ -35,6 +36,8 @@ export const Content = styled.div`
     .offcanvas-body{
         a{
             padding: 0;
+            margin: 7.5px 0 !important;
+
         }
     }
 
@@ -46,8 +49,7 @@ export const Content = styled.div`
     }
 
     @media screen and (max-width: 768px){
-        max-width: 100vw;
-
+        width: 90%;
         .centered-text{
             font-size: 12px;
         }

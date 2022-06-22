@@ -28,7 +28,7 @@ const navLinks = [
         type: "text",
         to: "/",
         additionalIcon: <i class="fa-solid fa-list"></i>,
-        mobileText: "Daftar Jual"
+        mobileComponent: <p>Daftar Jual</p>
     }, {
         type: "others",
         to: "/notifications",
@@ -41,13 +41,12 @@ const navLinks = [
                 seen: true
             }
         ]} />,
-        
-        mobileText: "Notifications"
+        mobileComponent: <p>Notifications</p>
     }, {
         type: "text",
         to: "",
         additionalIcon: <i class="fa-solid fa-user"></i>,
-        mobileText: "Akun Saya"
+        mobileComponent: <p>Akun Saya</p>
     }, 
 ]
 
@@ -68,7 +67,7 @@ const InfoProduct = () => {
         ID: 1
     }
     const product = {
-        ownerID: 1
+        ownerID: 2
     }
     const [show, setShow] = useState(false)
     const [bidPrice, setBidPrice] = useState(0)
@@ -140,17 +139,17 @@ const InfoProduct = () => {
                             }
                             mobileButton={
                                 <ActionButton text="Edit"
-                                            width="92.5%"
+                                            width="calc(90% + 5px)"
                                             color="#7126B5"
                                             onClick={onEdit}
                                             style={
                                                     { 
                                                         position: "fixed", 
-                                                        bottom: "10px", 
-                                                        display: "initial",
+                                                        bottom: "10px",
                                                         left: "50%", 
-                                                        transform: 'translateX(-48.5%)', 
+                                                        display: "initial",
                                                         zIndex: "1000", 
+                                                        transform: "translateX(calc(-50% + 2.5px))",
                                                         transition: "0.5s" 
                                                     }
                                                 }
@@ -175,7 +174,7 @@ const InfoProduct = () => {
                                 }
                                 mobileButton={
                                     <ActionButton text="Saya tertarik dan ingin nego"
-                                                width="92.5%"
+                                                width="calc(90% + 5px)"
                                                 color="#7126B5"
                                                 onClick={onClick}
                                                 style={
@@ -183,9 +182,9 @@ const InfoProduct = () => {
                                                             position: "fixed", 
                                                             bottom: "10px", 
                                                             display: "initial",
-                                                            left: "50%", 
-                                                            transform: 'translateX(-48.5%)', 
+                                                            left: "50%",  
                                                             zIndex: "1000", 
+                                                            transform: "translateX(calc(-50% + 2.5px))",
                                                             transition: "0.5s" 
                                                         }
                                                     }
