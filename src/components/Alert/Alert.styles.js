@@ -13,9 +13,16 @@ export const Wrapper = styled.div`
     transition: 0.5s;
     animation: close 0.5s ease-in-out forwards;
     
+    @media screen and (max-width: 768px){
+        min-width: initial;
+        width: calc(90% + 5px);
+            
+        transform: translateX(calc(-50% + 2.5px));
+    }
+
     &.show{
         top: 100px;
-        animation: show 5s ease-in-out forwards;
+        animation: show 0.5s ease-in-out forwards;
     }
 
     @keyframes show {
@@ -23,12 +30,8 @@ export const Wrapper = styled.div`
             top: 0;
         }
 
-        10%, 90%{
-            top: 100px;
-        }
-
         100%{
-            top: 0;
+            top: 100px;
         }
     }
 

@@ -10,12 +10,12 @@ import { Wrapper, Content, Actions } from './Navbar.styles'
 const Navbar = ({ withSearchBar, centeredText, navLinks, ...styles }) => {
     return (
         <Wrapper className="fixed-top navbar navbar-expand-lg navbar-light">
-            <Content className="container-fluid position-relative mx-auto">
+            <Content className="position-relative mx-auto">
                 <button className="navbar-toggler"
                         data-bs-toggle="offcanvas" 
-                        href="#offcanvasExample"
+                        href="#offcanvasWithBothOptions"
                         role="button" 
-                        aria-controls="offcanvasExample"
+                        aria-controls="offcanvasWithBothOptions"
                         aria-expanded="false" 
                         aria-label="Toggle navigation"
                         >
@@ -95,9 +95,9 @@ const Navbar = ({ withSearchBar, centeredText, navLinks, ...styles }) => {
                     </div>
                 </Actions>
 
-                <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div className="offcanvas offcanvas-start" tabIndex="-1" data-bs-scroll="true" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
                     <div className="offcanvas-header">
-                        <h5 className="offcanvas-title" id="offcanvasExampleLabel">Secondhand</h5>
+                        <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">Secondhand</h5>
                         <button  className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body">
@@ -118,9 +118,7 @@ const Navbar = ({ withSearchBar, centeredText, navLinks, ...styles }) => {
                                                                     {...styles}
                                                                     />
                                                 ) : (
-                                                    
-                                                    navLink.text 
-                                                    
+                                                    navLink.mobileComponent 
                                                 )
                                             }
                                 </Link>
