@@ -2,18 +2,15 @@ import React, { useEffect, useRef } from 'react'
 
 import { Wrapper, Content, Header, Body } from './Popup.styles'
 
-const Popup = ({ show, onClick, children }) => {
+const Popup = ({ show, children, onClick }) => {
     const closeButtonRef = useRef(null)
     const openButtonRef = useRef(null)
 
     useEffect(() => {
         if (show){
             openButtonRef.current.click()
-        } else{
-            onClick()
-            closeButtonRef.current.click()
-        }
-    }, [show, onClick])
+        } 
+    }, [show])
 
     return (
         <>
@@ -37,6 +34,7 @@ const Popup = ({ show, onClick, children }) => {
                                     className="btn-close" 
                                     data-bs-dismiss="modal" 
                                     aria-label="Close"
+                                    onClick={onClick}
                                     >        
                             </button>
                         </Header>

@@ -167,7 +167,7 @@ export const LeftSection = styled.div`
             position: relative;
             z-index: 1000;
             width: 90%;
-            margin: 0 auto;
+            margin: 0 auto !important;
             transform: translateY(-50px);
             .overview{
                 
@@ -231,6 +231,7 @@ export const RightSection = styled.div`
         transform: translateY(-50px);
         .description{
             margin-top: 0 !important;
+            margin: 0 auto !important;
             width: 90%;
             *{
                 width: 90%;
