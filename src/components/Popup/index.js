@@ -7,7 +7,7 @@ const Popup = ({ topic, show, children, onClick }) => {
     const openButtonRef = useRef(null)
     const containerRef = useRef(null)
     const popupRef = useRef(null)
-    // console.log(topic, show)
+    
     useEffect(() => {
         if (show){
             openButtonRef.current.click()

@@ -61,7 +61,7 @@ const navLinks = [
 ]
 
 const user = {
-    // userId: 1,
+    userId: 2,
 }
 
 const ProductBid = () => {
@@ -109,20 +109,16 @@ const ProductBid = () => {
     }   
     
     const onCallByWA = () => {
-        console.log("call by wa")
         window.open("https://stackoverflow.com", '_blank', 'noopener,noreferrer').focus();
     }
 
     const onChange = (e) => {
-        console.log(e.currentTarget.value)
         setUpdateStatus(e.currentTarget.value)
     }
 
     return (
         <Wrapper>
             <Navbar centeredText="Info Penawar" 
-                    navLinks={navLinks}
-                    withSearchBar 
                     />
             <Content className="mx-auto position-relative"> 
                 <Link to='/' className="back-icon py-3">
@@ -132,7 +128,7 @@ const ProductBid = () => {
                             imageUrl={Image}
                             sellerName="seller name"
                             sellerCity="seller city"
-                            style={{ boxShadow: "box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15)" }}
+                            style={{ boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.15)" }}
                             />
                 <h4 className='my-4'>Daftar Produkmu yang Ditawar</h4>
                 {
