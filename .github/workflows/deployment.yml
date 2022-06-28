@@ -1,9 +1,11 @@
 name: deployment
 on:
   push: 
-    - *
+    branches:
+      - staging
   pull_request:
-    - *
+    branches:  
+      - staging
 jobs:
   deployment_staging:
     runs-on: ubuntu-latest
