@@ -77,6 +77,7 @@ const Preview = ({ active, images, name, price, category, description, onClose, 
                                     sellerName="Nama Penjual"
                                     sellerCity="Kota"
                                     additionalClass="my-5"
+                                    withShadow
                                     />
                     </div>
                 </LeftSection>
