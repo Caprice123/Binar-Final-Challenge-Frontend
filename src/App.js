@@ -11,6 +11,7 @@ import AddProduct from './pages/AddProduct';
 import GlobalStyle from './GlobalStyle';
 import InfoProfile from './pages/InfoProfile';
 import InfoProduct from './pages/InfoProduct';
+import ProductBid from './pages/ProductBid';
 
 function App() {
 	return (
@@ -23,7 +24,7 @@ function App() {
 					<Route path='/' element={<AddProduct />} />
 					<Route path='/user/profile' element={<InfoProfile />} />
 					<Route path='/product/:productId' element={<InfoProduct />} />
-
+					<Route path='/product/:productId/bid' element={<ProductBid />} />
 				</Routes>
 				<GlobalStyle />
 			</Router>

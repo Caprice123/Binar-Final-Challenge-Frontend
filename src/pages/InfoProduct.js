@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 
 // external hooks
 import { useParams, useNavigate } from 'react-router-dom'
@@ -59,26 +59,26 @@ const images = [
 ]
 
 
+const user = {
+    ID: 1
+}
+const product = {
+    ownerID: 2
+}
 
 const InfoProduct = () => {
-    const { productId } = useParams()
-
-    const user = {
-        ID: 1
-    }
-    const product = {
-        ownerID: 2
-    }
+    
     const [show, setShow] = useState(false)
     const [bidPrice, setBidPrice] = useState(0)
     const [alertOn, setAlertOn] = useState(true)
     
+    const { productId } = useParams()
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const onClick = useCallback(() => {
-        setShow(prev => !prev)
-    }, [])
+    const onClick = (value) => {
+        setShow(value)
+    }
 
     const onChange = (e) => {
         const { value } = e.currentTarget
@@ -94,8 +94,6 @@ const InfoProduct = () => {
             productId,
             bidPrice,
         }))
-
-
     }
 
     const onClose = () => {
@@ -168,7 +166,7 @@ const InfoProduct = () => {
                                     <ActionButton text="Saya tertarik dan ingin nego"
                                                     width="90%"
                                                     color="#7126B5"
-                                                    onClick={onClick}
+                                                    onClick={() => onClick(true)}
                                                 />
                                     ]
                                 }
@@ -176,7 +174,7 @@ const InfoProduct = () => {
                                     <ActionButton text="Saya tertarik dan ingin nego"
                                                 width="calc(90% + 5px)"
                                                 color="#7126B5"
-                                                onClick={onClick}
+                                                onClick={() => onClick(true)}
                                                 style={
                                                         { 
                                                             position: "fixed", 
@@ -205,6 +203,7 @@ const InfoProduct = () => {
                                                 width="100%"
                                                 additionalClass="my-3"
                                                 style={{ background: "#EEEEEE" }}
+                                                withShadow
                                                 />
 
                                     <Input type="text"
