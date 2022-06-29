@@ -144,7 +144,7 @@ const ProductBid = () => {
                                         />
     
                             {
-                                <div className='d-flex justify-content-end px-2' style={{ width: "90%", margin: "0 auto" }}>
+                                <div className='d-flex buttons justify-content-end px-2' style={{ width: "90%", margin: "0 auto" }}>
                                     <BorderOnlyButton text={product.status === "sent_to_seller" ? "Tolak" : "Status"}
                                                         width="30%"
                                                         color="#7126B5"

@@ -55,7 +55,7 @@ const Popup = ({ topic, show, children, onClick }) => {
                                     >        
                             </button>
                         </Header>
-                        <Body className="modal-body">
+                        <Body className="modal-body d-flex flex-column justify-content-center">
                             { children }
                         </Body>
                     </Content>

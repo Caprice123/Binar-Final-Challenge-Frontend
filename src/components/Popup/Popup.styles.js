@@ -24,7 +24,7 @@ export const Content = styled.div`
         border-top-right-radius: 16px;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
-
+        height: auto !important;
         animation: open 0.375s ease-in-out forwards;
     }
 

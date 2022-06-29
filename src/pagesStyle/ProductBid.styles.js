@@ -37,6 +37,16 @@ export const Wrapper = styled.div`
             color: var(--neutral-03);
         }
     }
+
+    @media screen and (max-width: 768px) {
+        .seller-info{
+            margin-top: 1rem;
+
+            div:first-child{
+                width: 100% !important;
+            }
+        }
+    }
 `
 
 export const Content = styled.div`
@@ -54,5 +64,26 @@ export const Content = styled.div`
         line-height: 20px;
     }
 
+    @media screen and (max-width: 768px) {
+        max-width: initial;
+        width: 90%;
+        margin: 0 auto;
+        margin-top: calc(var(--navbar-height) * 1.25);
+        /* background-color: red; */
+
+        .back-icon{
+            position: relative;
+            left: 0;
+            margin-bottom: 1rem !important;
+        }
+
+        .buttons{
+            justify-content: space-between !important;
+
+            button{
+                width: 45%;
+            }
+        }
+    }
     
 `
