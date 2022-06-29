@@ -7,13 +7,51 @@ export const updateUser = createAsyncThunk(
     'user/updateUser',
     async (payload) => {
         console.log(payload)
-        const response = await api.put("/users")
-        const datas = response.data
-        return datas
+        const formData = new FormData()
         
+        for (const key in payload){
+            formData.append(key, payload[key])
+        }
+
+        const response = await api.put(
+            "/users", 
+            formData, 
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            }
+        )
+        const data = response.data
+        return data
     }
 )
 
+export const login = createAsyncThunk(
+    'user/login',
+    async (payload) => {
+        console.log(payload)
+        const response = await api.post(
+            '/login', 
+            payload
+        )
+        const data = response.data
+        return data
+    }
+)
+
+export const register = createAsyncThunk(
+    'user/register',
+    async (payload) => {
+        console.log(payload)
+        const response = await api.post(
+            '/register', 
+            payload
+        )
+        const data = response.data
+        return data
+    }
+)
 
 const userSlice = createSlice({
     name: 'user',
@@ -29,7 +67,50 @@ const userSlice = createSlice({
         }
     }, 
     extraReducers: {
+        // updateUser
+        [updateUser.pending]: (state) => {
+            state.loading = true
+            state.error = ""
+        },
+        [updateUser.fulfilled]: (state) => {
+            state.loading = false
+            state.error = ""
+        },
+        [updateUser.rejected]: (state) => {
+            state.loading = false
+            state.error = ""
+        },
 
+        // login
+        [login.pending]: (state) => {
+            state.loading = true
+            state.error = ""
+        },
+        [login.fulfilled]: (state) => {
+            state.loading = false
+            state.error = ""
+        },
+        [login.rejected]: (state) => {
+            state.loading = false
+            state.error = ""
+        },
+
+        // register
+        [register.pending]: (state) => {
+            state.loading = true
+            state.error = ""
+        },
+        [register.fulfilled]: (state) => {
+            state.loading = false
+            state.error = ""
+        },
+        [register.rejected]: (state) => {
+            state.loading = false
+            state.error = ""
+        },
+
+
+        
     }
 })
 

@@ -3,7 +3,7 @@ import React from 'react'
 // styles
 import { Wrapper } from './Input.styles'
 
-const Input = ({ type, text, placeholder, value, onChange, styles, required }) => {
+const Input = ({ type, text, placeholder, value, onChange, required, ...additionalStyles }) => {
     return (
         <Wrapper className='d-flex py-2 flex-column'>
             <label htmlFor={text.replace(" ", "-")}
@@ -21,6 +21,7 @@ const Input = ({ type, text, placeholder, value, onChange, styles, required }) =
                     value={value} 
                     autoComplete="off"
                     onChange={onChange} 
+                    {...additionalStyles}
                     />
         </Wrapper>
     )
