@@ -5,7 +5,7 @@ import Input from '../components/Input';
 import imageCover from '../assets/images/cover.png'
 import ActiveButton from '../components/ActionButton';
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // styles
 import styles from '../assets/css/auth.module.css'
@@ -24,6 +24,7 @@ const Registrasi = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const onChange = (e) => {
         const { value, id } = e.currentTarget
@@ -62,11 +63,17 @@ const Registrasi = () => {
             return
         }
 
-        dispatch(register({
-            name,
-            email,
-            password
-        }))
+        try{
+            dispatch(register({
+                name,
+                email,
+                password
+            }))
+    
+            navigate('/login')
+        } catch(err){
+            console.log(err);
+        }
     }
 
     return (

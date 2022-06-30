@@ -26,7 +26,7 @@ import { useDispatch } from 'react-redux'
 const navLinks = [
     {
         type: "text",
-        to: "/",
+        to: "/products",
         additionalIcon: <i class="fa-solid fa-list"></i>,
         mobileComponent: <p>Daftar Jual</p>
     }, {
@@ -90,10 +90,15 @@ const InfoProduct = () => {
             alert("Please insert bid price")
             return
         }
-        dispatch(setBidPrice({
-            productId,
-            bidPrice,
-        }))
+
+        try{
+            dispatch(setBidPrice({
+                productId,
+                bidPrice,
+            }))
+        } catch(err){
+            console.log(err)
+        }
     }
 
     const onClose = () => {
