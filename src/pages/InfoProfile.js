@@ -9,7 +9,7 @@ import Input from '../components/Input'
 import InputFile from '../components/InputFile'
 import Navbar from '../components/Navbar'
 import Textarea from '../components/Textarea'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // helpers
 import { validatePhoneNumber } from '../helpers/validatePhoneNumber'
@@ -23,6 +23,7 @@ import { updateUser, userActions } from '../store/user'
 
 const InfoProfile = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const { availableCities } = useSelector(state => state.user)
 
     const [name, setName] = useState("")
@@ -90,7 +91,11 @@ const InfoProfile = () => {
             phoneNumber
         }
 
-        dispatch(updateUser(payload))
+        try{
+            dispatch(updateUser(payload))
+        } catch(err){
+            console.log(err)
+        }
     }
 
     useEffect(() => {
@@ -105,6 +110,9 @@ const InfoProfile = () => {
         }
     }, [city, availableCities])
     
+    const onClickGoBack = () => {
+		navigate(-1)
+	} 
 
     return (
         <Wrapper>
@@ -112,7 +120,7 @@ const InfoProfile = () => {
                     />
                 
             <Content className='mx-auto position-relative'>
-                <Link to='/' className="back-icon py-3">
+                <Link to='/' className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
                 <div className='py-3 d-flex justify-content-center align-items-center'>

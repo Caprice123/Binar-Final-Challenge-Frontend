@@ -39,7 +39,7 @@ const Login = () => {
         }
     }
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (email.length === 0){
             alert("Tolong isi email")
             return
@@ -55,10 +55,14 @@ const Login = () => {
             return
         }
 
-        dispatch(login({
-            email,
-            password
-        }))
+        try{
+            dispatch(login({
+                email,
+                password
+            }))
+        } catch(err){
+            console.log(err);
+        }
     }
 
     return (
@@ -103,7 +107,7 @@ const Login = () => {
                                     <p className='text-center mt-3'>
                                         Belum punya akun? 
                                     
-                                        <Link to="/daftar" className="text-purple">
+                                        <Link to="/register" className="text-purple">
                                             Daftar disini
                                         </Link>
                                     

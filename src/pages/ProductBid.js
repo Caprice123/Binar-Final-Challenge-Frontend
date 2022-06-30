@@ -78,10 +78,14 @@ const ProductBid = () => {
     }
 
     const onReject = () => {
-        dispatch(rejectBid({
-            transactionId: 1,
-        }))
-        setIsRejectApprove(false)
+        try{
+            dispatch(rejectBid({
+                transactionId: 1,
+            }))
+            setIsRejectApprove(false)
+        } catch(err){
+            console.log(err)
+        }
     }
     
     const onAcceptApproval = (value) => {
@@ -89,10 +93,14 @@ const ProductBid = () => {
     }
 
     const onAccept = () => {
-        dispatch(acceptBid({
-            transactionId: 1,
-        }))
-        setIsAcceptApprove(false)
+        try{
+            dispatch(acceptBid({
+                transactionId: 1,
+            }))
+            setIsAcceptApprove(false)
+        } catch(err){
+            console.log(err)
+        }
     }
     
     const onUpdateStatusApproval = (value) => {
@@ -100,12 +108,16 @@ const ProductBid = () => {
     }   
 
     const onUpdateStatus = () => {
-        dispatch(updateStatusBid({
-            transactionId: 1,
-            updateStatus,
-        }))
-        
-        setIsUpdateStatusApprove(false)
+        try{
+            dispatch(updateStatusBid({
+                transactionId: 1,
+                updateStatus,
+            }))
+            
+            setIsUpdateStatusApprove(false)
+        } catch(err){
+            console.log(err)
+        }
     }   
     
     const onCallByWA = () => {
