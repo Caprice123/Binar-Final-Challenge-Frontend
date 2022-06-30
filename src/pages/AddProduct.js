@@ -123,13 +123,17 @@ const AddProduct = () => {
 			alert("Tolong masukkan 1 foto product")
 			return
 		}
-		dispatch(addProduct({
-			name,
-			price,
-			category,
-			productImages
-		}))
-		navigate("/")
+		try{
+			dispatch(addProduct({
+				name,
+				price,
+				category,
+				productImages
+			}))
+			navigate("/")
+		} catch(err){
+			console.log(err)
+		}
 	}
 
 	const onDelete = (e) => {
@@ -155,11 +159,15 @@ const AddProduct = () => {
 		setProductImages(productImagesUpdated.slice(0, 4))
 	}, [productImages])
 
+	const onClickGoBack = () => {
+		navigate(-1)
+	}
+
 	return (
 		<Wrapper>
 			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<Content className="mx-auto position-relative">
-				<Link to='/' className="back-icon py-3">
+				<Link to='/' className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
 				<Input type="text" 

@@ -18,11 +18,15 @@ function App() {
 		<Provider store={store}>
 			<Router>
 				<Routes>
+					{/* Auth Routes */}
 					<Route path="/login" element={<Login/>} />
-					<Route path="/daftar" element={<Registrasi/>} />
+					<Route path="/register" element={<Registrasi/>} />
 
-					<Route path='/' element={<AddProduct />} />
-					<Route path='/user/profile' element={<InfoProfile />} />
+					{/* User Routes */}
+					<Route path='/user/:id/update' element={<InfoProfile />} />
+
+					{/* Product Routes */}
+					<Route path='/product/add' element={<AddProduct />} />
 					<Route path='/product/:productId' element={<InfoProduct />} />
 					<Route path='/product/:productId/bid' element={<ProductBid />} />
 				</Routes>
