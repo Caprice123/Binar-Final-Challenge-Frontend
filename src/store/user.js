@@ -53,12 +53,15 @@ export const register = createAsyncThunk(
     }
 )
 
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
+        currentUser: {},
         availableCities: [],
         loading: false,
-        error: ""
+        error: "",
+        isLoggedIn: false,
     },
     reducers: {
         getCities: (state) => {
