@@ -21,13 +21,20 @@ export const setBidPrice = createAsyncThunk(
     }
 )
 
+const defaultState = {
+    loading: false,
+    error: ""
+}
+
+const productCached = JSON.parse(localStorage.getItem("productState"))
+
+const initialState = productCached
+                    ? productCached
+                    : defaultState
+
 const productSlice = createSlice({
     name: 'product',
-    initialState: {
-        loading: false,
-        error: "",
-
-    },
+    initialState,
     reducers: {
 
     }, 
@@ -35,35 +42,41 @@ const productSlice = createSlice({
         [addProduct.pending]: (state) => {
             state.loading = true
             state.error = ""
+            localStorage.setItem("productState", JSON.stringify(state))
         },
-
+        
         [addProduct.fulfilled]: (state, action) => {
             state.loading = false
             state.products.push(action.payload)
             state.error = ""
+            localStorage.setItem("productState", JSON.stringify(state))
         }, 
-
+        
         [addProduct.rejected]: (state, action) => {
             state.loading = false
             // error
             state.error = action.payload
             state.products = []
+            localStorage.setItem("productState", JSON.stringify(state))
         },
-
+        
         [setBidPrice.pending]: (state) => {
             state.loading = true
             state.error = ""
+            localStorage.setItem("productState", JSON.stringify(state))
         },
-
+        
         [setBidPrice.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
             // add more logic
+            localStorage.setItem("productState", JSON.stringify(state))
         },
-
+        
         [setBidPrice.rejected]: (state, action) => {
             state.loading = false
             state.error = action.payload
+            localStorage.setItem("productState", JSON.stringify(state))
         },
     }
 })

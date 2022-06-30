@@ -33,13 +33,20 @@ export const updateStatusBid = createAsyncThunk(
     }
 )
 
+const defaultState = {
+    loading: false,
+    error: ""
+}
+
+const bidCached = JSON.parse(localStorage.getItem("bidState"))
+
+const initialState = bidCached 
+                    ? bidCached
+                    : defaultState
 
 const bidSlice = createSlice({
     name: 'bid',
-    initialState: {
-        loading: false,
-        error: "",
-    },
+    initialState,
     reducers: {
 
     }, 
@@ -47,34 +54,40 @@ const bidSlice = createSlice({
         [rejectBid.pending]: (state) => {
             state.loading = true
             state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
         },
 
         [rejectBid.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
         }, 
 
         [rejectBid.rejected]: (state, action) => {
             state.loading = false
             // error
             state.error = action.payload
+            localStorage.setItem("bidState", JSON.stringify(state))
         },
 
 
         [acceptBid.pending]: (state) => {
             state.loading = true
             state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
         },
 
         [acceptBid.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
         }, 
 
         [acceptBid.rejected]: (state, action) => {
             state.loading = false
             // error
             state.error = action.payload
+            localStorage.setItem("bidState", JSON.stringify(state))
         },
     }
 })

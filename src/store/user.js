@@ -53,20 +53,28 @@ export const register = createAsyncThunk(
     }
 )
 
+const defaultState = {
+    currentUser: {},
+    availableCities: [],
+    loading: false,
+    error: "",
+    isLoggedIn: false
+}
+
+const userStateCached = JSON.parse(localStorage.getItem("userState"))
+
+const initialState = userStateCached
+                    ? userStateCached
+                    : defaultState
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: {
-        currentUser: {},
-        availableCities: [],
-        loading: false,
-        error: "",
-        isLoggedIn: false,
-    },
+    initialState,
     reducers: {
         getCities: (state) => {
             const allCities = City.getCitiesOfCountry('ID')
             state.availableCities = allCities
+            localStorage.setItem("userState", JSON.stringify(state))
         }
     }, 
     extraReducers: {
@@ -74,46 +82,53 @@ const userSlice = createSlice({
         [updateUser.pending]: (state) => {
             state.loading = true
             state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         },
         [updateUser.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         },
         [updateUser.rejected]: (state) => {
             state.loading = false
             state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         },
 
         // login
         [login.pending]: (state) => {
             state.loading = true
             state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         },
         [login.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
+            state.isLoggedIn = true
+            localStorage.setItem("userState", JSON.stringify(state))
         },
         [login.rejected]: (state) => {
             state.loading = false
             state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         },
 
         // register
         [register.pending]: (state) => {
             state.loading = true
             state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         },
         [register.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         },
         [register.rejected]: (state) => {
             state.loading = false
             state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         },
-
-
-        
     }
 })
 
