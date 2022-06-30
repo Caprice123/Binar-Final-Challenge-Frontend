@@ -1,18 +1,18 @@
-.login__form-wrapper{
+.auth_form_wrapper{
     padding: 0 75px;
 }
 
-.login__left{
+.auth_left{
     height: 100%;
     padding: 0 !important;
     overflow: hidden;
 }
 
-.login-cover{
+.auth_cover{
     position: relative;
 }
 
-.login-cover::after{
+.auth_cover::after{
     content: '';
     position: absolute;
     top: 0;
@@ -35,18 +35,18 @@
     color: #ffffff;
 }
 
-.brand p{
+.text_brand{
     line-height: 35px;
     margin: 0;
     margin-left: 25px;
 }
 
 @media screen and (max-width: 576px) {
-    .page-login{
+    .page_auth{
         position: relative;
     }
 
-    .login__form-wrapper{
+    .auth_form_wrapper{
         padding: 0;
     }
 
