@@ -4,8 +4,6 @@ import React, { useState } from 'react';
 import ActiveButton from '../components/ActionButton';
 import Input from '../components/Input';
 import imageCover from '../assets/images/cover.png'
-import ActiveButton from '../components/ActionButton';
-import Input from '../components/Input';
 
 import { Link } from 'react-router-dom';
 
