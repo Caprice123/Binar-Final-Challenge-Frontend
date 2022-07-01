@@ -53,7 +53,6 @@ export const LeftSection = styled.div`
     width: 100%;
 
     .image-preview{
-        margin: 0 auto;
         width: 45%;
         min-height: 436px;
         box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
@@ -97,7 +96,6 @@ export const LeftSection = styled.div`
 
     .description{
         width: 25%;
-        margin: 0 auto;
         .overview{
             width: 100%;
             margin: 0 auto;
@@ -169,7 +167,7 @@ export const LeftSection = styled.div`
             position: relative;
             z-index: 1000;
             width: 90%;
-            margin: 0 auto;
+            margin: 0 auto !important;
             transform: translateY(-50px);
             .overview{
                 
@@ -204,7 +202,6 @@ export const RightSection = styled.div`
 
     .description{
         width: 45%;
-        margin: 0 auto;
         box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
         border-radius: 16px;
 
@@ -228,14 +225,13 @@ export const RightSection = styled.div`
 
     .empty{
         width: 25%;
-        margin: 0 auto;
-        
     }
 
     @media screen and (max-width: 768px) {
         transform: translateY(-50px);
         .description{
             margin-top: 0 !important;
+            margin: 0 auto !important;
             width: 90%;
             *{
                 width: 90%;

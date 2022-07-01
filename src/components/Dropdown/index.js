@@ -1,23 +1,23 @@
 import React, { useRef, useEffect } from 'react'
 
 // styles
-import { Wrapper, Options } from "./Dropdown.styles"
+import { Wrapper } from "./Dropdown.styles"
 
-const Dropdown = ({ text, placeholder, value, options, onSelect, required }) => {
+const Dropdown = ({ text, placeholder, value, options, onSelect, required, elasticSearch, onInput }) => {
     const dropdownOptions = useRef(null)
     const dropdown = useRef(null)
 
     const onClick = () => {
-        if (dropdownOptions.current.classList.contains("show")){
-            dropdownOptions.current.classList.remove("show")
-        } else {
-            dropdownOptions.current.classList.add("show")
-        }
+        dropdownOptions.current.classList.add("show")
+    }
+
+    const onChange = (e) => {
+        onInput(e)
     }
 
     const onSelected = (e) => {
-        onSelect(e)
         dropdownOptions.current.classList.remove("show")
+        onSelect(e)
     }
 
     useEffect(() => {
@@ -29,6 +29,19 @@ const Dropdown = ({ text, placeholder, value, options, onSelect, required }) => 
             }
         })
     }, [])
+
+    useEffect(() => {
+        if (options.length === 0){
+            dropdownOptions.current.style.setProperty("height", "0px", "important")
+            dropdownOptions.current.style.overflow = "hidden"
+        } else if (options.length === 1){
+            dropdownOptions.current.style.setProperty("height", "50px", "important")
+            dropdownOptions.current.style.overflow = "hidden"
+        } else {
+            dropdownOptions.current.style.setProperty("height", "100px", "important")
+            dropdownOptions.current.style.overflow = "auto"
+        }
+    }, [options.length])
 
     return (
         <Wrapper ref={dropdown} 
@@ -45,20 +58,36 @@ const Dropdown = ({ text, placeholder, value, options, onSelect, required }) => 
                             )
                         }
             </label>
-            <input type="text" 
-                    placeholder={placeholder} 
-                    value={value}
-                    onClick={onClick} 
-                    readOnly
-                    />
+            {
+                elasticSearch ? (
+                    <input type="text" 
+                            placeholder={placeholder} 
+                            id={text.replace(" ", "_")}
+                            value={value}
+                            onClick={onClick}
+                            onChange={onChange}
+                            autoComplete="off" 
+                            />
+                            ): (
+                    <input type="text" 
+                            placeholder={placeholder} 
+                            value={value}
+                            id={text.replace(" ", "_")}
+                            onClick={onClick} 
+                            readOnly
+                            />
+                )
+            }
+                    
             <i className="fa-solid fa-chevron-down" 
                 onClick={onClick}
                 >    
             </i>
 
-            <Options ref={dropdownOptions}>
+            <div ref={dropdownOptions} className="options"> 
+                            
                 { 
-                    options.map(({ id, name }) => (
+                    options.map(({ name }, id) => (
                         <p key={id} 
                             className="d-flex flex-column justify-content-center"
                             onClick={onSelected} 
@@ -68,7 +97,7 @@ const Dropdown = ({ text, placeholder, value, options, onSelect, required }) => 
                         </p>
                     ))
                 }
-            </Options>
+            </div>
         </Wrapper>
     )   
 }

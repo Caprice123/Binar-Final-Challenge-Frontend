@@ -2,19 +2,20 @@ import React from 'react'
 
 // components
 import { Link } from 'react-router-dom'
+import ActionButton from '../ActionButton'
 
 // styles
 import { Wrapper, Content, Actions } from './Navbar.styles'
 
-const Navbar = ({ withSearchBar, centeredText, navLinks }) => {
+const Navbar = ({ withSearchBar, centeredText, navLinks, ...styles }) => {
     return (
         <Wrapper className="fixed-top navbar navbar-expand-lg navbar-light">
-            <Content className="container-fluid position-relative mx-auto">
+            <Content className="position-relative mx-auto">
                 <button className="navbar-toggler"
                         data-bs-toggle="offcanvas" 
-                        href="#offcanvasExample"
+                        href="#offcanvasWithBothOptions"
                         role="button" 
-                        aria-controls="offcanvasExample"
+                        aria-controls="offcanvasWithBothOptions"
                         aria-expanded="false" 
                         aria-label="Toggle navigation"
                         >
@@ -24,7 +25,7 @@ const Navbar = ({ withSearchBar, centeredText, navLinks }) => {
                     {centeredText}
                 </p>
                 <Actions className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div className="navbar-nav w-100 d-flex justify-content-between">
+                    <div className="navbar-nav w-100 d-flex justify-content-between align-items-center">
                         <div className="d-flex navbar-nav">
                             <Link className="navbar-brand" 
                                     to='/'>        
@@ -45,36 +46,81 @@ const Navbar = ({ withSearchBar, centeredText, navLinks }) => {
                                 )
                             }
                         </div>
-                        <div className="nav-links">
+                        <div className="nav-links d-flex align-items-center">
                             { 
                                 navLinks?.map((navLink, id) => (
-                                    <Link key={id} 
-                                            className="nav-link active" 
-                                            aria-current="page" 
-                                            to={navLink.to}
-                                            >
-                                                { navLink.text }
-                                    </Link>
+                                    navLink.type === "others" ? (
+                                        <div className='nav-link d-flex align-items-center active'>
+                                            <span>
+                                                { navLink.additionalIcon }
+                                            </span>
+                                            { navLink.text }
+                                        </div>
+                                    ) : (
+
+                                        <Link key={id} 
+                                                className="nav-link d-flex align-items-center active" 
+                                                aria-current="page" 
+                                                to={navLink.to}
+                                                {...styles}
+                                                >
+                                                    {
+                                                        navLink.type === "text" && (
+                                                            <>
+                                                                <span>
+                                                                    { navLink.additionalIcon }
+                                                                </span>
+                                                                { navLink.text }
+                                                            </>
+                                                        )
+                                                    }
+    
+                                                    {
+                                                        navLink.type === "button" && (
+                                                        
+                                                            <ActionButton width="100%"
+                                                                            color="#7126B5"
+                                                                            icon={navLink.additionalIcon}
+                                                                            text={navLink.text}
+                                                                            {...styles}
+                                                                            />
+                                                        )
+                                                    }
+                                        </Link>
+                                    )
+                                    
                                 ))
                             }
                         </div>
                     </div>
                 </Actions>
 
-                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Secondhand</h5>
-                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <div className="offcanvas offcanvas-start" tabIndex="-1" data-bs-scroll="true" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+                    <div className="offcanvas-header">
+                        <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">Secondhand</h5>
+                        <button  className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <div class="offcanvas-body">
+                    <div className="offcanvas-body">
                         { 
                             navLinks?.map((navLink, id) => (
                                 <Link key={id} 
-                                        className="nav-link active" 
+                                        className="nav-link d-flex align-items-center active" 
                                         aria-current="page" 
                                         to={navLink.to}
+                                        {...styles}
                                         >
-                                            { navLink.text }
+                                            {
+                                                navLink.type === "button" ? (
+                                                    <ActionButton width="100%"
+                                                                    color="#7126B5"
+                                                                    icon={navLink.additionalIcon}
+                                                                    text={navLink.text}
+                                                                    {...styles}
+                                                                    />
+                                                ) : (
+                                                    navLink.mobileComponent 
+                                                )
+                                            }
                                 </Link>
                             ))
                         }
