@@ -7,8 +7,11 @@ const GlobalStyle = createGlobalStyle`
         --primary-purple-01: #E2D4F0;
         --primary-purple-04: #7126B5;
         --primary-purple-05: #4B1979;
+        
 
         --alert-success: #73CA5C;
+        --redalert-background: #f1dbdc;
+        --redalert-font: #D00C1A;
 
         --navbar-height: 67.5px;
     }

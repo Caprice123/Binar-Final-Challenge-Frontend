@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // components
 import Navbar from '../components/Navbar'
@@ -10,6 +10,8 @@ import InputRadio from '../components/InputRadio'
 import Image from '../200774.jpg'
 import NotifItems from '../components/NotifItems'
 import Popup from '../components/Popup'
+import LoadingSpinner from '../components/LoadingSpinner'
+import Alert from '../components/Alert'
 
 import { Link } from 'react-router-dom'
 
@@ -17,8 +19,10 @@ import { Link } from 'react-router-dom'
 import { Wrapper, Content } from '../pagesStyle/ProductBid.styles'
 
 // react redux
-import { acceptBid, rejectBid, updateStatusBid } from '../store/bids'
-import { useDispatch } from 'react-redux'
+import { acceptBid, bidActions, rejectBid, updateStatusBid } from '../store/bids'
+import { useDispatch, useSelector } from 'react-redux'
+import { productActions } from '../store/product'
+import { userActions } from '../store/user'
 
 // TODO: update the id of transaction id
 const bids = [
@@ -65,13 +69,17 @@ const user = {
 }
 
 const ProductBid = () => {
+    // state
     const [isRejectApprove, setIsRejectApprove] = useState(false)
     const [isAcceptApprove, setIsAcceptApprove] = useState(false)
     const [isUpdateStatusApprove, setIsUpdateStatusApprove] = useState(false)
-
     const [updateStatus, setUpdateStatus] = useState("sold")
- 
+    
+    // dispatch redux
     const dispatch = useDispatch()
+
+    // redux state
+    const { loading, error } = useSelector(state => state.bids)
 
     const onRejectApproval = (value) => {
         setIsRejectApprove(value)
@@ -128,8 +136,23 @@ const ProductBid = () => {
         setUpdateStatus(e.currentTarget.value)
     }
 
+    const onCloseAlert = () => {
+        dispatch(bidActions.clearError())
+    }
+
+    useEffect(() => {
+		dispatch(userActions.clearError())
+		dispatch(productActions.clearError())
+		dispatch(bidActions.clearError())
+	}, [dispatch])
+
+    console.log(error)
+
     return (
         <Wrapper>
+            <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            
             <Navbar centeredText="Info Penawar" 
                     />
             <Content className="mx-auto position-relative"> 

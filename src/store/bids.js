@@ -48,7 +48,10 @@ const bidSlice = createSlice({
     name: 'bid',
     initialState,
     reducers: {
-
+        clearError: (state) => {
+            state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
+        }
     }, 
     extraReducers: {
         [rejectBid.pending]: (state) => {
@@ -66,7 +69,7 @@ const bidSlice = createSlice({
         [rejectBid.rejected]: (state, action) => {
             state.loading = false
             // error
-            state.error = action.payload
+            state.error = action.error.message
             localStorage.setItem("bidState", JSON.stringify(state))
         },
 
@@ -84,9 +87,10 @@ const bidSlice = createSlice({
         }, 
 
         [acceptBid.rejected]: (state, action) => {
+            console.log(action.error.message)
             state.loading = false
             // error
-            state.error = action.payload
+            state.error = action.error.message
             localStorage.setItem("bidState", JSON.stringify(state))
         },
     }

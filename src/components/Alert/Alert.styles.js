@@ -5,44 +5,25 @@ export const Wrapper = styled.div`
     position: fixed;
     top: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -100%);
     background-color: ${({ backgroundColor }) => backgroundColor};
     color:  ${({ color }) => color};
     z-index: 1000;
     border-radius: 16px;
     transition: 0.5s;
-    animation: close 0.5s ease-in-out forwards;
     
+    i{
+        cursor: pointer;
+    }
+
     @media screen and (max-width: 768px){
         min-width: initial;
         width: calc(90% + 5px);
-            
-        transform: translateX(calc(-50% + 2.5px));
+        transform: translate(calc(-50% + 2.5px), -100%);
     }
 
     &.show{
-        top: 100px;
-        animation: show 0.5s ease-in-out forwards;
-    }
-
-    @keyframes show {
-        0%{
-            top: 0;
-        }
-
-        100%{
-            top: 100px;
-        }
-    }
-
-    @keyframes close {
-        0%{
-            top: 100px;
-        }
-
-        100%{
-            top: 0;
-        }
+        top: 125px;
     }
 `
 

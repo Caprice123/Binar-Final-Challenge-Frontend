@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 
 // components
 import ActionButton from '../components/ActionButton'
@@ -19,10 +19,14 @@ import { validateNumber } from '../helpers/validateNumber'
 import { validateSizeFile } from '../helpers/validateSizeFile'
 
 // redux
-import { useDispatch } from 'react-redux'
-import { addProduct } from '../store/product'
+import { useDispatch, useSelector } from 'react-redux'
+import { addProduct, productActions } from '../store/product'
 
 import { Wrapper, Content } from '../pagesStyle/AddProduct.styles'
+import LoadingSpinner from '../components/LoadingSpinner'
+import Alert from '../components/Alert'
+import { userActions } from '../store/user'
+import { bidActions } from '../store/bids'
 const options = [ 
 	{
 		id: 1,
@@ -43,15 +47,24 @@ const options = [
 ]
 
 const AddProduct = () => {
-	const navigate = useNavigate()
-	const dispatch = useDispatch()
-
+	
+	
+	// state
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState(0)
 	const [category, setCategory] = useState("")
 	const [description, setDescription] = useState("")
 	const [productImages, setProductImages] = useState([])
 	const [preview, setPreview] = useState(false)
+	
+	// navigation
+	const navigate = useNavigate()
+
+	// dispatch redux
+	const dispatch = useDispatch()
+
+	// redux state
+	const { loading, error } = useSelector(state => state.product)
 
 	const onChange = (e) => {
 		const { id, value } = e.currentTarget
@@ -163,8 +176,21 @@ const AddProduct = () => {
 		navigate(-1)
 	}
 
+	const onCloseAlert = () => {
+		dispatch(productActions.clearError())
+	}
+
+	useEffect(() => {
+		dispatch(userActions.clearError())
+		dispatch(productActions.clearError())
+		dispatch(bidActions.clearError())
+	}, [dispatch])
+
 	return (
 		<Wrapper>
+			<LoadingSpinner active={loading} />
+			<Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            
 			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<Content className="mx-auto position-relative">
 				<Link to='/' className="back-icon py-3" onClick={onClickGoBack}>

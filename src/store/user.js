@@ -75,6 +75,10 @@ const userSlice = createSlice({
             const allCities = City.getCitiesOfCountry('ID')
             state.availableCities = allCities
             localStorage.setItem("userState", JSON.stringify(state))
+        },
+        clearError: (state) => {
+            state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
         }
     }, 
     extraReducers: {
@@ -107,9 +111,10 @@ const userSlice = createSlice({
             state.isLoggedIn = true
             localStorage.setItem("userState", JSON.stringify(state))
         },
-        [login.rejected]: (state) => {
+        [login.rejected]: (state, action) => {
+            console.log(action)
             state.loading = false
-            state.error = ""
+            state.error = action.error.message
             localStorage.setItem("userState", JSON.stringify(state))
         },
 
@@ -124,9 +129,9 @@ const userSlice = createSlice({
             state.error = ""
             localStorage.setItem("userState", JSON.stringify(state))
         },
-        [register.rejected]: (state) => {
+        [register.rejected]: (state, action) => {
             state.loading = false
-            state.error = ""
+            state.error = action.error.message
             localStorage.setItem("userState", JSON.stringify(state))
         },
     }
