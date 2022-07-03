@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 // external hooks
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 
 // components
 import Navbar from '../components/Navbar'
@@ -22,52 +22,60 @@ import { validateNumber } from '../helpers/validateNumber'
 
 // redux
 import { useDispatch } from 'react-redux'
+import Slider from '../components/Slider'
+import NotifItems from '../components/NotifItems'
+import ImagePreview from '../components/ImagePreview'
 
-const navLinks = [
-    {
-        type: "text",
-        to: "/products",
-        additionalIcon: <i class="fa-solid fa-list"></i>,
-        mobileComponent: <p>Daftar Jual</p>
-    }, {
-        type: "others",
-        to: "/notifications",
-        additionalIcon: <Notif datas={[
-            {
-                seen: true,
-            }, {
-                seen: false
-            }, {
-                seen: true
-            }
-        ]} />,
-        mobileComponent: <p>Notifications</p>
-    }, {
-        type: "text",
-        to: "",
-        additionalIcon: <i class="fa-solid fa-user"></i>,
-        mobileComponent: <p>Akun Saya</p>
-    }, 
-]
-
-const images = [
-    {
-        imageUrl: Image,
-    }, {
-        imageUrl: Image,
-    },
-]
-
-
-const user = {
-    ID: 1
-}
-const product = {
-    ownerID: 2
-}
 
 const InfoProduct = () => {
+    const datas = [
+        {
+            seen: true,
+        }, {
+            seen: false
+        }, {
+            seen: true
+        }
+    ]
+    const navLinks = [
+        {
+            type: "text",
+            to: "/products",
+            additionalIcon: <i class="fa-solid fa-list"></i>,
+            mobileComponent: <p>Daftar Jual</p>
+        }, {
+            type: "others",
+            to: "",
+            additionalIcon: <Notif datas={datas} />,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")}>Notifications</p>
+        }, {
+            type: "text",
+            to: "",
+            additionalIcon: <i class="fa-solid fa-user"></i>,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Account")}>Akun Saya</p>
+        }, 
+    ]
     
+    const images = [
+        {
+            imageUrl: Image,
+        }, {
+            imageUrl: Image,
+        },
+    ]
+    
+    
+    const user = {
+        ID: 1
+    }
+    const product = {
+        ownerID: 2
+    }
+
+    const [isNavbarOn, setIsNavbarOn] = useState(false)
+    const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
+    const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
+
     const [show, setShow] = useState(false)
     const [bidPrice, setBidPrice] = useState(0)
     const [alertOn, setAlertOn] = useState(true)
@@ -75,6 +83,28 @@ const InfoProduct = () => {
     const { productId } = useParams()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    
+    const onOpen = (value) => {
+        setIsNavbarOn(value)
+    }
+
+    const onClickSlider = (value, target) => {
+        setIsNavbarOn(false)
+        switch(target){
+            case "Notifications":
+                setIsSliderNotificationOn(value)
+                setIsSliderAccountOn(false)
+                break
+            case "Account":
+                setIsSliderNotificationOn(false)
+                setIsSliderAccountOn(value)
+                break
+            default:
+                break
+        }
+
+    }
+
 
     const onClick = (value) => {
         setShow(value)
@@ -109,9 +139,64 @@ const InfoProduct = () => {
         navigate('/')
     }
 
+    const onMarkAsRead = () => {
+
+    }
+
     return (
         <Wrapper>
+            <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
+                <div className="title d-flex justify-content-between py-4">
+                    <h4>Notifications</h4>
+                    <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Notifications")} aria-label="Close"></button>
+                </div>
+                {
+                    datas.map((data, id) => (
+                        <div key={id}>
+                            <NotifItems redirectTo={`/product/${id}`}
+                                        seen={data.seen}
+                                        imageUrl={Image}
+                                        actionName="Penawaran Produk"
+                                        time={"20 Apr, 14:04"}
+                                        productName={"Jam Tangan Casio"}
+                                        originalPrice={250000}
+                                        bidPrice={200000}
+                                        onClick={onMarkAsRead}
+                                        />
+                        </div>
+                    ))
+                }
+            </Slider>
+
+            <Slider topic="Account" active={isSliderAccountOn} slideFrom="left">
+                <div className="title d-flex justify-content-between py-4">
+                    <h4>Akun Saya</h4>
+                    <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Account")} aria-label="Close"></button>
+                </div>
+                <div className="content d-flex flex-column">
+                    <ImagePreview url={Image} />
+                    <Link to='' className='d-flex align-items-center pt-5 pb-1'>
+                        <i class="fa-solid fa-pen-to-square me-3"></i>
+                        <span>Ubah Akun</span>
+                    </Link>
+                    <hr />
+                    <Link to='' className='d-flex align-items-center pt-3 pb-1'>
+                        <i class="fa-solid fa-gear me-3"></i>
+                        <span>Pengaturan Akun</span>
+                    </Link>
+                    <hr />
+                    <Link to='' className='d-flex align-items-center pt-3 pb-1'>
+                        <i class="fa-solid fa-arrow-right-from-bracket me-3"></i>
+                        <span>Ubah Akun</span>
+                    </Link>
+                    <hr />
+
+                    <p>Version 1.0.0</p>
+                </div>
+            </Slider>
             <Navbar navLinks={navLinks}
+                    isOffcanvasOn={isNavbarOn}
+                    onClick={onOpen}
                     withSearchBar  
                     style={{ margin: "7.5px 12px" }}  
                     />
