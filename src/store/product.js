@@ -11,8 +11,8 @@ export const addProduct = createAsyncThunk(
     }
 )
 
-export const setBidPrice = createAsyncThunk(
-    'product/setBidPrice',
+export const addBidPrice = createAsyncThunk(
+    'product/addBidPrice',
     async (payload) => {
         console.log(payload)
         const response = await api.post('/bidPrice')
@@ -36,7 +36,10 @@ const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
-
+        clearError: (state) => {
+            state.error = ""
+            localStorage.setItem("productState", JSON.stringify(state))
+        }
     }, 
     extraReducers: {
         [addProduct.pending]: (state) => {
@@ -55,27 +58,27 @@ const productSlice = createSlice({
         [addProduct.rejected]: (state, action) => {
             state.loading = false
             // error
-            state.error = action.payload
+            state.error = action.error.message
             state.products = []
             localStorage.setItem("productState", JSON.stringify(state))
         },
         
-        [setBidPrice.pending]: (state) => {
+        [addBidPrice.pending]: (state) => {
             state.loading = true
             state.error = ""
             localStorage.setItem("productState", JSON.stringify(state))
         },
         
-        [setBidPrice.fulfilled]: (state) => {
+        [addBidPrice.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
             // add more logic
             localStorage.setItem("productState", JSON.stringify(state))
         },
         
-        [setBidPrice.rejected]: (state, action) => {
+        [addBidPrice.rejected]: (state, action) => {
             state.loading = false
-            state.error = action.payload
+            state.error = action.error.message
             localStorage.setItem("productState", JSON.stringify(state))
         },
     }

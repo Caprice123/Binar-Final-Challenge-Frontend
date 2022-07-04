@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // external hooks
 import { useParams, useNavigate, Link } from 'react-router-dom'
@@ -13,6 +13,10 @@ import Notif from '../components/Notif/index'
 import SellerInfo from '../components/SellerInfo'
 import Alert from '../components/Alert'
 import Image from '../200774.jpg'
+import Slider from '../components/Slider'
+import NotifItems from '../components/NotifItems'
+import ImagePreview from '../components/ImagePreview'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 // styles
 import { Wrapper, Content } from '../pagesStyle/InfoProduct.styles'
@@ -21,10 +25,10 @@ import { Wrapper, Content } from '../pagesStyle/InfoProduct.styles'
 import { validateNumber } from '../helpers/validateNumber'
 
 // redux
-import { useDispatch } from 'react-redux'
-import Slider from '../components/Slider'
-import NotifItems from '../components/NotifItems'
-import ImagePreview from '../components/ImagePreview'
+import { useDispatch, useSelector } from 'react-redux'
+import { productActions, addBidPrice } from '../store/product'
+import { userActions } from '../store/user'
+import { bidActions } from '../store/bids'
 
 
 const InfoProduct = () => {
@@ -71,7 +75,8 @@ const InfoProduct = () => {
     const product = {
         ownerID: 2
     }
-
+    
+    // state
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
@@ -80,9 +85,17 @@ const InfoProduct = () => {
     const [bidPrice, setBidPrice] = useState(0)
     const [alertOn, setAlertOn] = useState(true)
     
+    // params
     const { productId } = useParams()
-    const dispatch = useDispatch()
+    
+    // navigation
     const navigate = useNavigate()
+   
+    // dispatch redux
+    const dispatch = useDispatch()
+    
+    // redux state
+    const { loading, error } = useSelector(state => state.product)
     
     const onOpen = (value) => {
         setIsNavbarOn(value)
@@ -105,7 +118,6 @@ const InfoProduct = () => {
 
     }
 
-
     const onClick = (value) => {
         setShow(value)
     }
@@ -121,8 +133,10 @@ const InfoProduct = () => {
             return
         }
 
+        setShow(false)
+
         try{
-            dispatch(setBidPrice({
+            dispatch(addBidPrice({
                 productId,
                 bidPrice,
             }))
@@ -138,10 +152,21 @@ const InfoProduct = () => {
     const onEdit = () => {
         navigate('/')
     }
-
+    
+    const onCloseAlert = () => {
+        dispatch(productActions.clearError())
+    }
+    
     const onMarkAsRead = () => {
 
     }
+
+    useEffect(() => {
+        dispatch(userActions.clearError())
+        dispatch(productActions.clearError())
+        dispatch(bidActions.clearError())
+	  }, [dispatch])
+
 
     return (
         <Wrapper>
@@ -194,6 +219,9 @@ const InfoProduct = () => {
                     <p>Version 1.0.0</p>
                 </div>
             </Slider>
+            <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+       
             <Navbar navLinks={navLinks}
                     isOffcanvasOn={isNavbarOn}
                     onClick={onOpen}
@@ -299,7 +327,7 @@ const InfoProduct = () => {
                                     <Input type="text"
                                             text="Harga Tawar"
                                             placeholder="Rp 0,00"
-                                            value={`Rp. ${String(bidPrice).toLocaleString()}`}
+                                            value={`Rp. ${bidPrice.toLocaleString()}`}
                                             onChange={onChange}
                                             required
                                             />

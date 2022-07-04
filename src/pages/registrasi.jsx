@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // components
 import Input from '../components/Input';
 import imageCover from '../assets/images/cover.png'
 import ActiveButton from '../components/ActionButton';
+import LoadingSpinner from '../components/LoadingSpinner';
+import Alert from '../components/Alert'
 
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -15,17 +17,26 @@ import { validateString } from '../helpers/validateString';
 import { validateEmail } from '../helpers/validateEmail';
 
 // react redux
-import { register } from '../store/user';
-import { useDispatch } from 'react-redux/es/exports';
+import { register, userActions } from '../store/user';
+import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { productActions } from '../store/product';
+import { bidActions } from '../store/bids';
 
 
 const Registrasi = () => {
+    // state
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
+    
+    // navigation
     const navigate = useNavigate()
+    
+    // dispatch redux
     const dispatch = useDispatch()
+
+    // redux state
+    const { loading, error } = useSelector(state => state.user)
     const onChange = (e) => {
         const { value, id } = e.currentTarget
 
@@ -38,6 +49,8 @@ const Registrasi = () => {
                 break
             case "Password":
                 setPassword(value)
+                break
+            default:
                 break
         }
     }
@@ -76,8 +89,21 @@ const Registrasi = () => {
         }
     }
 
+    const onCloseAlert = () => {
+        dispatch(userActions.clearError())
+    }
+
+    useEffect(() => {
+		dispatch(userActions.clearError())
+		dispatch(productActions.clearError())
+		dispatch(bidActions.clearError())
+	}, [dispatch])
+
     return (
         <div>
+            <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            
             <div className={styles.page_auth + " vh-100"}>
                 <div className="container-fluid h-100">
                     <div className="row align-items-center h-100">
@@ -119,6 +145,7 @@ const Registrasi = () => {
                                                     color="#7126B5"
                                                     text="Masuk"
                                                     style={{ margin: "1.5rem 0" }}
+                                                    onClick={onSubmit}
                                                     />
                                 </form>
                                 <div className={styles.footer}>

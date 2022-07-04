@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import ActiveButton from '../components/ActionButton';
 import Input from '../components/Input';
 import imageCover from '../assets/images/cover.png'
+import LoadingSpinner from '../components/LoadingSpinner';
+import Alert from '../components/Alert';
 
 import { Link } from 'react-router-dom';
 
@@ -14,19 +16,26 @@ import styles from '../assets/css/auth.module.css'
 import { validateEmail } from '../helpers/validateEmail';
 
 // react redux
-import { login } from '../store/user';
-import { useDispatch } from 'react-redux';
+import { login, userActions } from '../store/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { productActions } from '../store/product';
+import { bidActions } from '../store/bids';
+import { useEffect } from 'react';
 
 
 const Login = () => {
+    // state
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
+    
+    // dispatch redux
     const dispatch = useDispatch()
-
+    
+    // redux state
+    const { loading, error } = useSelector(state => state.user)
+    
     const onChange = (e) => {
         const { value, id } = e.currentTarget
-        console.log(value, id);
         switch (id){
             case "Email":
                 setEmail(value)
@@ -65,8 +74,21 @@ const Login = () => {
         }
     }
 
+    const onCloseAlert = () => {
+        dispatch(userActions.clearError())
+    }
+
+    useEffect(() => {
+		dispatch(userActions.clearError())
+		dispatch(productActions.clearError())
+		dispatch(bidActions.clearError())
+	}, [dispatch])
+
     return (
         <div>
+            <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            
             <div className={styles.page_auth + " vh-100"}>
                 <div className="container-fluid h-100">
                     <div className="row align-items-center h-100">
