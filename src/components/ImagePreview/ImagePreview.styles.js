@@ -1,9 +1,12 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
+    width: 100px;
     height: 100px;
     border-radius: 12px;
+    margin: 0 auto;
     overflow: hidden;
+    object-fit: contain;
     img{
         width: 100%;
         height: 100%;

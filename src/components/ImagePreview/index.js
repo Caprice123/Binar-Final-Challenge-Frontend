@@ -5,13 +5,18 @@ const ImagePreview = ({ url, imageIndex, onDelete }) => {
     return (
         <Wrapper className="position-relative">
             <img src={url}
-                    alt="product image" 
+                    alt="preview" 
                     />
-            <i data-imageindex={imageIndex} 
-                className="fa-solid fa-xmark" 
-                onClick={onDelete}>
 
-            </i>
+            {
+                onDelete && (
+                    <i data-imageindex={imageIndex} 
+                        className="fa-solid fa-xmark" 
+                        onClick={onDelete}>
+
+                    </i>
+                )
+            }
         </Wrapper>
     )
 }
