@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // external hooks
 import { useParams, useNavigate } from 'react-router-dom'
@@ -21,60 +21,74 @@ import { Wrapper, Content } from '../pagesStyle/InfoProduct.styles'
 import { validateNumber } from '../helpers/validateNumber'
 
 // redux
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { productActions, addBidPrice } from '../store/product'
+import LoadingSpinner from '../components/LoadingSpinner'
+import { userActions } from '../store/user'
+import { bidActions } from '../store/bids'
 
-const navLinks = [
-    {
-        type: "text",
-        to: "/products",
-        additionalIcon: <i class="fa-solid fa-list"></i>,
-        mobileComponent: <p>Daftar Jual</p>
-    }, {
-        type: "others",
-        to: "/notifications",
-        additionalIcon: <Notif datas={[
-            {
-                seen: true,
-            }, {
-                seen: false
-            }, {
-                seen: true
-            }
-        ]} />,
-        mobileComponent: <p>Notifications</p>
-    }, {
-        type: "text",
-        to: "",
-        additionalIcon: <i class="fa-solid fa-user"></i>,
-        mobileComponent: <p>Akun Saya</p>
-    }, 
-]
-
-const images = [
-    {
-        imageUrl: Image,
-    }, {
-        imageUrl: Image,
-    },
-]
-
-
-const user = {
-    ID: 1
-}
-const product = {
-    ownerID: 2
-}
 
 const InfoProduct = () => {
     
+    // state   
     const [show, setShow] = useState(false)
     const [bidPrice, setBidPrice] = useState(0)
     const [alertOn, setAlertOn] = useState(true)
     
+    // params
     const { productId } = useParams()
-    const dispatch = useDispatch()
+    
+    // navigation
     const navigate = useNavigate()
+    
+    // dispatch redux
+    const dispatch = useDispatch()
+    
+    // redux state
+    const { loading, error } = useSelector(state => state.product)
+    
+    // settings
+    const navLinks = [
+        {
+            type: "text",
+            to: "/products",
+            additionalIcon: <i class="fa-solid fa-list"></i>,
+            mobileComponent: <p>Daftar Jual</p>
+        }, {
+            type: "others",
+            to: "/notifications",
+            additionalIcon: <Notif datas={[
+                {
+                    seen: true,
+                }, {
+                    seen: false
+                }, {
+                    seen: true
+                }
+            ]} />,
+            mobileComponent: <p>Notifications</p>
+        }, {
+            type: "text",
+            to: "",
+            additionalIcon: <i class="fa-solid fa-user"></i>,
+            mobileComponent: <p>Akun Saya</p>
+        }, 
+    ]
+    
+    const images = [
+        {
+            imageUrl: Image,
+        }, {
+            imageUrl: Image,
+        },
+    ]
+
+    const user = {
+        ID: 1
+    }
+    const product = {
+        ownerID: 2
+    }
 
     const onClick = (value) => {
         setShow(value)
@@ -91,8 +105,10 @@ const InfoProduct = () => {
             return
         }
 
+        setShow(false)
+
         try{
-            dispatch(setBidPrice({
+            dispatch(addBidPrice({
                 productId,
                 bidPrice,
             }))
@@ -109,8 +125,21 @@ const InfoProduct = () => {
         navigate('/')
     }
 
+    const onCloseAlert = () => {
+        dispatch(productActions.clearError())
+    }
+
+    useEffect(() => {
+		dispatch(userActions.clearError())
+		dispatch(productActions.clearError())
+		dispatch(bidActions.clearError())
+	}, [dispatch])
+
     return (
         <Wrapper>
+            <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            
             <Navbar navLinks={navLinks}
                     withSearchBar  
                     style={{ margin: "7.5px 12px" }}  
@@ -214,7 +243,7 @@ const InfoProduct = () => {
                                     <Input type="text"
                                             text="Harga Tawar"
                                             placeholder="Rp 0,00"
-                                            value={`Rp. ${String(bidPrice).toLocaleString()}`}
+                                            value={`Rp. ${bidPrice.toLocaleString()}`}
                                             onChange={onChange}
                                             required
                                             />

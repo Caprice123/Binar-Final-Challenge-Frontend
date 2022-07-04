@@ -9,6 +9,9 @@ import Input from '../components/Input'
 import InputFile from '../components/InputFile'
 import Navbar from '../components/Navbar'
 import Textarea from '../components/Textarea'
+import LoadingSpinner from '../components/LoadingSpinner'
+import Alert from '../components/Alert'
+
 import { Link, useNavigate } from 'react-router-dom'
 
 // helpers
@@ -20,19 +23,28 @@ import { Wrapper, Content } from '../pagesStyle/InfoProfile.styles'
 // react redux
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser, userActions } from '../store/user'
+import { productActions } from '../store/product'
+import { bidActions } from '../store/bids'
 
 const InfoProfile = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const { availableCities } = useSelector(state => state.user)
-
+    
+    // state
     const [name, setName] = useState("")
     const [city, setCity] = useState("")
     const [optionCity, setOptionCity] = useState([])
     const [address, setAddress] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [image, setImage] = useState(null)
-
+    
+    // navigation 
+    const navigate = useNavigate()
+    
+    // dispatch redux
+    const dispatch = useDispatch()
+    
+    // redux state
+    const { loading, error, availableCities } = useSelector(state => state.user)
+    
     const onChange = (e) => {
         const { id, value } = e.currentTarget
         switch (id){
@@ -63,7 +75,7 @@ const InfoProfile = () => {
         setImage(file)
     }
 
-    const onDeleteImage = (e) => {
+    const onDeleteImage = () => {
         setImage(null)
     }
 
@@ -114,8 +126,21 @@ const InfoProfile = () => {
 		navigate(-1)
 	} 
 
+    const onCloseAlert = () => {
+        dispatch(userActions.clearError())
+    }
+
+    useEffect(() => {
+		dispatch(userActions.clearError())
+		dispatch(productActions.clearError())
+		dispatch(bidActions.clearError())
+	}, [dispatch])
+
     return (
         <Wrapper>
+            <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            
             <Navbar centeredText="Lengkapi Info Akun"
                     />
                 
