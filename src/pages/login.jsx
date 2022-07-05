@@ -100,7 +100,7 @@ const Login = () => {
     return (
         <div>
             <Alert active={flashMessage.length > 0} 
-					backgroundColor="green" 
+					backgroundColor="red" 
 					color="white" 
 					text={flashMessage} 
 					onClick={onCloseFlash} 

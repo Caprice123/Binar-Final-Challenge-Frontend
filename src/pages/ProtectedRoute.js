@@ -15,7 +15,9 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
                 isLoggedIn && (allowedRoles.length === 0 || allowedRoles.contains(currentUser.role)) ? (
                     children
                 ) : (
-                    <Navigate to='/login'/>
+                    <Navigate to='/login' 
+                                state={{message: "You are unauthorized"}}
+                                />
                 )
             }
         </>
