@@ -45,7 +45,7 @@ const InfoProduct = () => {
         {
             type: "text",
             to: "/products",
-            additionalIcon: <i class="fa-solid fa-list"></i>,
+            additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {
             type: "others",
@@ -55,7 +55,7 @@ const InfoProduct = () => {
         }, {
             type: "text",
             to: "",
-            additionalIcon: <i class="fa-solid fa-user"></i>,
+            additionalIcon: <i className="fa-solid fa-user"></i>,
             mobileComponent: <p onClick={() => onClickSlider(true, "Account")}>Akun Saya</p>
         }, 
     ]
@@ -206,17 +206,17 @@ const InfoProduct = () => {
                 <div className="content d-flex flex-column">
                     <ImagePreview url={Image} />
                     <Link to='' className='d-flex align-items-center pt-5 pb-1'>
-                        <i class="fa-solid fa-pen-to-square me-3"></i>
+                        <i className="fa-solid fa-pen-to-square me-3"></i>
                         <span>Ubah Akun</span>
                     </Link>
                     <hr />
                     <Link to='' className='d-flex align-items-center pt-3 pb-1'>
-                        <i class="fa-solid fa-gear me-3"></i>
+                        <i className="fa-solid fa-gear me-3"></i>
                         <span>Pengaturan Akun</span>
                     </Link>
                     <hr />
                     <Link to='' className='d-flex align-items-center pt-3 pb-1'>
-                        <i class="fa-solid fa-arrow-right-from-bracket me-3"></i>
+                        <i className="fa-solid fa-arrow-right-from-bracket me-3"></i>
                         <span>Ubah Akun</span>
                     </Link>
                     <hr />

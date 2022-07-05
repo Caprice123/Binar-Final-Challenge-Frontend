@@ -49,7 +49,7 @@ const navLinks = [
     {
         type: "text",
         to: "/",
-        additionalIcon: <i class="fa-solid fa-list"></i>,
+        additionalIcon: <i className="fa-solid fa-list"></i>,
         mobileComponent: <p>Daftar Jual</p>
     }, {
         type: "others",
@@ -59,7 +59,7 @@ const navLinks = [
     }, {
         type: "text",
         to: "",
-        additionalIcon: <i class="fa-solid fa-user"></i>,
+        additionalIcon: <i className="fa-solid fa-user"></i>,
         mobileComponent: <p>Akun Saya</p>
     }, 
 ]

@@ -161,7 +161,7 @@ const Registrasi = () => {
                                     
                                     <p className='text-center mt-3'>
                                         Sudah punya akun? 
-                                        <Link to="/login" class="text-purple">
+                                        <Link to="/login" className="text-purple">
                                             Masuk disini
                                         </Link>
                                     </p>
