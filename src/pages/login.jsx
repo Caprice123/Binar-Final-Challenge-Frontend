@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // components
 import ActiveButton from '../components/ActionButton';
@@ -7,7 +7,7 @@ import imageCover from '../assets/images/cover.png'
 import LoadingSpinner from '../components/LoadingSpinner';
 import Alert from '../components/Alert';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // styles
 import styles from '../assets/css/auth.module.css'
@@ -20,14 +20,18 @@ import { login, userActions } from '../store/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { productActions } from '../store/product';
 import { bidActions } from '../store/bids';
-import { useEffect } from 'react';
 
+// hooks
+import { useFlashMessage } from '../hooks/useFlashMessage';
 
 const Login = () => {
     // state
+    const [flashMessage, setFlashMessage] = useFlashMessage("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     
+    const navigate = useNavigate()
+
     // dispatch redux
     const dispatch = useDispatch()
     
@@ -65,10 +69,15 @@ const Login = () => {
         }
 
         try{
-            dispatch(login({
+            await dispatch(login({
                 email,
                 password
             }))
+            navigate('/', { 
+                state: {
+                    message: "Login Successful",
+                },
+            })
         } catch(err){
             console.log(err);
         }
@@ -77,6 +86,10 @@ const Login = () => {
     const onCloseAlert = () => {
         dispatch(userActions.clearError())
     }
+      
+	const onCloseFlash = () => {
+		setFlashMessage("")
+	}
 
     useEffect(() => {
 		dispatch(userActions.clearError())
@@ -86,8 +99,19 @@ const Login = () => {
 
     return (
         <div>
+            <Alert active={flashMessage.length > 0} 
+					backgroundColor="green" 
+					color="white" 
+					text={flashMessage} 
+					onClick={onCloseFlash} 
+					/>
             <LoadingSpinner active={loading} />
-            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            <Alert active={error.length > 0} 
+                    backgroundColor="var(--redalert-font)" 
+                    color="var(--redalert-background)" 
+                    text={error} 
+                    onClick={onCloseAlert} 
+                    />
             
             <div className={styles.page_auth + " vh-100"}>
                 <div className="container-fluid h-100">

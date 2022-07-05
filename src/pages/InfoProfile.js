@@ -79,7 +79,7 @@ const InfoProfile = () => {
         setImage(null)
     }
 
-    const onSubmit = () => {
+    const onSubmit =async () => {
         if(name.length === 0){
             alert("Tolong isi nama anda")
             return
@@ -103,8 +103,15 @@ const InfoProfile = () => {
             phoneNumber
         }
 
+
+
         try{
-            dispatch(updateUser(payload))
+            await dispatch(updateUser(payload))
+            navigate('/', {
+                state: {
+                    message: "Successfully updated profile"
+                }
+            })
         } catch(err){
             console.log(err)
         }
@@ -139,7 +146,12 @@ const InfoProfile = () => {
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />
-            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            <Alert active={error.length > 0} 
+                    backgroundColor="var(--redalert-font)" 
+                    color="var(--redalert-background)" 
+                    text={error} 
+                    onClick={onCloseAlert} 
+                    />
             
             <Navbar centeredText="Lengkapi Info Akun"
                     />

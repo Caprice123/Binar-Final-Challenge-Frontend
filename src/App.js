@@ -23,7 +23,7 @@ function App() {
 							<Login/>
 						} 
 					/>
-					<Route path="/daftar" element={
+					<Route path="/register" element={
 							<Registrasi/>
 						} 
 					/>

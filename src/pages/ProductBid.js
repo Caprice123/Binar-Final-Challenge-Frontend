@@ -13,7 +13,7 @@ import Popup from '../components/Popup'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Alert from '../components/Alert'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // styles
 import { Wrapper, Content } from '../pagesStyle/ProductBid.styles'
@@ -75,6 +75,9 @@ const ProductBid = () => {
     const [isUpdateStatusApprove, setIsUpdateStatusApprove] = useState(false)
     const [updateStatus, setUpdateStatus] = useState("sold")
     
+    // navigation
+    const navigate = useNavigate()
+
     // dispatch redux
     const dispatch = useDispatch()
 
@@ -85,12 +88,18 @@ const ProductBid = () => {
         setIsRejectApprove(value)
     }
 
-    const onReject = () => {
+    const onReject = async () => {
         try{
-            dispatch(rejectBid({
+            setIsRejectApprove(false)
+            await dispatch(rejectBid({
                 transactionId: 1,
             }))
-            setIsRejectApprove(false)
+
+            navigate('/', {
+                state: {
+                    message: "Successfully reject transaction"
+                }
+            })
         } catch(err){
             console.log(err)
         }
@@ -100,12 +109,19 @@ const ProductBid = () => {
         setIsAcceptApprove(value)
     }
 
-    const onAccept = () => {
+    const onAccept = async () => {
         try{
-            dispatch(acceptBid({
+            setIsAcceptApprove(false)
+            
+            await dispatch(acceptBid({
                 transactionId: 1,
             }))
-            setIsAcceptApprove(false)
+
+            navigate('/', {
+                state: {
+                    message: "Successfully accept product bid"
+                }
+            })
         } catch(err){
             console.log(err)
         }
@@ -115,14 +131,18 @@ const ProductBid = () => {
         setIsUpdateStatusApprove(value)
     }   
 
-    const onUpdateStatus = () => {
+    const onUpdateStatus = async () => {
         try{
-            dispatch(updateStatusBid({
+            setIsUpdateStatusApprove(false)
+            await dispatch(updateStatusBid({
                 transactionId: 1,
                 updateStatus,
             }))
-            
-            setIsUpdateStatusApprove(false)
+            navigate('/', {
+                state: {
+                    message: "Successfully update transaction"
+                }
+            })
         } catch(err){
             console.log(err)
         }
@@ -146,12 +166,15 @@ const ProductBid = () => {
 		dispatch(bidActions.clearError())
 	}, [dispatch])
 
-    console.log(error)
-
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />
-            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            <Alert active={error.length > 0} 
+                    backgroundColor="var(--redalert-font)" 
+                    color="var(--redalert-background)" 
+                    text={error} 
+                    onClick={onCloseAlert} 
+                    />
             
             <Navbar centeredText="Info Penawar" 
                     />

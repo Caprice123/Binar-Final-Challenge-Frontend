@@ -127,7 +127,7 @@ const InfoProduct = () => {
         validateNumber(value, setBidPrice)
     }
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (bidPrice === 0){
             alert("Please insert bid price")
             return
@@ -136,10 +136,15 @@ const InfoProduct = () => {
         setShow(false)
 
         try{
-            dispatch(addBidPrice({
+            await dispatch(addBidPrice({
                 productId,
                 bidPrice,
             }))
+            navigate('/', {
+                state: {
+                    message: "Successfully bid the product"
+                } 
+            })
         } catch(err){
             console.log(err)
         }

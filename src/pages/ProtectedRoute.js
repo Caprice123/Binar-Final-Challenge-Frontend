@@ -12,7 +12,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
     return (
         <>
             {
-                !isLoggedIn && (allowedRoles.length === 0 || allowedRoles.contains(currentUser.role)) ? (
+                isLoggedIn && (allowedRoles.length === 0 || allowedRoles.contains(currentUser.role)) ? (
                     children
                 ) : (
                     <Navigate to='/login'/>
