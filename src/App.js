@@ -19,6 +19,7 @@ function App() {
 		<Provider store={store}>
 			<Router>
 				<Routes>
+					{/* Auth Routes */}
 					<Route path="/login" element={
 							<Login/>
 						} 
@@ -28,15 +29,18 @@ function App() {
 						} 
 					/>
 
-					<Route path='/' element={
-							<ProtectedRoute allowedRoles={[]}>
-								<AddProduct />
+					{/* User Routes */}
+					<Route path='/user/profile' element={
+						<ProtectedRoute allowedRoles={[]}>
+								<InfoProfile />
 							</ProtectedRoute>
 						} 
 					/>
-					<Route path='/user/profile' element={
+
+					{/* Product Routes */}
+					<Route path='/product/add' element={
 							<ProtectedRoute allowedRoles={[]}>
-								<InfoProfile />
+								<AddProduct />
 							</ProtectedRoute>
 						} 
 					/>
