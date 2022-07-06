@@ -1,0 +1,36 @@
+.btnCategory{
+    display: block;
+    width: 100%;
+    color: #000000;
+    text-decoration: none;
+}
+
+.btnCategory:hover{
+    color: #000000;
+}
+
+.profileName{
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.profileCity{
+    font-size: .9 rem;
+    margin: 0;
+}
+
+.catalogLink{
+    text-decoration: none;
+}
+
+.catalogTitle,
+.catalogCategory,
+.catalogPrice{
+    color: #000000;
+}
+
+.catalogTitle:hover,
+.catalogCategory:hover,
+.catalogPrice:hover{
+    color: #000000;
+}
