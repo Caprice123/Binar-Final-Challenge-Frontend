@@ -8,7 +8,7 @@ export const Wrapper = styled.nav`
 `
 
 export const Content = styled.div`
-    max-width: 90%;
+    width: 90%;
     
     .centered-text{
         position: absolute;
@@ -26,6 +26,7 @@ export const Content = styled.div`
     .offcanvas-body{
         width: 75%;
         margin: 0 auto;
+        padding: 1rem 0;
     }
     
     .offcanvas-header{
@@ -35,6 +36,8 @@ export const Content = styled.div`
     .offcanvas-body{
         a{
             padding: 0;
+            margin: 7.5px 0 !important;
+
         }
     }
 
@@ -46,8 +49,7 @@ export const Content = styled.div`
     }
 
     @media screen and (max-width: 768px){
-        max-width: 100vw;
-
+        width: 90%;
         .centered-text{
             font-size: 12px;
         }
@@ -59,6 +61,17 @@ export const Actions = styled.div`
         min-width: 100px;
         height: 35px;
         background-color: var(--primary-purple-05);
+    }
+
+    .nav-link{
+        padding: 0;
+        i{
+            font-size: 1.5rem;
+            transition: 0.25s; 
+            &:hover{
+                color: var(--primary-purple-04);
+            }  
+        }
     }
     @media screen and (max-width: 768px) {
         display: none;

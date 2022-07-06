@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 
 // components
-import ActiveButton from '../components/ActionButton'
+import ActionButton from '../components/ActionButton'
 import BorderOnlyButton from '../components/BorderOnlyButton'
 import DragAndDrop from '../components/DragAndDrop'
 import Dropdown from '../components/Dropdown'
@@ -123,13 +123,17 @@ const AddProduct = () => {
 			alert("Tolong masukkan 1 foto product")
 			return
 		}
-		dispatch(addProduct({
-			name,
-			price,
-			category,
-			productImages
-		}))
-		navigate("/")
+		try{
+			dispatch(addProduct({
+				name,
+				price,
+				category,
+				productImages
+			}))
+			navigate("/")
+		} catch(err){
+			console.log(err)
+		}
 	}
 
 	const onDelete = (e) => {
@@ -155,11 +159,15 @@ const AddProduct = () => {
 		setProductImages(productImagesUpdated.slice(0, 4))
 	}, [productImages])
 
+	const onClickGoBack = () => {
+		navigate(-1)
+	}
+
 	return (
 		<Wrapper>
 			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<Content className="mx-auto position-relative">
-				<Link to='/' className="back-icon py-3">
+				<Link to='/' className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
 				<Input type="text" 
@@ -193,7 +201,7 @@ const AddProduct = () => {
 							/>
 
 				<label className='py-2'>Foto Produk (max 4 gambar)</label>
-				<Grid>
+				<Grid maxSize="100px">
 					{
 						productImages?.map((productImage, id) => (
 							<ImagePreview key={id} 
@@ -212,7 +220,7 @@ const AddProduct = () => {
 									color="#7126B5"
 									onClick={onPreview}
 									/>
-					<ActiveButton text="Terbitkan"
+					<ActionButton text="Terbitkan"
 									width="40%"
 									color="#7126B5"
 									onClick={onSubmit}
@@ -225,8 +233,38 @@ const AddProduct = () => {
 						price={price}
 						category={category}
 						description={description}
-						onSubmit={onSubmit}
-						onClick={onClosePreview}
+						onClose={onClosePreview}
+						actionButtons={[
+							<ActionButton text="Terbitakan"
+                                            width="90%"
+                                            color="#7126B5"
+                                            onClick={onSubmit}
+                                            />,
+
+                            <BorderOnlyButton text="Edit"
+                                            width="90%" 
+                                            color="#7126B5"
+                                            onClick={onClosePreview}
+                                            />
+						]}
+						mobileButton={
+							<ActionButton text="Terbitakan"
+                                        width="calc(90% + 5px)"
+                                        color="#7126B5"
+                                        onClick={onSubmit}
+                                        style={
+                                                { 
+                                                    position: "fixed", 
+                                                    bottom: "10px", 
+													display: `${preview ? 'initial' : 'none'}`,
+                                                    left: `${preview ? '50%' : '100%'}`, 
+                                                    transform: `${preview ? 'translateX(calc(-50% + 2.5px))' : 'translateX(0)'}`, 
+                                                    zIndex: "1000", 
+                                                    transition: "0.5s" 
+                                                }
+                                            }
+                                        />
+						}
 						/>
 		</Wrapper>
 	)
