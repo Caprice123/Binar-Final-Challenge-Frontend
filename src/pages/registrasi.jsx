@@ -22,7 +22,6 @@ import { useDispatch, useSelector } from 'react-redux/es/exports';
 import { productActions } from '../store/product';
 import { bidActions } from '../store/bids';
 
-
 const Registrasi = () => {
     // state
     const [name, setName] = useState("")

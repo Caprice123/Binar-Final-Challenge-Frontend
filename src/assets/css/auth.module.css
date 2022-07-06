@@ -1,4 +1,4 @@
-.auth_form-wrapper{
+.auth_form_wrapper{
     padding: 0 75px;
 }
 
@@ -35,7 +35,7 @@
     color: #ffffff;
 }
 
-.brand p{
+.text_brand{
     line-height: 35px;
     margin: 0;
     margin-left: 25px;
@@ -46,7 +46,7 @@
         position: relative;
     }
 
-    .auth_form-wrapper{
+    .auth_form_wrapper{
         padding: 0;
     }
 

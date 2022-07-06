@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import store from './store';
 import Login from './pages/login';
 import Registrasi from './pages/registrasi';
+import DaftarJual from './pages/DaftarJual'
 
 
 import AddProduct from './pages/AddProduct';
@@ -19,6 +20,12 @@ function App() {
 		<Provider store={store}>
 			<Router>
 				<Routes>
+					<Route path="/daftar-jual" element={
+              						<ProtectedRoute allowedRoles={[]}>
+								<DaftarJual />
+							</ProtectedRoute>
+           					} 
+          				/>
 					<Route path="/login" element={
 							<Login/>
 						} 
