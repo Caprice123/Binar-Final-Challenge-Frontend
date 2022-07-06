@@ -20,30 +20,29 @@ function App() {
 		<Provider store={store}>
 			<Router>
 				<Routes>
-					<Route path="/daftar-jual" element={
-              						<ProtectedRoute allowedRoles={[]}>
-								<DaftarJual />
-							</ProtectedRoute>
-           					} 
-          				/>
+					{/* Auth Routes */}
+					
 					<Route path="/login" element={
 							<Login/>
 						} 
 					/>
-					<Route path="/daftar" element={
+					<Route path="/register" element={
 							<Registrasi/>
 						} 
 					/>
 
-					<Route path='/' element={
-							<ProtectedRoute allowedRoles={[]}>
-								<AddProduct />
+					{/* User Routes */}
+					<Route path='/user/profile' element={
+						<ProtectedRoute allowedRoles={[]}>
+								<InfoProfile />
 							</ProtectedRoute>
 						} 
 					/>
-					<Route path='/user/profile' element={
+
+					{/* Product Routes */}
+					<Route path='/product/add' element={
 							<ProtectedRoute allowedRoles={[]}>
-								<InfoProfile />
+								<AddProduct />
 							</ProtectedRoute>
 						} 
 					/>
@@ -58,7 +57,14 @@ function App() {
 								<ProductBid />
 							</ProtectedRoute>
 						} 
+            
 					/>
+          <Route path="/daftar-jual" element={
+              						<ProtectedRoute allowedRoles={[]}>
+								<DaftarJual />
+							</ProtectedRoute>
+           					} 
+          				/>
 				</Routes>
 				<GlobalStyle />
 			</Router>

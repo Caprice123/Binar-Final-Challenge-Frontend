@@ -32,7 +32,7 @@ export const login = createAsyncThunk(
     async (payload) => {
         console.log(payload)
         const response = await api.post(
-            '/login', 
+            '/api/v1/login', 
             payload
         )
         const data = response.data
@@ -45,7 +45,7 @@ export const register = createAsyncThunk(
     async (payload) => {
         console.log(payload)
         const response = await api.post(
-            '/register', 
+            '/api/v1/register', 
             payload
         )
         const data = response.data
@@ -105,9 +105,11 @@ const userSlice = createSlice({
             state.error = ""
             localStorage.setItem("userState", JSON.stringify(state))
         },
-        [login.fulfilled]: (state) => {
+        [login.fulfilled]: (state, action) => {
+            console.log(action.payload)
             state.loading = false
             state.error = ""
+            state.user = action.payload
             state.isLoggedIn = true
             localStorage.setItem("userState", JSON.stringify(state))
         },

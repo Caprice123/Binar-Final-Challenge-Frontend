@@ -54,7 +54,7 @@ const Registrasi = () => {
         }
     }
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (name.length === 0){
             alert("Tolong isi nama")
             return
@@ -76,13 +76,17 @@ const Registrasi = () => {
         }
 
         try{
-            dispatch(register({
+            await dispatch(register({
                 name,
                 email,
                 password
             }))
     
-            navigate('/login')
+            navigate('/login', {
+                state: {
+                    message: "Successfully register"
+                }
+            })
         } catch(err){
             console.log(err);
         }
@@ -101,7 +105,12 @@ const Registrasi = () => {
     return (
         <div>
             <LoadingSpinner active={loading} />
-            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+            <Alert active={error.length > 0} 
+                    backgroundColor="var(--redalert-font)" 
+                    color="var(--redalert-background)" 
+                    text={error} 
+                    onClick={onCloseAlert} 
+                    />
             
             <div className={styles.page_auth + " vh-100"}>
                 <div className="container-fluid h-100">
@@ -151,7 +160,7 @@ const Registrasi = () => {
                                     
                                     <p className='text-center mt-3'>
                                         Sudah punya akun? 
-                                        <Link to="/login" class="text-purple">
+                                        <Link to="/login" className="text-purple">
                                             Masuk disini
                                         </Link>
                                     </p>

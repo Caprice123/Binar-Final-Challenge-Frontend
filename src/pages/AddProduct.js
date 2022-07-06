@@ -11,6 +11,8 @@ import Input from '../components/Input'
 import Textarea from '../components/Textarea'
 import Preview from '../components/Preview'
 import Navbar from '../components/Navbar'
+import LoadingSpinner from '../components/LoadingSpinner'
+import Alert from '../components/Alert'
 
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -22,11 +24,15 @@ import { validateSizeFile } from '../helpers/validateSizeFile'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProduct, productActions } from '../store/product'
 
-import { Wrapper, Content } from '../pagesStyle/AddProduct.styles'
-import LoadingSpinner from '../components/LoadingSpinner'
-import Alert from '../components/Alert'
 import { userActions } from '../store/user'
 import { bidActions } from '../store/bids'
+
+// hooks
+import { useFlashMessage } from '../hooks/useFlashMessage'
+
+// styles
+import { Wrapper, Content } from '../pagesStyle/AddProduct.styles'
+
 const options = [ 
 	{
 		id: 1,
@@ -50,6 +56,7 @@ const AddProduct = () => {
 	
 	
 	// state
+	const [flashMessage, setFlashMessage] = useFlashMessage("")
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState(0)
 	const [category, setCategory] = useState("")
@@ -179,6 +186,10 @@ const AddProduct = () => {
 	const onCloseAlert = () => {
 		dispatch(productActions.clearError())
 	}
+	  
+	const onCloseFlash = () => {
+		setFlashMessage("")
+	}
 
 	useEffect(() => {
 		dispatch(userActions.clearError())
@@ -186,10 +197,22 @@ const AddProduct = () => {
 		dispatch(bidActions.clearError())
 	}, [dispatch])
 
+
 	return (
 		<Wrapper>
+			<Alert active={flashMessage.length > 0} 
+					backgroundColor="green" 
+					color="white" 
+					text={flashMessage} 
+					onClick={onCloseFlash} 
+					/>
 			<LoadingSpinner active={loading} />
-			<Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
+			<Alert active={error.length > 0} 
+					backgroundColor="var(--redalert-font)" 
+					color="var(--redalert-background)" 
+					text={error} 
+					onClick={onCloseAlert} 
+					/>
             
 			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<Content className="mx-auto position-relative">

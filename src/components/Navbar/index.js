@@ -19,11 +19,15 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
     }, [isOffcanvasOn])
 
     const onOpen = () => {
-        onClick(true)
+        if (onClick){
+            onClick(true)
+        }
     }
 
     const onClose = () => {
-        onClick(false)
+        if (onClick){
+            onClick(false)
+        }
     }
 
     return (
