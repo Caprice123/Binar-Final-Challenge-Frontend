@@ -107,11 +107,11 @@ const Index = () => {
                                     </div>
                                 </div>
                                 <div className="col-12 col-md-9 mt-4 mt-md-0">
-                                    <div className="row g-3">
-                                        {hash === "#catalog" ? <Catalog /> : <></>}
-                                        {hash === "#wishlist" ? <Wishlist /> : <></>}
-                                        {hash === "#sold" ? <ProductSold /> : <></>}
-                                    </div>
+                                    
+                                    {hash === "#catalog" ? <Catalog /> : <></>}
+                                    {hash === "#wishlist" ? <Wishlist /> : <></>}
+                                    {hash === "#sold" ? <ProductSold /> : <></>}
+                                    
                                 </div>
                             </div>
                         </div>

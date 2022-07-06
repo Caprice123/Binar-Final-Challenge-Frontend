@@ -1,72 +1,13 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import imageClock from "../../assets/images/clock.png"
+import React, { useState } from 'react';
 
-import styles from '../../assets/css/daftar-jual.module.css'
+import ListCatalogCard from '../../components/ListCatalogCard'
 
 const Catalog = () => {
+    const [products, setProducts] = useState([]);
+
     return (
         <>
-            <div className="col-6 col-md-4">
-                <Link class={styles.catalogLink} to={""}>
-                    <div class="card">
-                        <img src={imageClock} class="card-img-top" alt="..." />
-                        <div class="card-body">
-                            <h5 class={`card-title ${styles.catalogTitle}`}>Jam Tangan Casio</h5>
-                            <p class={`card-text ${styles.catalogCategory}`}><small class="text-muted">Aksesoris</small></p>
-                            <h5 class={`card-text ${styles.catalogPrice}`}>Rp 250.00</h5>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-            <div className="col-6 col-md-4">
-                <Link class={styles.catalogLink} to={""}>
-                    <div class="card">
-                        <img src={imageClock} class="card-img-top" alt="..." />
-                        <div class="card-body">
-                            <h5 class={`card-title ${styles.catalogTitle}`}>Jam Tangan Casio</h5>
-                            <p class={`card-text ${styles.catalogCategory}`}><small class="text-muted">Aksesoris</small></p>
-                            <h5 class={`card-text ${styles.catalogPrice}`}>Rp 250.00</h5>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-            <div className="col-6 col-md-4">
-                <Link class={styles.catalogLink} to={""}>
-                    <div class="card">
-                        <img src={imageClock} class="card-img-top" alt="..." />
-                        <div class="card-body">
-                            <h5 class={`card-title ${styles.catalogTitle}`}>Jam Tangan Casio</h5>
-                            <p class={`card-text ${styles.catalogCategory}`}><small class="text-muted">Aksesoris</small></p>
-                            <h5 class={`card-text ${styles.catalogPrice}`}>Rp 250.00</h5>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-            <div className="col-6 col-md-4">
-                <Link class={styles.catalogLink} to={""}>
-                    <div class="card">
-                        <img src={imageClock} class="card-img-top" alt="..." />
-                        <div class="card-body">
-                            <h5 class={`card-title ${styles.catalogTitle}`}>Jam Tangan Casio</h5>
-                            <p class={`card-text ${styles.catalogCategory}`}><small class="text-muted">Aksesoris</small></p>
-                            <h5 class={`card-text ${styles.catalogPrice}`}>Rp 250.00</h5>
-                        </div>
-                    </div>
-                </Link>
-            </div>
-            <div className="col-6 col-md-4">
-                <Link class={styles.catalogLink} to={""}>
-                    <div class="card">
-                        <img src={imageClock} class="card-img-top" alt="..." />
-                        <div class="card-body">
-                            <h5 class={`card-title ${styles.catalogTitle}`}>Jam Tangan Casio</h5>
-                            <p class={`card-text ${styles.catalogCategory}`}><small class="text-muted">Aksesoris</small></p>
-                            <h5 class={`card-text ${styles.catalogPrice}`}>Rp 250.00</h5>
-                        </div>
-                    </div>
-                </Link>
-            </div>
+            <ListCatalogCard data={products} action={true} />
         </>
     );
 }

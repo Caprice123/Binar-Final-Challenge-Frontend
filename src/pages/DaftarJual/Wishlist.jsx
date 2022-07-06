@@ -1,12 +1,18 @@
-import React from 'react';
-import imagempty from '../../assets/images/empty.png'
+import React, { useState } from 'react';
+
+import ListCatalogCard from '../../components/ListCatalogCard'
+import EmptyState from '../../components/EmptyState'
 
 const Wishlist = () => {
+    const [products, setProducts] = useState([]);
+    
     return (
         <>
-            <div className="col-12 text-center">
-                <img src={imagempty} alt=""/>
-            </div>
+            {products.length > 0 ?
+                <ListCatalogCard data={products} />
+            :
+                <EmptyState />
+            }
         </>
     );
 }
