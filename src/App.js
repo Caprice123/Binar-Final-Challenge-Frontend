@@ -21,11 +21,11 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path="/daftar-jual" element={
-              <ProtectedRoute allowedRoles={[]}>
+              						<ProtectedRoute allowedRoles={[]}>
 								<DaftarJual />
 							</ProtectedRoute>
-            } 
-          />
+           					} 
+          				/>
 					<Route path="/login" element={
 							<Login/>
 						} 
