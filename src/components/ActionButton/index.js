@@ -6,15 +6,20 @@ import { Wrapper } from './ActionButton.styles'
 const ActionButton = ({ width, color, icon, text, onClick, ...additionalProps }) => {
     return (
         <Wrapper type="button" 
-                className="btn btn-primary"
+                className="btn d-flex align-items-center btn-primary"
                 width={width}
                 color={color} 
                 onClick={onClick}
                 {...additionalProps}
                 >
-                <span>
-                    {icon}
-                </span>
+                
+                {
+                    icon && (
+                        <span>
+                            {icon}
+                        </span>
+                    )
+                }
                 { text }
 
         </Wrapper>
