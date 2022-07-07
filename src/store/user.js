@@ -80,7 +80,7 @@ const userSlice = createSlice({
             console.log(action.payload)
             state.loading = false
             state.error = ""
-            state.user = action.payload
+            state.currentUser = action.payload
             state.isLoggedIn = true
             localStorage.setItem("userState", JSON.stringify(state))
         },

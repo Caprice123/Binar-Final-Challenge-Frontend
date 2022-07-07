@@ -1,4 +1,4 @@
-
+// IMAGE BLOM BERFUNGSI DAN ADA DELAY BENTAR 
 import React, { useEffect, useState } from 'react'
 
 // components
@@ -31,12 +31,12 @@ import { bidActions } from '../store/bids'
 const InfoProfile = () => {
     // redux state
     const { currentUser, loading, error, availableCities } = useSelector(state => state.user)
-
+    console.log(currentUser)
     // state
-    const [name, setName] = useState(currentUser.user.name ? currentUser.user.name : "")
-    const [city, setCity] = useState(currentUser.user.city ? currentUser.user.city : "")
-    const [address, setAddress] = useState(currentUser.user.address ? currentUser.user.address : "")
-    const [phone, setPhone] = useState(currentUser.user.phone ? currentUser.user.phone : "")
+    const [name, setName] = useState("")
+    const [city, setCity] = useState("")
+    const [address, setAddress] = useState("")
+    const [phone, setPhone] = useState("")
     const [image, setImage] = useState(null)
     
     const [optionCity, setOptionCity] = useState([])
@@ -111,11 +111,11 @@ const InfoProfile = () => {
         try{
             console.log("here")
             await dispatch(updateUser(payload))
-            navigate('/', {
-                state: {
-                    message: "Successfully updated profile"
-                }
-            })
+            // navigate('/', {
+            //     state: {
+            //         message: "Successfully updated profile"
+            //     }
+            // })
         } catch(err){
             console.log(err)
         }
@@ -150,6 +150,13 @@ const InfoProfile = () => {
             setOptionCity(availableCities)
         }
     }, [city, availableCities])
+
+    useEffect(() => {
+        setName(currentUser.user.name)
+        setCity(currentUser.user.city)
+        setAddress(currentUser.user.address)
+        setPhone(currentUser.user.phone)
+    }, [currentUser.user])
 
     return (
         <Wrapper>
