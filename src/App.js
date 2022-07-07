@@ -59,12 +59,12 @@ function App() {
 						} 
             
 					/>
-          <Route path="/daftar-jual" element={
-              						<ProtectedRoute allowedRoles={[]}>
+          			<Route path="/daftar-jual" element={
+							<ProtectedRoute allowedRoles={[]}>
 								<DaftarJual />
 							</ProtectedRoute>
-           					} 
-          				/>
+						} 
+					/>
 				</Routes>
 				<GlobalStyle />
 			</Router>

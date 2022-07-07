@@ -22,10 +22,14 @@ import { validateSizeFile } from '../helpers/validateSizeFile'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
-import { addProduct, productActions } from '../store/product'
 
+// actions
+import { productActions } from '../store/product'
 import { userActions } from '../store/user'
 import { bidActions } from '../store/bids'
+
+// services
+import { addProduct } from '../services/product'
 
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage'
@@ -53,7 +57,8 @@ const options = [
 ]
 
 const AddProduct = () => {
-	
+	// redux state
+	const { loading, error } = useSelector(state => state.product)
 	
 	// state
 	const [flashMessage, setFlashMessage] = useFlashMessage("")
@@ -69,9 +74,6 @@ const AddProduct = () => {
 
 	// dispatch redux
 	const dispatch = useDispatch()
-
-	// redux state
-	const { loading, error } = useSelector(state => state.product)
 
 	const onChange = (e) => {
 		const { id, value } = e.currentTarget

@@ -16,15 +16,23 @@ import styles from '../assets/css/auth.module.css'
 import { validateEmail } from '../helpers/validateEmail';
 
 // react redux
-import { login, userActions } from '../store/user';
 import { useDispatch, useSelector } from 'react-redux';
+
+// actions
+import { userActions } from '../store/user';
 import { productActions } from '../store/product';
 import { bidActions } from '../store/bids';
+
+// services
+import { login } from '../services/user';
 
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage';
 
 const Login = () => {
+    // redux state
+    const { loading, error } = useSelector(state => state.user)
+    
     // state
     const [flashMessage, setFlashMessage] = useFlashMessage("")
     const [email, setEmail] = useState("")
@@ -35,8 +43,6 @@ const Login = () => {
     // dispatch redux
     const dispatch = useDispatch()
     
-    // redux state
-    const { loading, error } = useSelector(state => state.user)
     
     const onChange = (e) => {
         const { value, id } = e.currentTarget

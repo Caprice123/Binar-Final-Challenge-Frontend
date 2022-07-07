@@ -17,12 +17,20 @@ import { validateString } from '../helpers/validateString';
 import { validateEmail } from '../helpers/validateEmail';
 
 // react redux
-import { register, userActions } from '../store/user';
-import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { useDispatch, useSelector } from 'react-redux';
+
+// actions
+import { userActions } from '../store/user';
 import { productActions } from '../store/product';
 import { bidActions } from '../store/bids';
 
+// services
+import { register } from '../services/user';
+
 const Registrasi = () => {
+    // redux state
+    const { loading, error } = useSelector(state => state.user)
+    
     // state
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -34,8 +42,6 @@ const Registrasi = () => {
     // dispatch redux
     const dispatch = useDispatch()
 
-    // redux state
-    const { loading, error } = useSelector(state => state.user)
     const onChange = (e) => {
         const { value, id } = e.currentTarget
 
