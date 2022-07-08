@@ -1,4 +1,4 @@
-
+// IMAGE BLOM BERFUNGSI DAN ADA DELAY BENTAR 
 import React, { useEffect, useState } from 'react'
 
 // components
@@ -9,7 +9,10 @@ import Input from '../components/Input'
 import InputFile from '../components/InputFile'
 import Navbar from '../components/Navbar'
 import Textarea from '../components/Textarea'
-import { Link } from 'react-router-dom'
+import LoadingSpinner from '../components/LoadingSpinner'
+import Alert from '../components/Alert'
+
+import { Link, useNavigate } from 'react-router-dom'
 
 // helpers
 import { validatePhoneNumber } from '../helpers/validatePhoneNumber'
@@ -19,19 +22,32 @@ import { Wrapper, Content } from '../pagesStyle/InfoProfile.styles'
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux'
-import { updateUser, userActions } from '../store/user'
+
+import { getCurrentUser, updateUser } from '../services/user'
+import { userActions } from '../store/user'
+import { productActions } from '../store/product'
+import { bidActions } from '../store/bids'
 
 const InfoProfile = () => {
-    const dispatch = useDispatch()
-    const { availableCities } = useSelector(state => state.user)
-
+    // redux state
+    const { currentUser, loading, error, availableCities } = useSelector(state => state.user)
+    console.log(currentUser)
+    // state
     const [name, setName] = useState("")
     const [city, setCity] = useState("")
-    const [optionCity, setOptionCity] = useState([])
     const [address, setAddress] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
+    const [phone, setPhone] = useState("")
     const [image, setImage] = useState(null)
-
+    
+    const [optionCity, setOptionCity] = useState([])
+    
+    // navigation 
+    const navigate = useNavigate()
+    
+    // dispatch redux
+    const dispatch = useDispatch()
+    
+    
     const onChange = (e) => {
         const { id, value } = e.currentTarget
         switch (id){
@@ -45,7 +61,7 @@ const InfoProfile = () => {
                 setCity(value)
                 break
             case "No-Handphone":
-                validatePhoneNumber(value, "0", setPhoneNumber)
+                validatePhoneNumber(value, "0", setPhone)
                 break
             default:
                 break
@@ -62,11 +78,11 @@ const InfoProfile = () => {
         setImage(file)
     }
 
-    const onDeleteImage = (e) => {
+    const onDeleteImage = () => {
         setImage(null)
     }
 
-    const onSubmit = () => {
+    const onSubmit =async () => {
         if(name.length === 0){
             alert("Tolong isi nama anda")
             return
@@ -77,7 +93,7 @@ const InfoProfile = () => {
             return
         }
 
-        if (phoneNumber.length === 0 || phoneNumber.length === 1){
+        if (phone.length === 0 || phone.length === 1){
             alert("Tolong isi nomor telepon anda")
             return
         }
@@ -87,32 +103,76 @@ const InfoProfile = () => {
             city,
             image, 
             address,
-            phoneNumber
+            phone
         }
 
-        dispatch(updateUser(payload))
-    }
 
+
+        try{
+            console.log("here")
+            await dispatch(updateUser(payload))
+            // navigate('/', {
+            //     state: {
+            //         message: "Successfully updated profile"
+            //     }
+            // })
+        } catch(err){
+            console.log(err)
+        }
+    }
+    
+    const onClickGoBack = () => {
+		navigate(-1)
+	} 
+
+    const onCloseAlert = () => {
+        dispatch(userActions.clearError())
+    }
+    
     useEffect(() => {
+        const getUser = async () => {
+            await dispatch(getCurrentUser())
+        }
+        
+        dispatch(userActions.clearError())
+        dispatch(productActions.clearError())
+        dispatch(bidActions.clearError())
         dispatch(userActions.getCities())
+        getUser()
     }, [dispatch])
 
     useEffect(() => {
         if (city){
-            setOptionCity(availableCities.filter(availableCity => availableCity.name.toLowerCase().includes(city.trim().toLowerCase())))
+            setOptionCity(availableCities.filter(({ name }) => 
+                name.toLowerCase().includes(city.trim().toLowerCase())
+            ))
         } else{
             setOptionCity(availableCities)
         }
     }, [city, availableCities])
-    
+
+    useEffect(() => {
+        setName(currentUser.user.name)
+        setCity(currentUser.user.city)
+        setAddress(currentUser.user.address)
+        setPhone(currentUser.user.phone)
+    }, [currentUser.user])
 
     return (
         <Wrapper>
+            <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0} 
+                    backgroundColor="var(--redalert-font)" 
+                    color="var(--redalert-background)" 
+                    text={error} 
+                    onClick={onCloseAlert} 
+                    />
+            
             <Navbar centeredText="Lengkapi Info Akun"
                     />
                 
             <Content className='mx-auto position-relative'>
-                <Link to='/' className="back-icon py-3">
+                <Link to='/' className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
                 <div className='py-3 d-flex justify-content-center align-items-center'>
@@ -154,7 +214,7 @@ const InfoProfile = () => {
                 <Input type="text" 
 						text="No Handphone" 
 						placeholder="contoh: +628123456789" 
-						value={`${phoneNumber}`} 
+						value={`${phone}`} 
 						onChange={onChange}
 						required
 						/>

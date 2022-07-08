@@ -5,6 +5,7 @@ export const Wrapper = styled.button`
     padding: 12px 24px;
     width: ${({ width }) => width};
     border-radius: 16px;
+    border: none;
 
 `
 

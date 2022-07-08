@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: "https://raw.githubusercontent.com"
+    baseURL: "https://secondhand-2-binar-final.herokuapp.com/",
 })
 
 export default api

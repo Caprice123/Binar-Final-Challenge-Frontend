@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 
 // components
 import ActionButton from '../components/ActionButton'
@@ -11,6 +11,8 @@ import Input from '../components/Input'
 import Textarea from '../components/Textarea'
 import Preview from '../components/Preview'
 import Navbar from '../components/Navbar'
+import LoadingSpinner from '../components/LoadingSpinner'
+import Alert from '../components/Alert'
 
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -19,10 +21,22 @@ import { validateNumber } from '../helpers/validateNumber'
 import { validateSizeFile } from '../helpers/validateSizeFile'
 
 // redux
-import { useDispatch } from 'react-redux'
-import { addProduct } from '../store/product'
+import { useDispatch, useSelector } from 'react-redux'
 
+// actions
+import { productActions } from '../store/product'
+import { userActions } from '../store/user'
+import { bidActions } from '../store/bids'
+
+// services
+import { addProduct } from '../services/product'
+
+// hooks
+import { useFlashMessage } from '../hooks/useFlashMessage'
+
+// styles
 import { Wrapper, Content } from '../pagesStyle/AddProduct.styles'
+
 const options = [ 
 	{
 		id: 1,
@@ -43,15 +57,23 @@ const options = [
 ]
 
 const AddProduct = () => {
-	const navigate = useNavigate()
-	const dispatch = useDispatch()
-
+	// redux state
+	const { loading, error } = useSelector(state => state.product)
+	
+	// state
+	const [flashMessage, setFlashMessage] = useFlashMessage("")
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState(0)
 	const [category, setCategory] = useState("")
 	const [description, setDescription] = useState("")
 	const [productImages, setProductImages] = useState([])
 	const [preview, setPreview] = useState(false)
+	
+	// navigation
+	const navigate = useNavigate()
+
+	// dispatch redux
+	const dispatch = useDispatch()
 
 	const onChange = (e) => {
 		const { id, value } = e.currentTarget
@@ -123,13 +145,17 @@ const AddProduct = () => {
 			alert("Tolong masukkan 1 foto product")
 			return
 		}
-		dispatch(addProduct({
-			name,
-			price,
-			category,
-			productImages
-		}))
-		navigate("/")
+		try{
+			dispatch(addProduct({
+				name,
+				price,
+				category,
+				productImages
+			}))
+			navigate("/")
+		} catch(err){
+			console.log(err)
+		}
 	}
 
 	const onDelete = (e) => {
@@ -155,11 +181,44 @@ const AddProduct = () => {
 		setProductImages(productImagesUpdated.slice(0, 4))
 	}, [productImages])
 
+	const onClickGoBack = () => {
+		navigate(-1)
+	}
+
+	const onCloseAlert = () => {
+		dispatch(productActions.clearError())
+	}
+	  
+	const onCloseFlash = () => {
+		setFlashMessage("")
+	}
+
+	useEffect(() => {
+		dispatch(userActions.clearError())
+		dispatch(productActions.clearError())
+		dispatch(bidActions.clearError())
+	}, [dispatch])
+
+
 	return (
 		<Wrapper>
+			<Alert active={flashMessage.length > 0} 
+					backgroundColor="green" 
+					color="white" 
+					text={flashMessage} 
+					onClick={onCloseFlash} 
+					/>
+			<LoadingSpinner active={loading} />
+			<Alert active={error.length > 0} 
+					backgroundColor="var(--redalert-font)" 
+					color="var(--redalert-background)" 
+					text={error} 
+					onClick={onCloseAlert} 
+					/>
+            
 			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<Content className="mx-auto position-relative">
-				<Link to='/' className="back-icon py-3">
+				<Link to='/' className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
 				<Input type="text" 
