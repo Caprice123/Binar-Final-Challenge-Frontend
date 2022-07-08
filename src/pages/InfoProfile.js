@@ -153,9 +153,9 @@ const InfoProfile = () => {
 
     useEffect(() => {
         setName(currentUser.user.name)
-        setCity(currentUser.user.city)
-        setAddress(currentUser.user.address)
-        setPhone(currentUser.user.phone)
+        setCity(currentUser.user.city ? currentUser.user.city : "")
+        setAddress(currentUser.user.address ? currentUser.user.address : "")
+        setPhone(currentUser.user.phone ? currentUser.user.phone : "")
     }, [currentUser.user])
 
     return (
