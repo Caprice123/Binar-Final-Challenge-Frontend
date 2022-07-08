@@ -1,57 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import api from '../config/api'
+import { createSlice } from '@reduxjs/toolkit'
 
 import { City } from 'country-state-city'
 
-export const updateUser = createAsyncThunk(
-    'user/updateUser',
-    async (payload) => {
-        console.log(payload)
-        const formData = new FormData()
-        
-        for (const key in payload){
-            formData.append(key, payload[key])
-        }
-
-        const response = await api.put(
-            "/users", 
-            formData, 
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                }
-            }
-        )
-        const data = response.data
-        return data
-    }
-)
-
-export const login = createAsyncThunk(
-    'user/login',
-    async (payload) => {
-        console.log(payload)
-        const response = await api.post(
-            '/api/v1/login', 
-            payload
-        )
-        const data = response.data
-        return data
-    }
-)
-
-export const register = createAsyncThunk(
-    'user/register',
-    async (payload) => {
-        console.log(payload)
-        const response = await api.post(
-            '/api/v1/register', 
-            payload
-        )
-        const data = response.data
-        return data
-    }
-)
+import { getCurrentUser, updateUser, login, register } from '../services/user'
 
 const defaultState = {
     currentUser: {},
@@ -82,6 +33,25 @@ const userSlice = createSlice({
         }
     }, 
     extraReducers: {
+        // getCurrentUser
+        [getCurrentUser.pending]: (state) => {
+            state.loading = true
+            state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
+        },
+        [getCurrentUser.fulfilled]: (state, action) => {
+            state.loading = false
+            state.error = ""
+            state.currentUser.user = action.payload
+            localStorage.setItem("userState", JSON.stringify(state))
+        },
+        [getCurrentUser.rejected]: (state, action) => {
+            console.log(action.error.message)
+            state.loading = false
+            state.error = ""
+            localStorage.setItem("userState", JSON.stringify(state))
+        },
+
         // updateUser
         [updateUser.pending]: (state) => {
             state.loading = true
@@ -93,7 +63,8 @@ const userSlice = createSlice({
             state.error = ""
             localStorage.setItem("userState", JSON.stringify(state))
         },
-        [updateUser.rejected]: (state) => {
+        [updateUser.rejected]: (state, action) => {
+            console.log(action.error.message)
             state.loading = false
             state.error = ""
             localStorage.setItem("userState", JSON.stringify(state))
@@ -109,7 +80,7 @@ const userSlice = createSlice({
             console.log(action.payload)
             state.loading = false
             state.error = ""
-            state.user = action.payload
+            state.currentUser = action.payload
             state.isLoggedIn = true
             localStorage.setItem("userState", JSON.stringify(state))
         },

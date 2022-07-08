@@ -19,56 +19,65 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Wrapper, Content } from '../pagesStyle/ProductBid.styles'
 
 // react redux
-import { acceptBid, bidActions, rejectBid, updateStatusBid } from '../store/bids'
 import { useDispatch, useSelector } from 'react-redux'
+
+// actions
+import { bidActions } from '../store/bids'
 import { productActions } from '../store/product'
 import { userActions } from '../store/user'
 
-// TODO: update the id of transaction id
-const bids = [
-    {
-        seen: true,
-        status: "pending"
-    }, {
-        seen: false,
-        status: "pending"
-    }, {
-        seen: true,
-        status: "pending"
-    }
-]
-
-const product = {
-    userId: 1,
-    status: "sent_to_seller"
-    // status: "pending"
-}
-
-
-const navLinks = [
-    {
-        type: "text",
-        to: "/",
-        additionalIcon: <i className="fa-solid fa-list"></i>,
-        mobileComponent: <p>Daftar Jual</p>
-    }, {
-        type: "others",
-        to: "/notifications",
-        additionalIcon: <Notif datas={bids} />,
-        mobileComponent: <p>Notifications</p>
-    }, {
-        type: "text",
-        to: "",
-        additionalIcon: <i className="fa-solid fa-user"></i>,
-        mobileComponent: <p>Akun Saya</p>
-    }, 
-]
-
-const user = {
-    userId: 2,
-}
+// services
+import { acceptBid, rejectBid, updateStatusBid } from '../services/bids'
 
 const ProductBid = () => {
+    // Settings
+    // TODO: update the id of transaction id
+    const bids = [
+        {
+            seen: true,
+            status: "pending"
+        }, {
+            seen: false,
+            status: "pending"
+        }, {
+            seen: true,
+            status: "pending"
+        }
+    ]
+
+    const product = {
+        userId: 1,
+        status: "sent_to_seller"
+        // status: "pending"
+    }
+
+
+    const navLinks = [
+        {
+            type: "text",
+            to: "/",
+            additionalIcon: <i className="fa-solid fa-list"></i>,
+            mobileComponent: <p>Daftar Jual</p>
+        }, {
+            type: "others",
+            to: "/notifications",
+            additionalIcon: <Notif datas={bids} />,
+            mobileComponent: <p>Notifications</p>
+        }, {
+            type: "text",
+            to: "",
+            additionalIcon: <i className="fa-solid fa-user"></i>,
+            mobileComponent: <p>Akun Saya</p>
+        }, 
+    ]
+
+    const user = {
+        userId: 2,
+    }
+
+    // redux state
+    const { loading, error } = useSelector(state => state.bids)
+    
     // state
     const [isRejectApprove, setIsRejectApprove] = useState(false)
     const [isAcceptApprove, setIsAcceptApprove] = useState(false)
@@ -81,8 +90,6 @@ const ProductBid = () => {
     // dispatch redux
     const dispatch = useDispatch()
 
-    // redux state
-    const { loading, error } = useSelector(state => state.bids)
 
     const onRejectApproval = (value) => {
         setIsRejectApprove(value)

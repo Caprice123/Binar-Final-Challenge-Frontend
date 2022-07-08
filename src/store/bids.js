@@ -1,37 +1,6 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import api from '../config/api'
+import { createSlice } from '@reduxjs/toolkit'
 
-export const rejectBid = createAsyncThunk(
-    'bid/rejectBid',
-    async (payload) => {
-        console.log(payload)
-        const response = await api.get(`/transaction/${payload.transactionId}/reject`)
-        const data = response.data
-        return data
-    }
-)
-
-export const acceptBid = createAsyncThunk(
-    'bid/acceptBid',
-    async (payload) => {
-        console.log(payload)
-        const response = await api.get(`/transaction/${payload.transactionId}/accept`)
-        const data = response.data
-        return data
-    }
-)
-
-export const updateStatusBid = createAsyncThunk(
-    'bid/updateStatusBid',
-    async (payload) => {
-        console.log(payload)
-        const response = await api.put(`/transaction/${payload.transactionId}`, {
-            status: payload.status,
-        })
-        const data = response.data
-        return data
-    }
-)
+import { rejectBid, acceptBid, updateStatusBid } from '../services/bids'
 
 const defaultState = {
     loading: false,
@@ -54,18 +23,17 @@ const bidSlice = createSlice({
         }
     }, 
     extraReducers: {
+        // reject bid
         [rejectBid.pending]: (state) => {
             state.loading = true
             state.error = ""
             localStorage.setItem("bidState", JSON.stringify(state))
         },
-
         [rejectBid.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
             localStorage.setItem("bidState", JSON.stringify(state))
         }, 
-
         [rejectBid.rejected]: (state, action) => {
             state.loading = false
             // error
@@ -73,23 +41,38 @@ const bidSlice = createSlice({
             localStorage.setItem("bidState", JSON.stringify(state))
         },
 
-
+        // acceptBid
         [acceptBid.pending]: (state) => {
             state.loading = true
             state.error = ""
             localStorage.setItem("bidState", JSON.stringify(state))
         },
-
         [acceptBid.fulfilled]: (state) => {
             state.loading = false
             state.error = ""
             localStorage.setItem("bidState", JSON.stringify(state))
         }, 
-
         [acceptBid.rejected]: (state, action) => {
             console.log(action.error.message)
             state.loading = false
-            // error
+            state.error = action.error.message
+            localStorage.setItem("bidState", JSON.stringify(state))
+        },
+
+        // updateStatusBid
+        [updateStatusBid.pending]: (state) => {
+            state.loading = true
+            state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
+        },
+        [updateStatusBid.fulfilled]: (state) => {
+            state.loading = false
+            state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
+        }, 
+        [updateStatusBid.rejected]: (state, action) => {
+            console.log(action.error.message)
+            state.loading = false
             state.error = action.error.message
             localStorage.setItem("bidState", JSON.stringify(state))
         },

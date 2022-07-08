@@ -26,10 +26,14 @@ import { validateNumber } from '../helpers/validateNumber'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
-import { productActions, addBidPrice } from '../store/product'
+
+// actions
+import { productActions } from '../store/product'
 import { userActions } from '../store/user'
 import { bidActions } from '../store/bids'
 
+// services
+import { addBidPrice } from '../services/product'
 
 const InfoProduct = () => {
     const datas = [
@@ -76,6 +80,9 @@ const InfoProduct = () => {
         ownerID: 2
     }
     
+    // redux state
+    const { loading, error } = useSelector(state => state.product)
+    
     // state
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
@@ -94,8 +101,6 @@ const InfoProduct = () => {
     // dispatch redux
     const dispatch = useDispatch()
     
-    // redux state
-    const { loading, error } = useSelector(state => state.product)
     
     const onOpen = (value) => {
         setIsNavbarOn(value)
