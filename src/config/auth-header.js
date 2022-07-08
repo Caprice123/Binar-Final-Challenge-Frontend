@@ -1,6 +1,6 @@
 export const authHeader = (contentType) => {
-    const { user } = JSON.parse(localStorage.getItem("userState"))
-    const token = user.token
+    const { currentUser } = JSON.parse(localStorage.getItem("userState"))
+    const token = currentUser.token
     
     const headers = {
         headers: {}
