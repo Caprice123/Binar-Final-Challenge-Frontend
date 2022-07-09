@@ -86,7 +86,7 @@ const Registrasi = () => {
                 name,
                 email,
                 password
-            }))
+            })).unwrap()
     
             navigate('/login', {
                 state: {

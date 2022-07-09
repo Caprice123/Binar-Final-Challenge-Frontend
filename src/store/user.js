@@ -85,9 +85,10 @@ const userSlice = createSlice({
             localStorage.setItem("userState", JSON.stringify(state))
         },
         [login.rejected]: (state, action) => {
+            const { message: errorMessage } = JSON.parse(action.error.message)
             console.log(action)
             state.loading = false
-            state.error = action.error.message
+            state.error = errorMessage
             localStorage.setItem("userState", JSON.stringify(state))
         },
 
@@ -103,8 +104,10 @@ const userSlice = createSlice({
             localStorage.setItem("userState", JSON.stringify(state))
         },
         [register.rejected]: (state, action) => {
+            const { message: errorMessage } = JSON.parse(action.error.message)
+            console.log(action)
             state.loading = false
-            state.error = action.error.message
+            state.error = errorMessage
             localStorage.setItem("userState", JSON.stringify(state))
         },
     }

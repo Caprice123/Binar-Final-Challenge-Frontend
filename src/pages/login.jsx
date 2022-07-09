@@ -78,7 +78,7 @@ const Login = () => {
             await dispatch(login({
                 email,
                 password
-            }))
+            })).unwrap()
             navigate('/', { 
                 state: {
                     message: "Login Successful",
