@@ -17,8 +17,20 @@ export const addBidPrice = createAsyncThunk(
     'product/addBidPrice',
     async (payload) => {
         console.log(payload)
-        const response = await api.post('/bidPrice')
-        const datas = response.data
-        return datas
+        const { productId, bidPrice } = payload
+        try{
+            const response = await api.post(
+                `/api/v1/products/${productId}/bids`,
+                authHeader(),
+                {
+                    request_price: bidPrice
+                }
+            )
+            const datas = response.data
+            return datas
+        } catch(err){
+            const errorMessage = err.response.data
+            throw Error(JSON.stringify(errorMessage))
+        }
     }
 )

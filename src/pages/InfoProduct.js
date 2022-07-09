@@ -144,7 +144,9 @@ const InfoProduct = () => {
             await dispatch(addBidPrice({
                 productId,
                 bidPrice,
-            }))
+            })).unwrap()
+            
+
             navigate('/', {
                 state: {
                     message: "Successfully bid the product"
