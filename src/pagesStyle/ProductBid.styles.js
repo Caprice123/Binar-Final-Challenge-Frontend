@@ -38,7 +38,7 @@ export const Wrapper = styled.div`
         }
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         .seller-info{
             margin-top: 1rem;
 
@@ -64,7 +64,7 @@ export const Content = styled.div`
         line-height: 20px;
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         max-width: initial;
         width: 90%;
         margin: 0 auto;

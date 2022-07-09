@@ -15,7 +15,7 @@ export const Content = styled.div`
         left: -10vw;
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         max-width: initial;
         width: 90%;
         margin: 0 auto;

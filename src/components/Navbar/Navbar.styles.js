@@ -41,14 +41,14 @@ export const Content = styled.div`
         }
     }
 
-    @media screen and (min-width: 769px) {
+    @media screen and (min-width: calc(992px + 1px)) {
         
         .offcanvas{
             display: none;
         }        
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 992px){
         width: 90%;
         .centered-text{
             font-size: 12px;
@@ -73,7 +73,7 @@ export const Actions = styled.div`
             }  
         }
     }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         display: none;
     }
 `

@@ -19,7 +19,7 @@ const Preview = ({ active, images, name, price, category, description, onClose, 
     useEffect(() => {
         const checkMobile = () => {
             const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-            setIsMobile(vw <= 768)
+            setIsMobile(vw <= 992)
         }
         window.addEventListener("resize", checkMobile)
         checkMobile()
