@@ -127,10 +127,12 @@ const ProductBid = () => {
         try{
             setIsAcceptApprove(false)
             
-            await dispatch(acceptBid({
-                transactionId: 1,
-            }))
+            const response = await dispatch(acceptBid({
+                bids: 1,
+            })).unwrap()
 
+            window.location.reload()
+            // TODO: Change navigation url
             navigate('/', {
                 state: {
                     message: "Successfully accept product bid"

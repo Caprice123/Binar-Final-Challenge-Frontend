@@ -53,9 +53,9 @@ const bidSlice = createSlice({
             localStorage.setItem("bidState", JSON.stringify(state))
         }, 
         [acceptBid.rejected]: (state, action) => {
-            console.log(action.error.message)
+            const { message: errorMessage } = JSON.parse(action.error.message)
             state.loading = false
-            state.error = action.error.message
+            state.error = errorMessage
             localStorage.setItem("bidState", JSON.stringify(state))
         },
 
