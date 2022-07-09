@@ -6,10 +6,21 @@ import { authHeader } from '../config/auth-header'
 export const rejectBid = createAsyncThunk(
     'bid/rejectBid',
     async (payload) => {
-        console.log(payload)
-        const response = await api.get(`/transaction/${payload.transactionId}/reject`)
-        const data = response.data
-        return data
+        try{
+            const { bidsId } = payload
+            const response = await api.put(
+                `/bids/${bidsId}`,
+                authHeader(),
+                {
+                    status: "rejected"
+                }
+            )
+            const data = response.data
+            return data
+        } catch(err){
+            const errorMessage = err.response.data
+            return new Error(errorMessage)
+        }
     }
 )
 

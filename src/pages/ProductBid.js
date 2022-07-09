@@ -103,10 +103,12 @@ const ProductBid = () => {
     const onReject = async () => {
         try{
             setIsRejectApprove(false)
-            await dispatch(rejectBid({
-                transactionId: 1,
-            }))
+            const response = await dispatch(rejectBid({
+                bidsId: 1,
+            })).unwrap()
 
+            window.location.reload()
+            // TODO: Change navigation url
             navigate('/', {
                 state: {
                     message: "Successfully reject transaction"
