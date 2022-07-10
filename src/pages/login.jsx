@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 // components
 import ActiveButton from '../components/ActionButton';
 import Input from '../components/Input';
-import imageCover from '../assets/images/cover.png'
+import imageCover from '../assets/images/login-reg-banner.png'
 import LoadingSpinner from '../components/LoadingSpinner';
 import Alert from '../components/Alert';
 
@@ -124,15 +124,11 @@ const Login = () => {
                     <div className="row align-items-center h-100">
                         <div className={styles.auth_left + " col-md-6 d-none d-md-block"}>
                             <div className={styles.auth_cover}>
-                                <div className={styles.brand}>
-                                    <p className={styles.text_brand}>Second</p>
-                                    <p className={styles.text_brand}>Hand.</p>
-                                </div>
                                 <img src={imageCover} alt="" />
                             </div>
                         </div>
                         <div className="col-md-6 col-12">
-                            <div className={styles.auth_form_wrapper + " mx-auto"} style={{ width: "50%" }}>
+                            <div className={styles.auth_form_wrapper + " mx-auto"}>
                                 <h3 className="title fw-bold">Masuk</h3>
                                    
                                 <Input type="email"
@@ -159,7 +155,7 @@ const Login = () => {
                                     <p className='text-center mt-3'>
                                         Belum punya akun? 
                                     
-                                        <Link to="/register" className="text-purple">
+                                        <Link to="/register" className={`${styles.text_purple} ms-3`}>
                                             Daftar disini
                                         </Link>
                                     
