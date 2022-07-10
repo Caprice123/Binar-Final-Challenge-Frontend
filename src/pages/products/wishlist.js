@@ -251,7 +251,7 @@ const Wishlist = () => {
                                     )
                                 }
                                 {
-                                    products.length === 0 ? (
+                                    !loading && products.length === 0 ? (
                                         <div className="no-offer d-flex align-items-center justify-content-center flex-column">
                                             <img src={ImagePerson} alt="No one minat" />
                                             <p className='py-3'>Belum ada produkmu yang diminati nih, sabar ya rejeki nggak kemana kok</p>
