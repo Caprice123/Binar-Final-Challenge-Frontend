@@ -14,6 +14,7 @@ import InfoProfile from './pages/InfoProfile';
 import InfoProduct from './pages/InfoProduct';
 import ProductBid from './pages/ProductBid';
 import ProtectedRoute from './pages/ProtectedRoute';
+import ListProducts from './pages/products';
 
 function App() {
 	return (
@@ -59,7 +60,7 @@ function App() {
 					/>
           			<Route path="/daftar-jual" element={
 							<ProtectedRoute allowedRoles={[]}>
-								<DaftarJual />
+								<ListProducts />
 							</ProtectedRoute>
 						} 
 					/>

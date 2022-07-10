@@ -3,6 +3,28 @@ import api from '../config/api'
 
 import { authHeader } from '../config/auth-header'
 
+
+export const getProducts = createAsyncThunk(
+    'product/getProducts',
+    async (payload) => {
+        
+        try{
+            console.log(payload)
+            const response = await api.get(
+                `/api/v1/products`,
+                {
+                    params: payload
+                }
+            )
+            const data = response.data
+            return data
+        } catch(err){
+            const errorMessage = err.response.data
+            return new Error(errorMessage)
+        }
+    }
+)
+
 // TODO: change to getProductByID
 export const getProductOneByID = createAsyncThunk(
     'product/getProductOneByID',

@@ -26,7 +26,7 @@ const Index = ({data, action, link}) => {
                 {action === true ?
                     <div className="col-6 col-md-4">
                         <Wrapper>
-                            <Link class={styles.catalogLink} to={''}>
+                            <Link  to={'/'} class={styles.catalogLink}>
                                 <div class="card">
                                     <div class="card-body card-border">
                                         +
@@ -39,7 +39,7 @@ const Index = ({data, action, link}) => {
                     <></>
                 }
 
-                {data.map((item, index) => {
+                {data?.map((item, index) => {
                     return(
                         <CatalogCard data={item} action={action} link={link}/>
                     )

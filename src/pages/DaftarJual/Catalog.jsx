@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import ListCatalogCard from '../../components/ListCatalogCard'
 
-const Catalog = () => {
-    const [products, setProducts] = useState([]);
+const Catalog = ({ products }) => {
 
     return (
         <>
