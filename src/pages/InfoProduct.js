@@ -33,7 +33,7 @@ import { userActions } from '../store/user'
 import { bidActions } from '../store/bids'
 
 // services
-import { addBidPrice } from '../services/product'
+import { addBidPrice, getProductOneByID } from '../services/product'
 
 const InfoProduct = () => {
     const datas = [
@@ -73,17 +73,21 @@ const InfoProduct = () => {
     ]
     
     
-    const user = {
-        ID: 1
-    }
-    const product = {
-        ownerID: 2
-    }
+    // const user = {
+    //     ID: 1
+    // }
+    // const product = {
+    //     ownerID: 2
+    // }
     
     // redux state
+    const { currentUser, isLoggedIn } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.product)
     
     // state
+    const [product, setProduct] = useState(null)
+    console.log(product)
+
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
@@ -173,11 +177,28 @@ const InfoProduct = () => {
 
     }
 
+    const onClickLogout = async () => {
+        await dispatch(userActions.logout())
+        navigate('/login', {
+            state: {
+                message: "Logout Successfully"
+            }
+        })
+    }
+
     useEffect(() => {
+        const fetchData = async () => {
+            const response = await dispatch(getProductOneByID({
+                productId: productId
+            })).unwrap()
+            setProduct(response)
+        }
         dispatch(userActions.clearError())
         dispatch(productActions.clearError())
         dispatch(bidActions.clearError())
-	  }, [dispatch])
+
+        fetchData()
+	  }, [dispatch, productId, setProduct])
 
 
     return (
@@ -212,7 +233,7 @@ const InfoProduct = () => {
                 </div>
                 <div className="content d-flex flex-column">
                     <ImagePreview url={Image} />
-                    <Link to='' className='d-flex align-items-center pt-5 pb-1'>
+                    <Link to='/user/profile' className='d-flex align-items-center pt-5 pb-1'>
                         <i className="fa-solid fa-pen-to-square me-3"></i>
                         <span>Ubah Akun</span>
                     </Link>
@@ -222,9 +243,9 @@ const InfoProduct = () => {
                         <span>Pengaturan Akun</span>
                     </Link>
                     <hr />
-                    <Link to='' className='d-flex align-items-center pt-3 pb-1'>
+                    <Link to='' className='d-flex align-items-center pt-3 pb-1' onClick={onClickLogout}>
                         <i className="fa-solid fa-arrow-right-from-bracket me-3"></i>
-                        <span>Ubah Akun</span>
+                        <span>Logout Akun</span>
                     </Link>
                     <hr />
 
@@ -250,109 +271,89 @@ const InfoProduct = () => {
             
             <Content>
                 {
-                    user.ID === product.ownerID 
-                    ? (
-                        <Preview active={true}
-                            images={images}
-                            name={"testing"}
-                            price={123500}
-                            category={"accessory"}
-                            actionButtons={[
-                                <ActionButton text="Edit"
-                                                width="90%"
-                                                color="#7126B5"
-                                                onClick={onEdit}
-                                            />
-                                ]
-                            }
-                            mobileButton={
-                                <ActionButton text="Edit"
-                                            width="calc(90% + 5px)"
-                                            color="#7126B5"
-                                            onClick={onEdit}
-                                            style={
-                                                    { 
-                                                        position: "fixed", 
-                                                        bottom: "10px",
-                                                        left: "50%", 
-                                                        display: "initial",
-                                                        zIndex: "1000", 
-                                                        transform: "translateX(calc(-50% + 2.5px))",
-                                                        transition: "0.5s" 
-                                                    }
-                                                }
-                                            />
-                                }
-                            />
-                    )
-                    : (
+                    product ? (
                         <>
                             <Preview active={true}
-                                images={images}
-                                name={"testing"}
-                                price={123500}
-                                category={"accessory"}
-                                actionButtons={[
-                                    <ActionButton text="Saya tertarik dan ingin nego"
-                                                    width="90%"
-                                                    color="#7126B5"
-                                                    onClick={() => onClick(true)}
-                                                />
-                                    ]
-                                }
-                                mobileButton={
-                                    <ActionButton text="Saya tertarik dan ingin nego"
-                                                width="calc(90% + 5px)"
-                                                color="#7126B5"
-                                                onClick={() => onClick(true)}
-                                                style={
-                                                        { 
-                                                            position: "fixed", 
-                                                            bottom: "10px", 
-                                                            display: "initial",
-                                                            left: "50%",  
-                                                            zIndex: "1000", 
-                                                            transform: "translateX(calc(-50% + 2.5px))",
-                                                            transition: "0.5s" 
-                                                        }
-                                                    }
-                                                />
-                                    }
-                                />
-                            <Popup show={show}
-                                    onClick={onClick}
-                                    >
-                                    <h4>Masukkan Harga Tawarmu</h4>
-                                    <p className='mb-4'>
-                                        Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
-                                    </p>
-                                    {/* move into one component */}
-                                    <SellerInfo imageUrl={Image}
-                                                sellerName="Jam Tangan Casio"
-                                                sellerCity="Rp. 250,000"
-                                                width="100%"
-                                                additionalClass="my-3"
-                                                style={{ background: "#EEEEEE" }}
-                                                withShadow
-                                                />
-
-                                    <Input type="text"
-                                            text="Harga Tawar"
-                                            placeholder="Rp 0,00"
-                                            value={`Rp. ${bidPrice.toLocaleString()}`}
-                                            onChange={onChange}
-                                            required
-                                            />
-                                    <ActionButton text="Kirim"
-                                                    width="100%"
-                                                    color="#7126B5"
-                                                    onClick={onSubmit}
-                                                    style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                                    // TODO: change to product.images
+                                    images={images}
+                                    name={product.name}
+                                    price={product.price}
+                                    owner={product.owner}
+                                    description={product.description}
+                                    category={product.category.name}
+                                    actionButtons={[
+                                        <ActionButton text={isLoggedIn ? (currentUser.user.id === 5 ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
+                                                        width="90%"
+                                                        color="#7126B5"
+                                                        onClick={isLoggedIn ? (currentUser.user.id === 5 ? onEdit : () => onClick(true)) : () => navigate('/login')}
                                                     />
-                            </Popup>
+                                        ]
+                                    }
+                                    mobileButton={
+                                        <ActionButton text={isLoggedIn ? (currentUser.user.id === 5 ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
+                                                    width="calc(90% + 5px)"
+                                                    color="#7126B5"
+                                                    onClick={isLoggedIn ? (currentUser.user.id === 5 ? onEdit : () => onClick(true)) : () => navigate('/login')}
+                                                    style={
+                                                            { 
+                                                                position: "fixed", 
+                                                                bottom: "10px",
+                                                                left: "50%", 
+                                                                display: "initial",
+                                                                zIndex: "1000", 
+                                                                transform: "translateX(calc(-50% + 2.5px))",
+                                                                transition: "0.5s" 
+                                                            }
+                                                        }
+                                                    />
+                                        }
+                                    />
+                            {
+                                isLoggedIn ? (
+                                    currentUser.user.id !== 5 && (
+                                        <Popup show={show}
+                                            onClick={onClick}
+                                            >
+                                            <h4>Masukkan Harga Tawarmu</h4>
+                                            <p className='mb-4'>
+                                                Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
+                                            </p>
+                                            {/* move into one component */}
+                                            <SellerInfo imageUrl={Image}
+                                                        // TODO: change to user.name
+                                                        sellerName={product.name}
+                                                        sellerCity={`Rp. ${product.price.toLocaleString()}`}
+                                                        width="100%"
+                                                        additionalClass="my-3"
+                                                        style={{ background: "#EEEEEE" }}
+                                                        withShadow
+                                                        />
+
+                                            <Input type="text"
+                                                    text="Harga Tawar"
+                                                    placeholder="Rp 0,00"
+                                                    value={`Rp. ${bidPrice.toLocaleString()}`}
+                                                    onChange={onChange}
+                                                    required
+                                                    />
+                                            <ActionButton text="Kirim"
+                                                            width="100%"
+                                                            color="#7126B5"
+                                                            onClick={onSubmit}
+                                                            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                                                            />
+                                        </Popup>
+                                    )
+                                ) : (
+                                <></>
+                                )
+                            }
                         </>
+                    ) : (
+                        <></>
                     )
                 }
+                
                 
             </Content>
         </Wrapper>

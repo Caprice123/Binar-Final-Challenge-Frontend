@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getAllCategories, getProductByID, addProduct, addBidPrice } from '../services/product'
+import { getAllCategories, getProductOneByID, getProductByID, addProduct, addBidPrice } from '../services/product'
 
 const defaultState = {
     loading: false,
@@ -34,6 +34,24 @@ const productSlice = createSlice({
             localStorage.setItem("bidState", JSON.stringify(state))
         },
         [getAllCategories.rejected]: (state, action) => {
+            const { message: errorMessage } = JSON.parse(action.error.message)
+            state.loading = false
+            state.error = errorMessage
+            localStorage.setItem("bidState", JSON.stringify(state))
+        },
+
+        // getProductOneByID
+        [getProductOneByID.pending]: (state) => {
+            state.loading = true
+            state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
+        },
+        [getProductOneByID.fulfilled]: (state) => {
+            state.loading = false
+            state.error = ""
+            localStorage.setItem("bidState", JSON.stringify(state))
+        },
+        [getProductOneByID.rejected]: (state, action) => {
             const { message: errorMessage } = JSON.parse(action.error.message)
             state.loading = false
             state.error = errorMessage

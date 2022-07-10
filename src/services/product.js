@@ -3,6 +3,25 @@ import api from '../config/api'
 
 import { authHeader } from '../config/auth-header'
 
+// TODO: change to getProductByID
+export const getProductOneByID = createAsyncThunk(
+    'product/getProductOneByID',
+    async (payload) => {
+        try{
+            const { productId } = payload
+            const response = await api.get(
+                `/api/v1/products/${productId}`,
+            )
+            const data = response.data
+            return data
+        } catch(err){
+            const errorMessage = err.response.data
+            return new Error(errorMessage)
+        }
+    }
+)
+
+// TODO: change to getProductBidByProductID
 export const getProductByID = createAsyncThunk(
     'product/getProductByID',
     async (payload) => {
@@ -70,10 +89,10 @@ export const addBidPrice = createAsyncThunk(
         try{
             const response = await api.post(
                 `/api/v1/products/${productId}/bids`,
-                authHeader(),
                 {
                     request_price: bidPrice
-                }
+                },
+                authHeader(),
             )
             const datas = response.data
             return datas
