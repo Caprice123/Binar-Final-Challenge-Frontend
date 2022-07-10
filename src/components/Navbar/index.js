@@ -17,6 +17,17 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
         }
     }, [isOffcanvasOn])
 
+    useEffect(() => {
+        const checkMobile = () => {
+            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+            if (vw >= 992){
+                closeButtonRef.current.click()
+            }
+        }
+        window.addEventListener("resize", checkMobile)
+        checkMobile()
+    }, [])
+
     const onOpen = () => {
         if (onClick){
             onClick(true)
@@ -35,7 +46,6 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                 <button className="navbar-toggler"
                         data-bs-toggle="offcanvas" 
                         href="#offcanvasWithBothOptions"
-                        role="button" 
                         aria-controls="offcanvasWithBothOptions"
                         aria-expanded="false" 
                         aria-label="Toggle navigation"

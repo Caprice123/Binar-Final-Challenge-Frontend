@@ -14,6 +14,8 @@ const GlobalStyle = createGlobalStyle`
         --redalert-font: #D00C1A;
 
         --navbar-height: 67.5px;
+
+        --tablet-size: 992px;
     }
     html{
         scroll-behavior: smooth;

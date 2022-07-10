@@ -16,7 +16,7 @@ export const Content = styled.div`
         border-radius: 1rem;
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         width: 90%;
         margin: 0 auto;
     }

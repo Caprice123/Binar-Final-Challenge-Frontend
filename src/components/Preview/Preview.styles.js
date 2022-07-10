@@ -37,7 +37,7 @@ export const Wrapper = styled.div`
 `
 
 export const Content = styled.div`
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         padding: 0 !important;
     }
 
@@ -149,7 +149,7 @@ export const LeftSection = styled.div`
         }
     }
     
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         display: block !important;
 
         .image-preview{
@@ -227,7 +227,7 @@ export const RightSection = styled.div`
         width: 25%;
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         transform: translateY(-50px);
         .description{
             margin-top: 0 !important;

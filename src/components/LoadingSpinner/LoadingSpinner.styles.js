@@ -62,7 +62,7 @@ export const Dot = styled.div`
         }
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 992px){
         width: 12.5px;
         height: 12.5px;
     }
