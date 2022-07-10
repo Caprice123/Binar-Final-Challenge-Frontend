@@ -30,8 +30,7 @@ import { bidActions } from '../store/bids'
 
 const InfoProfile = () => {
     // redux state
-    const { currentUser, loading, error, availableCities } = useSelector(state => state.user)
-    console.log(currentUser)
+    const { loading, error, availableCities } = useSelector(state => state.user)
     // state
     const [name, setName] = useState("")
     const [city, setCity] = useState("")
@@ -106,16 +105,15 @@ const InfoProfile = () => {
             phone
         }
 
-
-
         try{
-            console.log("here")
-            await dispatch(updateUser(payload))
-            // navigate('/', {
-            //     state: {
-            //         message: "Successfully updated profile"
-            //     }
-            // })
+            const response = await dispatch(
+                updateUser(payload)
+            ).unwrap()
+            navigate('/', {
+                state: {
+                    message: "Successfully updated profile"
+                }
+            })
         } catch(err){
             console.log(err)
         }
@@ -130,8 +128,24 @@ const InfoProfile = () => {
     }
     
     useEffect(() => {
+        const fetchImage = async (image_url) => {
+            const response = await fetch(image_url);
+            // here image is url/location of image
+            const blob = await response.blob();
+            const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
+            setImage(file)
+        }
+
         const getUser = async () => {
-            await dispatch(getCurrentUser())
+            const response = await dispatch(
+                getCurrentUser()
+            ).unwrap()
+
+            setName(response.name)
+            setCity(response.city)
+            setAddress(response.address)
+            setPhone(response.phone)
+            await fetchImage(response.image_url)
         }
         
         dispatch(userActions.clearError())
@@ -150,13 +164,6 @@ const InfoProfile = () => {
             setOptionCity(availableCities)
         }
     }, [city, availableCities])
-
-    useEffect(() => {
-        setName(currentUser.user.name)
-        setCity(currentUser.user.city ? currentUser.user.city : "")
-        setAddress(currentUser.user.address ? currentUser.user.address : "")
-        setPhone(currentUser.user.phone ? currentUser.user.phone : "")
-    }, [currentUser.user])
 
     return (
         <Wrapper>
