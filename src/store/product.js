@@ -49,7 +49,8 @@ const productSlice = createSlice({
             localStorage.setItem("productState", JSON.stringify(state))
         },
         
-        [addBidPrice.fulfilled]: (state) => {
+        [addBidPrice.fulfilled]: (state, action) => {
+            console.log(action)
             state.loading = false
             state.error = ""
             // add more logic
@@ -57,8 +58,9 @@ const productSlice = createSlice({
         },
         
         [addBidPrice.rejected]: (state, action) => {
+            const { message: errorMessage } = JSON.parse(action.error.message)
             state.loading = false
-            state.error = action.error.message
+            state.error = errorMessage
             localStorage.setItem("productState", JSON.stringify(state))
         },
     }
