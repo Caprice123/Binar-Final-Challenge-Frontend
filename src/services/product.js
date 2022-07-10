@@ -24,10 +24,41 @@ export const getProductByID = createAsyncThunk(
 export const addProduct = createAsyncThunk(
     'product/addProduct',
     async (payload) => {
-        console.log(payload)
-        const response = await api.post("/product")
-        const datas = response.data
-        return datas
+        try{
+            const { name, price, categoryId, description, productImages } = payload
+            console.log(payload)
+            const responseBody = {
+                name,
+                price,
+                category_id: categoryId,
+                description
+            }
+            const responseAddProduct = await api.post(
+                "/api/v1/products",
+                responseBody,
+                authHeader()
+            )
+            const dataAddProduct = responseAddProduct.data
+            const productId = dataAddProduct.id
+
+            const formData = new FormData()
+            productImages.forEach(img => {
+                formData.append("files", img.file)
+            })
+            formData.append("productId", productId)
+
+            const responseAddProductImage = await api.post(
+                '/api/v1/productsimageupload',
+                formData,
+                authHeader('multipart/form-data')
+            )
+
+            const dataAddProductImage = responseAddProductImage.data
+            return dataAddProductImage
+        } catch(err){
+            const errorMessage = err.response.data
+            throw Error(JSON.stringify(errorMessage))
+        }
     }
 )
 
@@ -44,6 +75,23 @@ export const addBidPrice = createAsyncThunk(
                     request_price: bidPrice
                 }
             )
+            const datas = response.data
+            return datas
+        } catch(err){
+            const errorMessage = err.response.data
+            throw Error(JSON.stringify(errorMessage))
+        }
+    }
+)
+
+export const getAllCategories = createAsyncThunk(
+    '/product/getAllCategories',
+    async () => {
+        try{
+            const response = await api.get(
+                '/api/v1/categories',
+            )
+
             const datas = response.data
             return datas
         } catch(err){
