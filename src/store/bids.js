@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { rejectBid, acceptBid, updateStatusBid } from '../services/bids'
+import { getAllBids, rejectBid, acceptBid, updateStatusBid } from '../services/bids'
 
 const defaultState = {
     loading: false,

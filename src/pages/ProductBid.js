@@ -13,7 +13,7 @@ import Popup from '../components/Popup'
 import LoadingSpinner from '../components/LoadingSpinner'
 import Alert from '../components/Alert'
 
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 
 // styles
 import { Wrapper, Content } from '../pagesStyle/ProductBid.styles'
@@ -28,28 +28,30 @@ import { userActions } from '../store/user'
 
 // services
 import { acceptBid, rejectBid, updateStatusBid } from '../services/bids'
+import { getProductByID } from '../services/product'
 
 const ProductBid = () => {
     // Settings
     // TODO: update the id of transaction id
-    const bids = [
-        {
-            seen: true,
-            status: "pending"
-        }, {
-            seen: false,
-            status: "pending"
-        }, {
-            seen: true,
-            status: "pending"
-        }
-    ]
+    // const bids = [
+    //     {
+    //         seen: true,
+    //         status: "pending"
+    //     }, {
+    //         seen: false,
+    //         status: "pending"
+    //     }, {
+    //         seen: true,
+    //         status: "pending"
+    //     }
+    // ]
 
-    const product = {
-        userId: 1,
-        status: "sent_to_seller"
-        // status: "pending"
-    }
+    // const product = {
+    //     userId: 1,
+    //     status: "sent_to_seller"
+    //     // status: "pending"
+    // }
+    const [product, setProduct] = useState(null)
 
 
     const navLinks = [
@@ -61,7 +63,7 @@ const ProductBid = () => {
         }, {
             type: "others",
             to: "/notifications",
-            additionalIcon: <Notif datas={bids} />,
+            additionalIcon: <Notif datas={product ? product.bids : []} />,
             mobileComponent: <p>Notifications</p>
         }, {
             type: "text",
@@ -79,11 +81,14 @@ const ProductBid = () => {
     const { loading, error } = useSelector(state => state.bids)
     
     // state
+
     const [isRejectApprove, setIsRejectApprove] = useState(false)
     const [isAcceptApprove, setIsAcceptApprove] = useState(false)
     const [isUpdateStatusApprove, setIsUpdateStatusApprove] = useState(false)
     const [updateStatus, setUpdateStatus] = useState("sold")
     
+    const { productId } = useParams()
+
     // navigation
     const navigate = useNavigate()
 
@@ -168,10 +173,18 @@ const ProductBid = () => {
     }
 
     useEffect(() => {
+        const fetchData = async () => {
+            const response = await dispatch(getProductByID({
+                productId
+            })).unwrap()
+            setProduct(response)
+        }
 		dispatch(userActions.clearError())
 		dispatch(productActions.clearError())
 		dispatch(bidActions.clearError())
-	}, [dispatch])
+
+        fetchData()
+	}, [dispatch, productId])
 
     return (
         <Wrapper>
@@ -197,36 +210,42 @@ const ProductBid = () => {
                             />
                 <h4 className='my-4'>Daftar Produkmu yang Ditawar</h4>
                 {
-                    user.userId !== product.userId ? (
-                        bids.map((bid, id) => (
-                            <div key={id}>
-                            <NotifItems imageUrl={Image}
-                                        actionName="Penawaran Product"
-                                        time="20 Apr 14:04"
-                                        productName="Jam Tangan Casio"
-                                        originalPrice={Number("250000")}
-                                        bidPrice={Number("200000")}
-                                        />
-    
-                            {
-                                <div className='d-flex buttons justify-content-end px-2' style={{ width: "90%", margin: "0 auto" }}>
-                                    <BorderOnlyButton text={product.status === "sent_to_seller" ? "Tolak" : "Status"}
-                                                        width="30%"
-                                                        color="#7126B5"
-                                                        style={{ padding: "5px 12px"}}
-                                                        onClick={product.status === "sent_to_seller" ? () => onRejectApproval(true) : () => onUpdateStatusApproval(true)}
-                                                        />
-                                    <ActionButton text={product.status === "sent_to_seller" ? "Terima" : "Hubungi di WA"}
-                                                        width="30%"
-                                                        color="#7126B5"
-                                                        style={{ padding: "5px 12px", marginLeft: "1rem" }} 
-                                                        onClick={product.status === "sent_to_seller" ? () => onAcceptApproval(true) : onCallByWA}
-                                                        />
+                    user.userId !== product?.user_id ? (
+                        product?.bids ? (
+                            product?.bids.map((bid, id) => (
+                                <div key={id}>
+                                    {/* TODO: Change it to based on bid variable */}
+                                    <NotifItems imageUrl={Image}
+                                                actionName="Penawaran Product"
+                                                time="20 Apr 14:04"
+                                                productName="Jam Tangan Casio"
+                                                originalPrice={Number("250000")}
+                                                bidPrice={Number("200000")}
+                                                />
+            
+                                    {
+                                        <div className='d-flex buttons justify-content-end px-2' style={{ width: "90%", margin: "0 auto" }}>
+                                            <BorderOnlyButton text={product.status === "open_for_bid" ? "Tolak" : "Status"}
+                                                                width="30%"
+                                                                color="#7126B5"
+                                                                style={{ padding: "5px 12px"}}
+                                                                onClick={product.status === "open_for_bid" ? () => onRejectApproval(true) : () => onUpdateStatusApproval(true)}
+                                                                />
+                                            <ActionButton text={product.status === "open_for_bid" ? "Terima" : "Hubungi di WA"}
+                                                                width="30%"
+                                                                color="#7126B5"
+                                                                style={{ padding: "5px 12px", marginLeft: "1rem" }} 
+                                                                onClick={product.status === "open_for_bid" ? () => onAcceptApproval(true) : onCallByWA}
+                                                                />
+                                        </div>
+                                    }
+                                    <hr className='my-3' />
                                 </div>
-                            }
-                                <hr className='my-3' />
-                            </div>
-                        ))
+                            ))
+                        ) : (
+                            // TODO: Change to skeleton loading
+                            <></>
+                        )
                     ) : (
                         <></>
                     )
