@@ -55,24 +55,35 @@ export const login = createAsyncThunk(
     'user/login',
     async (payload) => {
         console.log(payload)
-        const response = await api.post(
-            '/api/v1/login', 
-            payload
-        )
-        const data = response.data
-        return data
+        try{
+
+            const response = await api.post(
+                '/api/v1/login', 
+                payload
+            )
+            const data = response.data
+            return data
+        } catch(err){
+            const errorMessage = err.response.data
+            throw new Error(JSON.stringify(errorMessage))
+        }
     }
 )
 
 export const register = createAsyncThunk(
     'user/register',
     async (payload) => {
-        console.log(payload)
-        const response = await api.post(
-            '/api/v1/register', 
-            payload
-        )
-        const data = response.data
-        return data
+        try{
+            console.log(payload)
+            const response = await api.post(
+                '/api/v1/register', 
+                payload
+            )
+            const data = response.data
+            return data
+        } catch(err){
+            const errorMessage = err.response.data
+            throw new Error(JSON.stringify(errorMessage))
+        }
     }
 )
