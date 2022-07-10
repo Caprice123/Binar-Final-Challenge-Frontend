@@ -280,6 +280,7 @@ const AddProduct = () => {
 						images={productImages}
 						name={name}
 						price={price}
+						owner={{ name: "Seller Info", city: "City"}}
 						category={category}
 						description={description}
 						onClose={onClosePreview}

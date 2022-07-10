@@ -14,7 +14,7 @@ import "swiper/css/navigation";
 import { Wrapper, Content, LeftSection, RightSection } from './Preview.styles'
 import SellerInfo from '../SellerInfo';
 
-const Preview = ({ active, images, name, price, category, description, onClose, actionButtons, mobileButton }) => {
+const Preview = ({ active, images, name, price, category, owner, description, onClose, actionButtons, mobileButton }) => {
     const [isMobile, setIsMobile] = useState(false)
     useEffect(() => {
         const checkMobile = () => {
@@ -74,8 +74,8 @@ const Preview = ({ active, images, name, price, category, description, onClose, 
 
                         <SellerInfo width="90%"
                                     imageUrl={Image}
-                                    sellerName="Nama Penjual"
-                                    sellerCity="Kota"
+                                    sellerName={owner.name}
+                                    sellerCity={owner.city}
                                     additionalClass="my-5"
                                     withShadow
                                     />
@@ -83,11 +83,12 @@ const Preview = ({ active, images, name, price, category, description, onClose, 
                 </LeftSection>
                 
                 <RightSection className='d-flex justify-content-center'>
-                    <div className='description d-flex flex-column me-5 align-items-center my-5'>
+                    <div className='description d-flex flex-column me-5 my-5'>
                         <label>Description</label>
                         <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            {
+                                description
+                            }
                         </p>
                     </div>
                     <div className='empty ms-5'>&nbsp;</div>

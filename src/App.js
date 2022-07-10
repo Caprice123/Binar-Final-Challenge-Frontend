@@ -47,9 +47,7 @@ function App() {
 						} 
 					/>
 					<Route path='/product/:productId' element={
-							<ProtectedRoute allowedRoles={[]}>
-								<InfoProduct />
-							</ProtectedRoute>
+							<InfoProduct />
 						} 
 					/>
 					<Route path='/product/:productId/bid' element={

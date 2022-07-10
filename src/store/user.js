@@ -30,6 +30,11 @@ const userSlice = createSlice({
         clearError: (state) => {
             state.error = ""
             localStorage.setItem("userState", JSON.stringify(state))
+        },
+        logout: (state) => {
+            state.currentUser = {}
+            state.isLoggedIn = false
+            localStorage.setItem("userState", JSON.stringify(state))
         }
     }, 
     extraReducers: {
