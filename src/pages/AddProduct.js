@@ -29,7 +29,7 @@ import { userActions } from '../store/user'
 import { bidActions } from '../store/bids'
 
 // services
-import { addProduct } from '../services/product'
+import { addProduct, getAllCategories } from '../services/product'
 
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage'
@@ -37,30 +37,12 @@ import { useFlashMessage } from '../hooks/useFlashMessage'
 // styles
 import { Wrapper, Content } from '../pagesStyle/AddProduct.styles'
 
-const options = [ 
-	{
-		id: 1,
-		name: "Hobi"
-	}, {
-		id: 2,
-		name: "Kendaraan"
-	}, {
-		id: 3,
-		name: "Baju",
-	}, {
-		id: 4,
-		name: "Elektronik",
-	}, {
-		id: 5,
-		name: "Kesehatan",
-	}, 
-]
-
 const AddProduct = () => {
 	// redux state
 	const { loading, error } = useSelector(state => state.product)
 	
 	// state
+	const [availableCategories, setAvailableCategories] = useState([])
 	const [flashMessage, setFlashMessage] = useFlashMessage("")
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState(0)
@@ -125,7 +107,7 @@ const AddProduct = () => {
 		setPreview(false)
 	}
 
-	const onSubmit = () => {
+	const onSubmit = async () => {
 		if (name.length === 0){
 			alert("Tolong isi nama product")
 			return
@@ -146,13 +128,20 @@ const AddProduct = () => {
 			return
 		}
 		try{
-			dispatch(addProduct({
+			const categoryId = availableCategories.find(cat => cat.name === category).id
+			await dispatch(addProduct({
 				name,
 				price,
-				category,
+				categoryId,
+				description,
 				productImages
-			}))
-			navigate("/")
+			})).unwrap()
+
+			navigate("/", {
+				state: {
+					message: "Successfully created product"
+				}
+			})
 		} catch(err){
 			console.log(err)
 		}
@@ -194,9 +183,18 @@ const AddProduct = () => {
 	}
 
 	useEffect(() => {
+		const fetchCategories = async () => {
+			const response = await dispatch(
+				getAllCategories()
+			).unwrap()
+			setAvailableCategories(response)
+		}
+
 		dispatch(userActions.clearError())
 		dispatch(productActions.clearError())
 		dispatch(bidActions.clearError())
+
+		fetchCategories()
 	}, [dispatch])
 
 
@@ -239,7 +237,7 @@ const AddProduct = () => {
 
 				<Dropdown text="Kategory" 
 							placeholder="Select Kategory"
-							options={options}
+							options={availableCategories}
 							value={category}
 							onSelect={onSelect}
 							required
