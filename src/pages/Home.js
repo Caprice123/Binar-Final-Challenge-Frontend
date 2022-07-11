@@ -97,7 +97,7 @@ const Home = () => {
                     />
             <Content>
                 <Swiper autoplay={{
-                                delay: 100000,
+                                delay: 2500,
                                 disableOnInteraction: false,
                             }}
                             scrollbar={{ draggable: true }}
