@@ -265,7 +265,7 @@ const Wishlist = () => {
                                         <Grid maxSize="200px">
                                             {
                                                 products.map(product => (
-                                                    <ProductCard product={product} />
+                                                    <ProductCard to={`/product/${product.id}/bid`} product={product} />
 
                                                 ))
                                             }
