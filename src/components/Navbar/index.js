@@ -112,8 +112,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                                                     {
                                                         navLink.type === "button" && (
                                                         
-                                                            <ActionButton width="100%"
-                                                                            color="#7126B5"
+                                                            <ActionButton color="#7126B5"
                                                                             icon={navLink.additionalIcon}
                                                                             text={navLink.text}
                                                                             />
@@ -144,8 +143,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                                             {/* TODO: change to mobile compoennt only no component here */}
                                             {
                                                 navLink.type === "button" ? (
-                                                    <ActionButton width="100%"
-                                                                    color="#7126B5"
+                                                    <ActionButton color="#7126B5"
                                                                     icon={navLink.additionalIcon}
                                                                     text={navLink.text}
                                                                     />
