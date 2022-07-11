@@ -15,6 +15,7 @@ import InfoProduct from './pages/InfoProduct';
 import ProductBid from './pages/ProductBid';
 import ProtectedRoute from './pages/ProtectedRoute';
 import ListProducts from './pages/products';
+import Wishlist from './pages/products/wishlist';
 
 function App() {
 	return (
@@ -61,6 +62,12 @@ function App() {
           			<Route path="/daftar-jual" element={
 							<ProtectedRoute allowedRoles={[]}>
 								<ListProducts />
+							</ProtectedRoute>
+						} 
+					/>
+          			<Route path="/daftar-jual/wishlist" element={
+							<ProtectedRoute allowedRoles={[]}>
+								<Wishlist />
 							</ProtectedRoute>
 						} 
 					/>
