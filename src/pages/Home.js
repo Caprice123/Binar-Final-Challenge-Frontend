@@ -64,7 +64,7 @@ const Home = () => {
 
 
         fetchData()
-    }, [dispatch])
+    }, [dispatch, currentUser.user.id])
 
     const onSelectCategory = async(e) => {
         const { value } = e.currentTarget.dataset
