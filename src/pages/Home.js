@@ -1,22 +1,30 @@
 
 import React, { useEffect, useState } from 'react'
+
+// components
 import Navbar from '../components/Navbar'
 import Alert from '../components/Alert'
-
-import { Wrapper, Content } from '../pagesStyle/Home.styles'
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, Autoplay } from "swiper";
-import ImageBanner from '../img-banner.png'
-// styles
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllCategories, getProducts } from '../services/product';
 import ActionButton from '../components/ActionButton';
 import Grid from '../components/Grid';
 import ProductCard from '../components/ProductCard';
+import { Swiper, SwiperSlide } from "swiper/react";
+import ImageBanner from '../img-banner.png'
+
 import { Link } from 'react-router-dom';
+
+// styles
+import { Wrapper, Content } from '../pagesStyle/Home.styles'
+import { Pagination, Navigation, Autoplay } from "swiper";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+// redux
+import { useDispatch, useSelector } from 'react-redux';
+
+// services
+import { getAllCategories, getProducts } from '../services/product';
 
 
 const Home = () => {
@@ -89,14 +97,13 @@ const Home = () => {
                     />
             <Content>
                 <Swiper autoplay={{
-                                delay: 1000,
+                                delay: 100000,
                                 disableOnInteraction: false,
                             }}
                             scrollbar={{ draggable: true }}
                             modules={[Pagination, Navigation, Autoplay]}
                             className="mySwiper"
                             slidesPerView={"auto"}
-                            spaceBetween={40}
                             centeredSlides
                             loop
                         >
