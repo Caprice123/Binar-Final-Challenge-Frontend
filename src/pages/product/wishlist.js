@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // services
 import { getCurrentUser } from '../../services/user'
 import { getProducts } from '../../services/product'
+import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
 
 const Wishlist = () => {
     const datas = [
@@ -40,7 +41,7 @@ const Wishlist = () => {
     const navLinks = [
         {
             type: "text",
-            to: "/products",
+            to: PRODUCTS_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {
@@ -97,7 +98,7 @@ const Wishlist = () => {
     }
 
     const onClickEdit = () => {
-        navigate('/user/profile')
+        navigate(USER_PROFILE_ROUTE)
     }
 
     useEffect(() => {
@@ -137,7 +138,7 @@ const Wishlist = () => {
                 {
                     datas.map((data, id) => (
                         <div key={id}>
-                            <NotifItems redirectTo={`/product/${id}`}
+                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
                                         seen={data.seen}
                                         imageUrl={Image}
                                         actionName="Penawaran Produk"
@@ -207,18 +208,18 @@ const Wishlist = () => {
                                             <ActionButton color={`${uri === "daftar-jual" ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}`} 
                                                         text="Product"
                                                         icon={<i className="fa-solid fa-cube pe-2"></i>}
-                                                        onClick={() => navigate('/daftar-jual')}
+                                                        onClick={() => navigate(DAFTAR_JUAL_ROUTE)}
 
                                                         />
                                             <ActionButton color={`${uri === "wishlist" ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}`} 
                                                         text="Diminati"
                                                         icon={<i className="fa-solid fa-heart pe-2"></i>}
-                                                        onClick={() => navigate('/daftar-jual/wishlist')}
+                                                        onClick={() => navigate(WISHLIST_ROUTE)}
                                                         />
                                             <ActionButton color={`${uri === "sold" ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}`} 
                                                         text="Terjual"
                                                         icon={<i className="fa-solid fa-dollar-sign pe-2"></i>}
-                                                        onClick={() => navigate('/daftar-jual/sold')}
+                                                        onClick={() => navigate(SOLD_PRODUCT_ROUTE)}
                                                         />
                                         </div>
                                     )
@@ -229,7 +230,7 @@ const Wishlist = () => {
                                         <div className='category'>
                                             <h5>Kategori</h5>
 
-                                            <Link to='/daftar-jual' className={`${uri === "daftar-jual" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={DAFTAR_JUAL_ROUTE} className={`${uri === "daftar-jual" ? "active" : ""} d-flex justify-content-between align-items-center`}>
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-cube"></i>
                                                     <p className='px-2'>Semua Product</p>
@@ -237,7 +238,7 @@ const Wishlist = () => {
                                                 <i className="fa-solid fa-chevron-right"></i>
                                             </Link>
                                             <hr />
-                                            <Link to='/daftar-jual/wishlist' className={`${uri === "wishlist" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={WISHLIST_ROUTE} className={`${uri === "wishlist" ? "active" : ""} d-flex justify-content-between align-items-center`}>
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-heart"></i>
                                                     <p className='px-2'>Diminati</p>
@@ -245,7 +246,7 @@ const Wishlist = () => {
                                                 <i className="fa-solid fa-chevron-right"></i>
                                             </Link>
                                             <hr />
-                                            <Link to='/daftar-jual/sold' className={`${uri === "sold" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={SOLD_PRODUCT_ROUTE} className={`${uri === "sold" ? "active" : ""} d-flex justify-content-between align-items-center`}>
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-dollar-sign"></i>
                                                     <p className='px-2'>Terjual</p>
@@ -265,7 +266,7 @@ const Wishlist = () => {
                                         <Grid maxSize="200px">
                                             {
                                                 products.map(product => (
-                                                    <ProductCard to={`/product/${product.id}/bid`} product={product} />
+                                                    <ProductCard to={`${PRODUCTS_ROUTE}/${product.id}${BID_ROUTE}`} product={product} />
 
                                                 ))
                                             }

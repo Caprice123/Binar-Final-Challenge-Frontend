@@ -26,6 +26,7 @@ import { bidActions } from '../store/bids';
 
 // services
 import { register } from '../services/user';
+import { LOGIN_ROUTE } from '../types/pages';
 
 const Registrasi = () => {
     // redux state
@@ -88,7 +89,7 @@ const Registrasi = () => {
                 password
             })).unwrap()
     
-            navigate('/login', {
+            navigate(LOGIN_ROUTE, {
                 state: {
                     message: "Successfully register"
                 }
@@ -162,7 +163,7 @@ const Registrasi = () => {
                                     
                                     <p className='text-center mt-3'>
                                         Sudah punya akun? 
-                                        <Link to="/login" className={`${styles.text_purple} ms-3`}>
+                                        <Link to={LOGIN_ROUTE} className={`${styles.text_purple} ms-3`}>
                                             Masuk disini
                                         </Link>
                                     </p>

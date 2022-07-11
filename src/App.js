@@ -3,44 +3,45 @@ import { Provider } from 'react-redux'
 
 import store from './store';
 import Login from './pages/login';
-import Registrasi from './pages/registrasi';
-import DaftarJual from './pages/DaftarJual'
+import Registrasi from './pages/register';
 
 
-import AddProduct from './pages/AddProduct';
+import AddProduct from './pages/product/add';
 
 import GlobalStyle from './GlobalStyle';
-import InfoProfile from './pages/InfoProfile';
-import InfoProduct from './pages/InfoProduct';
-import ProductBid from './pages/ProductBid';
+import InfoProfile from './pages/user/profile';
+import InfoProduct from './pages/product/productId';
+import ProductBid from './pages/product/productId/bid';
 import ProtectedRoute from './pages/ProtectedRoute';
-import ListProducts from './pages/products';
-import Wishlist from './pages/products/wishlist';
-import SoldProducts from './pages/products/sold';
-import Home from './pages/Home';
+import ListProducts from './pages/product';
+import Wishlist from './pages/product/wishlist';
+import SoldProducts from './pages/product/sold';
+import Home from './pages';
+
+import { ADD_PRODUCT_ROUTE, BID_ROUTE, DAFTAR_JUAL_ROUTE, HOME_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE, REGISTER_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from './types/pages';
 
 function App() {
 	return (
 		<Provider store={store}>
 			<Router>
 				<Routes>
-					<Route path="/" element={
+					<Route path={HOME_ROUTE} element={
 							<Home />
 						} 
 					/>
 					{/* Auth Routes */}
 					
-					<Route path="/login" element={
+					<Route path={LOGIN_ROUTE} element={
 							<Login/>
 						} 
 					/>
-					<Route path="/register" element={
+					<Route path={REGISTER_ROUTE} element={
 							<Registrasi/>
 						} 
 					/>
 
 					{/* User Routes */}
-					<Route path='/user/profile' element={
+					<Route path={USER_PROFILE_ROUTE} element={
 						<ProtectedRoute allowedRoles={[]}>
 								<InfoProfile />
 							</ProtectedRoute>
@@ -48,36 +49,36 @@ function App() {
 					/>
 
 					{/* Product Routes */}
-					<Route path='/product/add' element={
+					<Route path={ADD_PRODUCT_ROUTE} element={
 							<ProtectedRoute allowedRoles={[]}>
 								<AddProduct />
 							</ProtectedRoute>
 						} 
 					/>
-					<Route path='/product/:productId' element={
+					<Route path={PRODUCTS_ROUTE + "/:productId"} element={
 							<InfoProduct />
 						} 
 					/>
-					<Route path='/product/:productId/bid' element={
+					<Route path={PRODUCTS_ROUTE + "/:productId" + BID_ROUTE} element={
 							<ProtectedRoute allowedRoles={[]}>
 								<ProductBid />
 							</ProtectedRoute>
 						} 
             
 					/>
-          			<Route path="/daftar-jual" element={
+          			<Route path={DAFTAR_JUAL_ROUTE} element={
 							<ProtectedRoute allowedRoles={[]}>
 								<ListProducts />
 							</ProtectedRoute>
 						} 
 					/>
-          			<Route path="/daftar-jual/wishlist" element={
+          			<Route path={WISHLIST_ROUTE} element={
 							<ProtectedRoute allowedRoles={[]}>
 								<Wishlist />
 							</ProtectedRoute>
 						} 
 					/>
-          			<Route path="/daftar-jual/sold" element={
+          			<Route path={SOLD_PRODUCT_ROUTE} element={
 							<ProtectedRoute allowedRoles={[]}>
 								<SoldProducts />
 							</ProtectedRoute>

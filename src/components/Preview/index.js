@@ -15,6 +15,7 @@ import { Wrapper, Content, LeftSection, RightSection } from './Preview.styles'
 import SellerInfo from '../SellerInfo';
 
 const Preview = ({ active, images, name, price, category, owner, description, onClose, actionButtons, mobileButton }) => {
+    console.log(images)
     const [isMobile, setIsMobile] = useState(false)
     useEffect(() => {
         const checkMobile = () => {
@@ -49,7 +50,7 @@ const Preview = ({ active, images, name, price, category, owner, description, on
                         { 
                             images.map((image, id) => (
                                 <SwiperSlide key={id}>
-                                    <img src={image.imageUrl} alt="preview" />
+                                    <img src={image} alt="preview" />
                                 </SwiperSlide>
                             ))
                         }

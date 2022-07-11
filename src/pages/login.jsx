@@ -7,7 +7,7 @@ import imageCover from '../assets/images/login-reg-banner.png'
 import LoadingSpinner from '../components/LoadingSpinner';
 import Alert from '../components/Alert';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // styles
 import styles from '../assets/css/auth.module.css'
@@ -28,6 +28,7 @@ import { login } from '../services/user';
 
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage';
+import { HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
 
 const Login = () => {
     // redux state
@@ -39,6 +40,7 @@ const Login = () => {
     const [password, setPassword] = useState("")
     
     const navigate = useNavigate()
+    const location = useLocation()
 
     // dispatch redux
     const dispatch = useDispatch()
@@ -79,7 +81,7 @@ const Login = () => {
                 email,
                 password
             })).unwrap()
-            navigate('/', { 
+            navigate(HOME_ROUTE, { 
                 state: {
                     message: "Login Successful",
                 },
@@ -101,7 +103,8 @@ const Login = () => {
 		dispatch(userActions.clearError())
 		dispatch(productActions.clearError())
 		dispatch(bidActions.clearError())
-	}, [dispatch])
+        navigate(location.pathname, { replace: true })
+	}, [dispatch, navigate, location.pathname])
 
     return (
         <div>
@@ -155,7 +158,7 @@ const Login = () => {
                                     <p className='text-center mt-3'>
                                         Belum punya akun? 
                                     
-                                        <Link to="/register" className={`${styles.text_purple} ms-3`}>
+                                        <Link to={REGISTER_ROUTE} className={`${styles.text_purple} ms-3`}>
                                             Daftar disini
                                         </Link>
                                     

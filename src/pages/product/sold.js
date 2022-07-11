@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from 'react'
 
-// components
+
+import Image from '../../200774.jpg'
 import Navbar from '../../components/Navbar'
 import Notif from '../../components/Notif'
 import NotifItems from '../../components/NotifItems'
 import Slider from '../../components/Slider'
 import ImagePreview from '../../components/ImagePreview'
-import Image from '../../200774.jpg'
+import ImagePerson from '../../assets/images/belumadaminat.png'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+
+
+import { Wrapper, Content } from '../../pagesStyle/products/sold.styles.js'
 import SellerInfo from '../../components/SellerInfo'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCurrentUser } from '../../services/user'
 import BorderOnlyButton from '../../components/BorderOnlyButton'
 import Grid from '../../components/Grid'
+import { getProducts } from '../../services/product'
 import ProductCard from '../../components/ProductCard'
 import ActionButton from '../../components/ActionButton'
 import LoadingSpinner from '../../components/LoadingSpinner'
+import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
 
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-
-// styles
-import { Wrapper, Content } from '../../pagesStyle/products/index.styles.js'
-
-// redux
-import { useDispatch, useSelector } from 'react-redux'
-
-// services
-import { getCurrentUser } from '../../services/user'
-import { getProducts } from '../../services/product'
-
-const ListProducts = () => {
+const SoldProducts = () => {
     const datas = [
         {
             seen: true,
@@ -39,7 +36,7 @@ const ListProducts = () => {
     const navLinks = [
         {
             type: "text",
-            to: "/products",
+            to: PRODUCTS_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {
@@ -96,7 +93,7 @@ const ListProducts = () => {
     }
 
     const onClickEdit = () => {
-        navigate('/user/profile')
+        navigate(USER_PROFILE_ROUTE)
     }
 
     useEffect(() => {
@@ -113,8 +110,10 @@ const ListProducts = () => {
     useEffect(() => {
         const fetchData = async () => {
             await dispatch(getCurrentUser()).unwrap()
+
             const response = await dispatch(getProducts({
-                user_id: currentUser.user.id
+                user_id: currentUser.user.id,
+                statusProduct: "sold",
             })).unwrap()
             setProducts(response)
         }
@@ -134,7 +133,7 @@ const ListProducts = () => {
                 {
                     datas.map((data, id) => (
                         <div key={id}>
-                            <NotifItems redirectTo={`/product/${id}`}
+                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
                                         seen={data.seen}
                                         imageUrl={Image}
                                         actionName="Penawaran Produk"
@@ -194,7 +193,7 @@ const ListProducts = () => {
                                                     />
                             }
                             />
-                <div className="products py-5">
+                <div className="products py-5"> 
                     {
                         !error ? (
                             <>
@@ -204,18 +203,18 @@ const ListProducts = () => {
                                             <ActionButton color={`${uri === "daftar-jual" ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}`} 
                                                         text="Product"
                                                         icon={<i className="fa-solid fa-cube pe-2"></i>}
-                                                        onClick={() => navigate('/daftar-jual')}
+                                                        onClick={() => navigate(DAFTAR_JUAL_ROUTE)}
 
                                                         />
                                             <ActionButton color={`${uri === "wishlist" ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}`} 
                                                         text="Diminati"
                                                         icon={<i className="fa-solid fa-heart pe-2"></i>}
-                                                        onClick={() => navigate('/daftar-jual/wishlist')}
+                                                        onClick={() => navigate(WISHLIST_ROUTE)}
                                                         />
                                             <ActionButton color={`${uri === "sold" ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}`} 
                                                         text="Terjual"
                                                         icon={<i className="fa-solid fa-dollar-sign pe-2"></i>}
-                                                        onClick={() => navigate('/daftar-jual/sold')}
+                                                        onClick={() => navigate(SOLD_PRODUCT_ROUTE)}
                                                         />
                                         </div>
                                     )
@@ -226,7 +225,7 @@ const ListProducts = () => {
                                         <div className='category'>
                                             <h5>Kategori</h5>
 
-                                            <Link to='/daftar-jual' className={`${uri === "daftar-jual" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={DAFTAR_JUAL_ROUTE} className={`${uri === "daftar-jual" ? "active" : ""} d-flex justify-content-between align-items-center`}>
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-cube"></i>
                                                     <p className='px-2'>Semua Product</p>
@@ -234,7 +233,7 @@ const ListProducts = () => {
                                                 <i className="fa-solid fa-chevron-right"></i>
                                             </Link>
                                             <hr />
-                                            <Link to='/daftar-jual/wishlist' className={`${uri === "wishlist" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={WISHLIST_ROUTE} className={`${uri === "wishlist" ? "active" : ""} d-flex justify-content-between align-items-center`}>
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-heart"></i>
                                                     <p className='px-2'>Diminati</p>
@@ -242,7 +241,7 @@ const ListProducts = () => {
                                                 <i className="fa-solid fa-chevron-right"></i>
                                             </Link>
                                             <hr />
-                                            <Link to='/daftar-jual/sold' className={`${uri === "sold" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={SOLD_PRODUCT_ROUTE} className={`${uri === "sold" ? "active" : ""} d-flex justify-content-between align-items-center`}>
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-dollar-sign"></i>
                                                     <p className='px-2'>Terjual</p>
@@ -252,19 +251,24 @@ const ListProducts = () => {
                                         </div>
                                     )
                                 }
+                                {
+                                    !loading && products.length === 0 ? (
+                                        <div className="no-offer d-flex align-items-center justify-content-center flex-column">
+                                            <img src={ImagePerson} alt="No one minat" />
+                                            <p className='py-3'>Belum ada produkmu yang terjual nih, sabar ya rejeki nggak kemana kok</p>
+                                        </div>
+                                    ) : (
+                                        <Grid maxSize="200px">
+                                            {
+                                                products.map(product => (
+                                                    <ProductCard to={`${PRODUCTS_ROUTE}/${product.id}${BID_ROUTE}`} product={product} />
 
-                                <Grid maxSize="200px">
-                                    <Link to='/product/add' className='d-flex align-items-center justify-content-center flex-column'>
-                                        <p>+</p>
-                                        <p>Tambah Produk</p>
-                                    </Link>
-                                    {
-                                        products.map(product => (
-                                            <ProductCard to={`/product/${product.id}`} product={product} />
+                                                ))
+                                            }
+                                        </Grid>
+                                    )
+                                }
 
-                                        ))
-                                    }
-                                </Grid>
                             </>
                         ) : (
                             <></>
@@ -277,4 +281,4 @@ const ListProducts = () => {
     )
 }
 
-export default ListProducts
+export default SoldProducts

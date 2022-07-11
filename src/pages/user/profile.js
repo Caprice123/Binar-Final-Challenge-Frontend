@@ -2,36 +2,39 @@
 import React, { useEffect, useState } from 'react'
 
 // components
-import ActionButton from '../components/ActionButton'
-import Dropdown from '../components/Dropdown'
-import ImagePreview from '../components/ImagePreview'
-import Input from '../components/Input'
-import InputFile from '../components/InputFile'
-import Navbar from '../components/Navbar'
-import Textarea from '../components/Textarea'
-import LoadingSpinner from '../components/LoadingSpinner'
-import Alert from '../components/Alert'
+import ActionButton from '../../components/ActionButton'
+import Dropdown from '../../components/Dropdown'
+import ImagePreview from '../../components/ImagePreview'
+import Input from '../../components/Input'
+import InputFile from '../../components/InputFile'
+import Navbar from '../../components/Navbar'
+import Textarea from '../../components/Textarea'
+import LoadingSpinner from '../../components/LoadingSpinner'
+import Alert from '../../components/Alert'
 
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 // helpers
-import { validatePhoneNumber } from '../helpers/validatePhoneNumber'
+import { validatePhoneNumber } from '../../helpers/validatePhoneNumber'
 
 // styles
-import { Wrapper, Content } from '../pagesStyle/InfoProfile.styles'
+import { Wrapper, Content } from '../../pagesStyle/InfoProfile.styles'
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getCurrentUser, updateUser } from '../services/user'
-import { userActions } from '../store/user'
-import { productActions } from '../store/product'
-import { bidActions } from '../store/bids'
+import { getCurrentUser, updateUser } from '../../services/user'
+import { userActions } from '../../store/user'
+import { productActions } from '../../store/product'
+import { bidActions } from '../../store/bids'
+import { HOME_ROUTE } from '../../types/pages'
 
 const InfoProfile = () => {
     // redux state
     const { loading, error, availableCities } = useSelector(state => state.user)
     // state
+    const [flashMessage, setFlashMessage] = useState("")
+    
     const [name, setName] = useState("")
     const [city, setCity] = useState("")
     const [address, setAddress] = useState("")
@@ -42,7 +45,8 @@ const InfoProfile = () => {
     
     // navigation 
     const navigate = useNavigate()
-    
+    const location = useLocation()
+
     // dispatch redux
     const dispatch = useDispatch()
     
@@ -106,14 +110,17 @@ const InfoProfile = () => {
         }
 
         try{
-            const response = await dispatch(
+            await dispatch(
                 updateUser(payload)
             ).unwrap()
-            navigate('/', {
-                state: {
-                    message: "Successfully updated profile"
-                }
-            })
+
+            setFlashMessage("Successfully updated profile")
+            // navigate(location.pathname, {
+            //     state: {
+            //         message: "Successfully updated profile"
+            //     },
+            //     replace: true
+            // })
         } catch(err){
             console.log(err)
         }
@@ -127,6 +134,10 @@ const InfoProfile = () => {
         dispatch(userActions.clearError())
     }
     
+    const onCloseFlash = () => {
+		setFlashMessage("")
+	}
+
     useEffect(() => {
         const fetchImage = async (image_url) => {
             const response = await fetch(image_url);
@@ -153,7 +164,7 @@ const InfoProfile = () => {
         dispatch(bidActions.clearError())
         dispatch(userActions.getCities())
         getUser()
-    }, [dispatch])
+    }, [dispatch, navigate, location.pathname])
 
     useEffect(() => {
         if (city){
@@ -174,12 +185,18 @@ const InfoProfile = () => {
                     text={error} 
                     onClick={onCloseAlert} 
                     />
+            <Alert active={flashMessage.length > 0} 
+					backgroundColor="green" 
+					color="white" 
+					text={flashMessage} 
+					onClick={onCloseFlash} 
+					/>
             
             <Navbar centeredText="Lengkapi Info Akun"
                     />
                 
             <Content className='mx-auto position-relative'>
-                <Link to='/' className="back-icon py-3" onClick={onClickGoBack}>
+                <Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
                 <div className='py-3 d-flex justify-content-center align-items-center'>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 
 // components
 import { Link } from 'react-router-dom'
+import { HOME_ROUTE } from '../../types/pages'
 import ActionButton from '../ActionButton'
 
 // styles
@@ -63,7 +64,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                     <div className="navbar-nav w-100 d-flex justify-content-between align-items-center">
                         <div className="d-flex navbar-nav">
                             <Link className="navbar-brand" 
-                                    to='/'>        
+                                    to={HOME_ROUTE}>        
                             </Link>
                             {
                                 withSearchBar && (

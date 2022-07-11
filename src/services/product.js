@@ -88,14 +88,13 @@ export const addProduct = createAsyncThunk(
             })
             formData.append("productId", productId)
 
-            const responseAddProductImage = await api.post(
+            await api.post(
                 '/api/v1/productsimageupload',
                 formData,
                 authHeader('multipart/form-data')
             )
 
-            const dataAddProductImage = responseAddProductImage.data
-            return dataAddProductImage
+            return dataAddProduct
         } catch(err){
             const errorMessage = err.response.data
             throw Error(JSON.stringify(errorMessage))

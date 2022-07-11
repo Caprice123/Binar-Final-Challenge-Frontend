@@ -5,6 +5,7 @@ import { Navigate } from 'react-router-dom'
 
 // react redux
 import { useSelector } from 'react-redux/es/exports'
+import { LOGIN_ROUTE } from '../types/pages'
 
 const ProtectedRoute = ({ allowedRoles, children }) => {
     const { currentUser, isLoggedIn } = useSelector(state => state.user)
@@ -15,7 +16,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
                 isLoggedIn && (allowedRoles.length === 0 || allowedRoles.contains(currentUser.role)) ? (
                     children
                 ) : (
-                    <Navigate to='/login' />
+                    <Navigate to={LOGIN_ROUTE} />
                 )
             }
         </>
