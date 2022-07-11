@@ -21,7 +21,7 @@ import ImagePreview from '../../components/ImagePreview'
 import LoadingSpinner from '../../components/LoadingSpinner'
 
 // styles
-import { Wrapper, Content } from '../../pagesStyle/InfoProduct.styles'
+import { Wrapper, Content } from '../../pagesStyle/product/productId.styles'
 
 // helpers
 import { validateNumber } from '../../helpers/validateNumber'

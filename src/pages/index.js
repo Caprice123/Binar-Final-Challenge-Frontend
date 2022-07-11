@@ -14,7 +14,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // styles
-import { Wrapper, Content } from '../pagesStyle/Home.styles'
+import { Wrapper, Content } from '../pagesStyle/index.styles'
 import { Pagination, Navigation, Autoplay } from "swiper";
 
 import "swiper/css";

@@ -18,7 +18,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { validatePhoneNumber } from '../../helpers/validatePhoneNumber'
 
 // styles
-import { Wrapper, Content } from '../../pagesStyle/InfoProfile.styles'
+import { Wrapper, Content } from '../../pagesStyle/user/profile.styles'
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux'

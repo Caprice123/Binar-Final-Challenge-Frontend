@@ -16,7 +16,7 @@ import Alert from '../../../components/Alert'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 
 // styles
-import { Wrapper, Content } from '../../../pagesStyle/ProductBid.styles'
+import { Wrapper, Content } from '../../../pagesStyle/product/productId/bid.styles'
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux'

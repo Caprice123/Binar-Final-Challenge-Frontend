@@ -32,7 +32,7 @@ import { bidActions } from '../../store/bids'
 import { addProduct, getAllCategories } from '../../services/product'
 
 // styles
-import { Wrapper, Content } from '../../pagesStyle/AddProduct.styles'
+import { Wrapper, Content } from '../../pagesStyle/product/add.styles'
 import { HOME_ROUTE, PRODUCTS_ROUTE } from '../../types/pages'
 
 const AddProduct = () => {
