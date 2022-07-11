@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from 'react'
 
-
-import Image from '../../200774.jpg'
+// components
 import Navbar from '../../components/Navbar'
 import Notif from '../../components/Notif'
 import NotifItems from '../../components/NotifItems'
 import Slider from '../../components/Slider'
 import ImagePreview from '../../components/ImagePreview'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-
-
-import { Wrapper, Content } from '../../pagesStyle/products/index.styles.js'
+import Image from '../../200774.jpg'
 import SellerInfo from '../../components/SellerInfo'
-import { useDispatch, useSelector } from 'react-redux'
-import { getCurrentUser } from '../../services/user'
 import BorderOnlyButton from '../../components/BorderOnlyButton'
 import Grid from '../../components/Grid'
-import { getProducts } from '../../services/product'
 import ProductCard from '../../components/ProductCard'
 import ActionButton from '../../components/ActionButton'
 import LoadingSpinner from '../../components/LoadingSpinner'
+
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+
+// styles
+import { Wrapper, Content } from '../../pagesStyle/products/index.styles.js'
+
+// redux
+import { useDispatch, useSelector } from 'react-redux'
+
+// services
+import { getCurrentUser } from '../../services/user'
+import { getProducts } from '../../services/product'
 
 const ListProducts = () => {
     const datas = [
