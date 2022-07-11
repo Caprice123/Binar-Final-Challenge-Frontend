@@ -21,11 +21,14 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
         const checkMobile = () => {
             const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
             if (vw >= 992){
-                closeButtonRef.current.click()
+                if (closeButtonRef.current){
+                    closeButtonRef.current.click()
+                }
             }
         }
         window.addEventListener("resize", checkMobile)
         checkMobile()
+        return () => window.removeEventListener("resize", checkMobile)
     }, [])
 
     const onOpen = () => {
