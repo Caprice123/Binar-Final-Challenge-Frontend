@@ -17,12 +17,17 @@ import ProtectedRoute from './pages/ProtectedRoute';
 import ListProducts from './pages/products';
 import Wishlist from './pages/products/wishlist';
 import SoldProducts from './pages/products/sold';
+import Home from './pages/Home';
 
 function App() {
 	return (
 		<Provider store={store}>
 			<Router>
 				<Routes>
+					<Route path="/" element={
+							<Home />
+						} 
+					/>
 					{/* Auth Routes */}
 					
 					<Route path="/login" element={
