@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from 'react'
 
-// components
+
+import Image from '../../200774.jpg'
 import Navbar from '../../components/Navbar'
 import Notif from '../../components/Notif'
 import NotifItems from '../../components/NotifItems'
 import Slider from '../../components/Slider'
 import ImagePreview from '../../components/ImagePreview'
-import Image from '../../200774.jpg'
 import ImagePerson from '../../assets/images/belumadaminat.png'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+
+
+import { Wrapper, Content } from '../../pagesStyle/products/sold.styles.js'
 import SellerInfo from '../../components/SellerInfo'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCurrentUser } from '../../services/user'
 import BorderOnlyButton from '../../components/BorderOnlyButton'
 import Grid from '../../components/Grid'
+import { getProducts } from '../../services/product'
 import ProductCard from '../../components/ProductCard'
 import ActionButton from '../../components/ActionButton'
 import LoadingSpinner from '../../components/LoadingSpinner'
 
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-
-// styles
-import { Wrapper, Content } from '../../pagesStyle/products/wishlist.styles.js'
-
-// redux
-import { useDispatch, useSelector } from 'react-redux'
-
-// services
-import { getCurrentUser } from '../../services/user'
-import { getProducts } from '../../services/product'
-
-const Wishlist = () => {
+const SoldProducts = () => {
     const datas = [
         {
             seen: true,
@@ -115,11 +110,11 @@ const Wishlist = () => {
         const fetchData = async () => {
             await dispatch(getCurrentUser()).unwrap()
 
-            // TODO: change url or change redux
             const response = await dispatch(getProducts({
-                user_id: -1
+                user_id: currentUser.user.id,
+                statusProduct: "sold",
             })).unwrap()
-            // setProducts(response)
+            setProducts(response)
         }
 
         fetchData()
@@ -259,7 +254,7 @@ const Wishlist = () => {
                                     !loading && products.length === 0 ? (
                                         <div className="no-offer d-flex align-items-center justify-content-center flex-column">
                                             <img src={ImagePerson} alt="No one minat" />
-                                            <p className='py-3'>Belum ada produkmu yang diminati nih, sabar ya rejeki nggak kemana kok</p>
+                                            <p className='py-3'>Belum ada produkmu yang terjual nih, sabar ya rejeki nggak kemana kok</p>
                                         </div>
                                     ) : (
                                         <Grid maxSize="200px">
@@ -285,4 +280,4 @@ const Wishlist = () => {
     )
 }
 
-export default Wishlist
+export default SoldProducts
