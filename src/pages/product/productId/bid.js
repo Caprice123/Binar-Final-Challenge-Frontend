@@ -52,7 +52,7 @@ const ProductBid = () => {
     //     status: "sent_to_seller"
     //     // status: "pending"
     // }
-    const [product, setProduct] = useState(null)
+    const [product, setProduct] = useState({})
 
 
     const navLinks = [
@@ -74,11 +74,12 @@ const ProductBid = () => {
         }, 
     ]
 
-    const user = {
-        userId: 2,
-    }
+    // const user = {
+    //     userId: 2,
+    // }
 
     // redux state
+    const { currentUser } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.bids)
     
     // state
@@ -213,7 +214,7 @@ const ProductBid = () => {
                             />
                 <h4 className='my-4'>Daftar Produkmu yang Ditawar</h4>
                 {
-                    user.userId !== product?.user_id ? (
+                    currentUser.user.id !== product?.user_id ? (
                         product?.bids ? (
                             product?.bids.map((bid, id) => (
                                 <div key={id}>
