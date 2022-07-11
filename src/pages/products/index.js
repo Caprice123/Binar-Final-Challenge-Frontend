@@ -260,7 +260,7 @@ const ListProducts = () => {
                                     </Link>
                                     {
                                         products.map(product => (
-                                            <ProductCard product={product} />
+                                            <ProductCard to={`/product/${product.id}`} product={product} />
 
                                         ))
                                     }
