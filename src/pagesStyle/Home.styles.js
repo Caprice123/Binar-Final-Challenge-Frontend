@@ -16,7 +16,7 @@ export const Content = styled.div`
             border-radius: 20px;
             overflow: hidden;
             transition: height 0.5s;
-            margin: auto 0;
+            margin: auto 40px;
 
             &.swiper-slide-active{
                 height: 100%;
@@ -26,13 +26,6 @@ export const Content = styled.div`
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-            }
-        }
-
-        @media screen and (max-width: var(--tablet-size)) {
-            height: 32.5vh;
-            .swiper-slide{
-                width: 90vw !important;
             }
         }
     }
@@ -56,6 +49,20 @@ export const Content = styled.div`
             }
             &::-webkit-scrollbar-thumb {
                 background: transparent;
+            }
+        }
+    }
+
+    @media screen and (max-width: 992px) {
+        margin-top: var(--navbar-height);
+
+        .swiper{
+            height: 37.5vh;
+            width: 100vw;
+            .swiper-slide{
+                border-radius: 0;
+                margin: auto 0;
+                width: 100vw !important;
             }
         }
     }
