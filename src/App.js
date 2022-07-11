@@ -12,7 +12,7 @@ import GlobalStyle from './GlobalStyle';
 import InfoProfile from './pages/user/profile';
 import InfoProduct from './pages/product/productId';
 import ProductBid from './pages/product/productId/bid';
-import ProtectedRoute from './pages/ProtectedRoute';
+import ProtectedRoute from './ProtectedRoute';
 import ListProducts from './pages/product';
 import Wishlist from './pages/product/wishlist';
 import SoldProducts from './pages/product/sold';
