@@ -1,41 +1,39 @@
 import React, { useState, useCallback, useEffect } from 'react'
 
 // components
-import ActionButton from '../components/ActionButton'
-import BorderOnlyButton from '../components/BorderOnlyButton'
-import DragAndDrop from '../components/DragAndDrop'
-import Dropdown from '../components/Dropdown'
-import Grid from '../components/Grid'
-import ImagePreview from '../components/ImagePreview'
-import Input from '../components/Input'
-import Textarea from '../components/Textarea'
-import Preview from '../components/Preview'
-import Navbar from '../components/Navbar'
-import LoadingSpinner from '../components/LoadingSpinner'
-import Alert from '../components/Alert'
+import ActionButton from '../../components/ActionButton'
+import BorderOnlyButton from '../../components/BorderOnlyButton'
+import DragAndDrop from '../../components/DragAndDrop'
+import Dropdown from '../../components/Dropdown'
+import Grid from '../../components/Grid'
+import ImagePreview from '../../components/ImagePreview'
+import Input from '../../components/Input'
+import Textarea from '../../components/Textarea'
+import Preview from '../../components/Preview'
+import Navbar from '../../components/Navbar'
+import LoadingSpinner from '../../components/LoadingSpinner'
+import Alert from '../../components/Alert'
 
 import { Link, useNavigate } from 'react-router-dom'
 
 // helpers
-import { validateNumber } from '../helpers/validateNumber'
-import { validateSizeFile } from '../helpers/validateSizeFile'
+import { validateNumber } from '../../helpers/validateNumber'
+import { validateSizeFile } from '../../helpers/validateSizeFile'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-import { productActions } from '../store/product'
-import { userActions } from '../store/user'
-import { bidActions } from '../store/bids'
+import { productActions } from '../../store/product'
+import { userActions } from '../../store/user'
+import { bidActions } from '../../store/bids'
 
 // services
-import { addProduct, getAllCategories } from '../services/product'
-
-// hooks
-import { useFlashMessage } from '../hooks/useFlashMessage'
+import { addProduct, getAllCategories } from '../../services/product'
 
 // styles
-import { Wrapper, Content } from '../pagesStyle/AddProduct.styles'
+import { Wrapper, Content } from '../../pagesStyle/product/add.styles'
+import { HOME_ROUTE, PRODUCTS_ROUTE } from '../../types/pages'
 
 const AddProduct = () => {
 	// redux state
@@ -43,7 +41,7 @@ const AddProduct = () => {
 	
 	// state
 	const [availableCategories, setAvailableCategories] = useState([])
-	const [flashMessage, setFlashMessage] = useFlashMessage("")
+	const [flashMessage, setFlashMessage] = useState("")
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState(0)
 	const [category, setCategory] = useState("")
@@ -129,7 +127,7 @@ const AddProduct = () => {
 		}
 		try{
 			const categoryId = availableCategories.find(cat => cat.name === category).id
-			await dispatch(addProduct({
+			const product = await dispatch(addProduct({
 				name,
 				price,
 				categoryId,
@@ -137,7 +135,9 @@ const AddProduct = () => {
 				productImages
 			})).unwrap()
 
-			navigate("/", {
+			console.log(product)
+
+			navigate(`${PRODUCTS_ROUTE}/${product.id}`, {
 				state: {
 					message: "Successfully created product"
 				}
@@ -155,10 +155,7 @@ const AddProduct = () => {
 	const onDrop = useCallback((acceptedFiles) => {
 		const additionalImages = acceptedFiles.map((file) => {
 			if (validateSizeFile(file)){
-				return {
-					file,
-					imageUrl: URL.createObjectURL(file)
-				}
+				return URL.createObjectURL(file)
 			}
 			return null
 		})
@@ -216,7 +213,7 @@ const AddProduct = () => {
             
 			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<Content className="mx-auto position-relative">
-				<Link to='/' className="back-icon py-3" onClick={onClickGoBack}>
+				<Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
 				<Input type="text" 

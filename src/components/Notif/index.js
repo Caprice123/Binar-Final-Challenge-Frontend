@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import Image from '../../200774.jpg'
+import { PRODUCTS_ROUTE } from '../../types/pages'
 import NotifItems from '../NotifItems'
 
 import { Wrapper, Content } from './Notif.styles'
@@ -49,7 +50,7 @@ const Notif = ({ datas }) => {
                 {
                     datas.map((data, id) => (
                         <>
-                            <NotifItems redirectTo={`/product/${id}`}
+                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
                                         seen={data.seen}
                                         imageUrl={Image}
                                         actionName="Penawaran Produk"

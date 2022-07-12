@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from 'react'
 
 // components
-import Navbar from '../components/Navbar'
-import Notif from '../components/Notif'
-import SellerInfo from '../components/SellerInfo'
-import BorderOnlyButton from '../components/BorderOnlyButton'
-import ActionButton from '../components/ActionButton'
-import InputRadio from '../components/InputRadio'
-import Image from '../200774.jpg'
-import NotifItems from '../components/NotifItems'
-import Popup from '../components/Popup'
-import LoadingSpinner from '../components/LoadingSpinner'
-import Alert from '../components/Alert'
+import Navbar from '../../../components/Navbar'
+import Notif from '../../../components/Notif'
+import SellerInfo from '../../../components/SellerInfo'
+import BorderOnlyButton from '../../../components/BorderOnlyButton'
+import ActionButton from '../../../components/ActionButton'
+import InputRadio from '../../../components/InputRadio'
+import Image from '../../../200774.jpg'
+import NotifItems from '../../../components/NotifItems'
+import Popup from '../../../components/Popup'
+import LoadingSpinner from '../../../components/LoadingSpinner'
+import Alert from '../../../components/Alert'
 
 import { Link, useParams, useNavigate } from 'react-router-dom'
 
 // styles
-import { Wrapper, Content } from '../pagesStyle/ProductBid.styles'
+import { Wrapper, Content } from '../../../pagesStyle/product/productId/bid.styles'
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-import { bidActions } from '../store/bids'
-import { productActions } from '../store/product'
-import { userActions } from '../store/user'
+import { bidActions } from '../../../store/bids'
+import { productActions } from '../../../store/product'
+import { userActions } from '../../../store/user'
 
 // services
-import { acceptBid, rejectBid, updateStatusBid } from '../services/bids'
-import { getProductByID } from '../services/product'
+import { acceptBid, rejectBid, updateStatusBid } from '../../../services/bids'
+import { getProductByID } from '../../../services/product'
+import { HOME_ROUTE } from '../../../types/pages'
 
 const ProductBid = () => {
     // Settings
@@ -51,13 +52,13 @@ const ProductBid = () => {
     //     status: "sent_to_seller"
     //     // status: "pending"
     // }
-    const [product, setProduct] = useState(null)
+    const [product, setProduct] = useState({})
 
 
     const navLinks = [
         {
             type: "text",
-            to: "/",
+            to: HOME_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {
@@ -73,11 +74,12 @@ const ProductBid = () => {
         }, 
     ]
 
-    const user = {
-        userId: 2,
-    }
+    // const user = {
+    //     userId: 2,
+    // }
 
     // redux state
+    const { currentUser } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.bids)
     
     // state
@@ -109,7 +111,7 @@ const ProductBid = () => {
 
             window.location.reload()
             // TODO: Change navigation url
-            navigate('/', {
+            navigate(HOME_ROUTE, {
                 state: {
                     message: "Successfully reject transaction"
                 }
@@ -131,7 +133,7 @@ const ProductBid = () => {
                 transactionId: 1,
             }))
 
-            navigate('/', {
+            navigate(HOME_ROUTE, {
                 state: {
                     message: "Successfully accept product bid"
                 }
@@ -152,7 +154,7 @@ const ProductBid = () => {
                 transactionId: 1,
                 updateStatus,
             }))
-            navigate('/', {
+            navigate(HOME_ROUTE, {
                 state: {
                     message: "Successfully update transaction"
                 }
@@ -201,7 +203,7 @@ const ProductBid = () => {
             <Navbar centeredText="Info Penawar" 
                     />
             <Content className="mx-auto position-relative"> 
-                <Link to='/' className="back-icon py-3">
+                <Link to={HOME_ROUTE} className="back-icon py-3">
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
                 <SellerInfo width="100%"
@@ -212,7 +214,7 @@ const ProductBid = () => {
                             />
                 <h4 className='my-4'>Daftar Produkmu yang Ditawar</h4>
                 {
-                    user.userId !== product?.user_id ? (
+                    currentUser.user.id !== product?.user_id ? (
                         product?.bids ? (
                             product?.bids.map((bid, id) => (
                                 <div key={id}>

@@ -7,9 +7,9 @@ const ProductCard = ({ to, product }) => {
         <Wrapper to={to}>
             <Content className='d-flex flex-column justify-content-around py-3 px-3'>
                 <img src={product.images[0].name} alt="product" />
-                <h5>{product.name}</h5>
-                <p>{product.category.name}</p>
-                <h5>{product.price.toLocaleString()}</h5>
+                <h5 className='mt-2'>{product.name}</h5>
+                <p className='mt-2'>{product.category.name}</p>
+                <h5 className='mt-2'>{product.price.toLocaleString()}</h5>
             </Content>
         </Wrapper>
     )

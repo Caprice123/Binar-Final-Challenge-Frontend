@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom'
 import imageClock from "../../assets/images/clock.png"
 
 import styles from '../../assets/css/daftar-jual.module.css'
+import { HOME_ROUTE } from '../../types/pages';
 
 const Index = ({ data, link }) => {
 
     return (
         <>
             <div className="col-6 col-md-4">
-                <Link class={styles.catalogLink} to={'/'}>
+                <Link class={styles.catalogLink} to={HOME_ROUTE}>
                     <div class="card h-100">
                         <img src={imageClock} class="card-img-top" alt="..." />
                         <div class="card-body">

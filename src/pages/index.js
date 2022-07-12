@@ -9,11 +9,12 @@ import Grid from '../components/Grid';
 import ProductCard from '../components/ProductCard';
 import { Swiper, SwiperSlide } from "swiper/react";
 import ImageBanner from '../img-banner.png'
+import LoadingSpinner from '../components/LoadingSpinner';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // styles
-import { Wrapper, Content } from '../pagesStyle/Home.styles'
+import { Wrapper, Content } from '../pagesStyle/index.styles'
 import { Pagination, Navigation, Autoplay } from "swiper";
 
 import "swiper/css";
@@ -25,22 +26,30 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // services
 import { getAllCategories, getProducts } from '../services/product';
+import { useFlashMessage } from '../hooks/useFlashMessage';
+import { ADD_PRODUCT_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
 
 
 const Home = () => {
     const navLinks = [
         {
             type: "button",
-            to: '/login',
+            to: LOGIN_ROUTE,
             text: "Masuk",
             additionalIcon: <i className="fa-solid fa-arrow-right-to-bracket me-3" style={{ color: "white" }}></i>,
         }
     ]
 
-    const { currentUser } = useSelector(state => state.user)
+    const navigate = useNavigate()
+    const location = useLocation()
+    
+    const { isLoggedIn, currentUser } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.product)
     
+    const [flashMessage, setFlashMessage] = useFlashMessage("")
     const [isNavbarOn, setIsNavbarOn] = useState(false)
+
+    console.log(flashMessage)
 
     const [availableCategories, setAvailableCategories] = useState([])
     const [products, setProducts] = useState([])
@@ -54,25 +63,32 @@ const Home = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            // const responseGetAllCategories = await dispatch(
-            //     getAllCategories()
-            // ).unwrap()
-            
-            const [ responseGetAllCategories, responseGetProducts ]= await Promise.all([
-                dispatch(getAllCategories()).unwrap(),
-                dispatch(getProducts({
-                    excludeStatusProduct: "sold",
-                    excludeUserId: currentUser.user.id
-                })).unwrap()
-            ])
-            setAvailableCategories(responseGetAllCategories)
-            setProducts(responseGetProducts)
 
+            if (isLoggedIn){
+                const [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
+                    dispatch(getAllCategories()).unwrap(),
+                    dispatch(getProducts({
+                        excludeStatusProduct: "sold",
+                        excludeUserId: currentUser.user.id
+                    })).unwrap()
+                ])
+                setAvailableCategories(responseGetAllCategories)
+                setProducts(responseGetProducts)
+            } else {
+                const [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
+                    dispatch(getAllCategories()).unwrap(),
+                    dispatch(getProducts({
+                        excludeStatusProduct: "sold"
+                    })).unwrap()
+                ])
+                setAvailableCategories(responseGetAllCategories)
+                setProducts(responseGetProducts)
+            }
         }
-
-
+        navigate(location.pathname, { replace: true })
         fetchData()
-    }, [dispatch, currentUser.user.id])
+
+    }, [dispatch, navigate, isLoggedIn, currentUser.user, location.pathname])
 
     const onSelectCategory = async(e) => {
         const { value } = e.currentTarget.dataset
@@ -86,10 +102,19 @@ const Home = () => {
         setProducts(response)
     }
 
-    console.log(availableCategories)
+    const onClickAlert = () => {
+        setFlashMessage("")
+    }
+
     return (
         <Wrapper>
-            <Alert />
+            <LoadingSpinner active={loading} />
+            <Alert active={flashMessage.length > 0}
+                    backgroundColor="green"
+                    color="white" 
+                    text={flashMessage}
+                    onClick={onClickAlert}
+                    />
             <Navbar navLinks={navLinks}
                     isOffcanvasOn={isNavbarOn}
                     onClick={onOpen}
@@ -145,11 +170,10 @@ const Home = () => {
                             ))
                         }
                     </div>
-                    <Grid maxSize="175px">
-
+                    <Grid maxSize="175px" className='py-3'>
                         {
                             products.map(product => (
-                                <ProductCard product={product} />
+                                <ProductCard to={`${PRODUCTS_ROUTE}/${product.id}`} product={product} />
                             ))
                         }
                     </Grid>
@@ -157,7 +181,7 @@ const Home = () => {
 
             </Content>
 
-            <Link to='/product/add' style={{ borderRadius: "12px", position: "fixed", bottom: '2.5%', left: "50%", transform: "translateX(-50%)", boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.5)"}}>
+            <Link to={ADD_PRODUCT_ROUTE} style={{ borderRadius: "12px", position: "fixed", bottom: '2.5%', left: "50%", transform: "translateX(-50%)", boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.5)"}}>
 
                 <ActionButton text="Jual" 
                                 color="var(--primary-purple-04)"

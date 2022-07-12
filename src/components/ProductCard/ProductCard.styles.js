@@ -10,10 +10,9 @@ export const Wrapper = styled(Link)`
 
 
 export const Content = styled.div`
-    height: 100%;
     img{
         width: 100%;
-        height: 62.5%;
+        height: 125px;
         object-fit: cover;
     }
 

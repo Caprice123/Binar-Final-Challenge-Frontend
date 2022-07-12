@@ -1,39 +1,43 @@
+// TODO: BLOM KELAR ACTION BUTTON NEGO
+
 import React, { useEffect, useState } from 'react'
 
 // external hooks
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
 
 // components
-import Navbar from '../components/Navbar'
-import Preview from '../components/Preview'
-import Input from '../components/Input'
-import ActionButton from '../components/ActionButton'
-import Popup from '../components/Popup'
-import Notif from '../components/Notif/index'
-import SellerInfo from '../components/SellerInfo'
-import Alert from '../components/Alert'
-import Image from '../200774.jpg'
-import Slider from '../components/Slider'
-import NotifItems from '../components/NotifItems'
-import ImagePreview from '../components/ImagePreview'
-import LoadingSpinner from '../components/LoadingSpinner'
+import Navbar from '../../components/Navbar'
+import Preview from '../../components/Preview'
+import Input from '../../components/Input'
+import ActionButton from '../../components/ActionButton'
+import Popup from '../../components/Popup'
+import Notif from '../../components/Notif/index'
+import SellerInfo from '../../components/SellerInfo'
+import Alert from '../../components/Alert'
+import Image from '../../200774.jpg'
+import Slider from '../../components/Slider'
+import NotifItems from '../../components/NotifItems'
+import ImagePreview from '../../components/ImagePreview'
+import LoadingSpinner from '../../components/LoadingSpinner'
 
 // styles
-import { Wrapper, Content } from '../pagesStyle/InfoProduct.styles'
+import { Wrapper, Content } from '../../pagesStyle/product/productId.styles'
 
 // helpers
-import { validateNumber } from '../helpers/validateNumber'
+import { validateNumber } from '../../helpers/validateNumber'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-import { productActions } from '../store/product'
-import { userActions } from '../store/user'
-import { bidActions } from '../store/bids'
+import { productActions } from '../../store/product'
+import { userActions } from '../../store/user'
+import { bidActions } from '../../store/bids'
 
 // services
-import { addBidPrice, getProductOneByID } from '../services/product'
+import { addBidPrice, getProductOneByID } from '../../services/product'
+import { useFlashMessage } from '../../hooks/useFlashMessage'
+import { HOME_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../types/pages'
 
 const InfoProduct = () => {
     const datas = [
@@ -48,7 +52,7 @@ const InfoProduct = () => {
     const navLinks = [
         {
             type: "text",
-            to: "/products",
+            to: PRODUCTS_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {
@@ -64,13 +68,13 @@ const InfoProduct = () => {
         }, 
     ]
     
-    const images = [
-        {
-            imageUrl: Image,
-        }, {
-            imageUrl: Image,
-        },
-    ]
+    // const images = [
+    //     {
+    //         imageUrl: Image,
+    //     }, {
+    //         imageUrl: Image,
+    //     },
+    // ]
     
     
     // const user = {
@@ -86,7 +90,7 @@ const InfoProduct = () => {
     
     // state
     const [product, setProduct] = useState(null)
-    console.log(product)
+    const [isDisabled, setIsDisabled] = useState(false)
 
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
@@ -94,13 +98,14 @@ const InfoProduct = () => {
 
     const [show, setShow] = useState(false)
     const [bidPrice, setBidPrice] = useState(0)
-    const [alertOn, setAlertOn] = useState(true)
+    const [flashMessage, setFlashMessage] = useFlashMessage("")
     
     // params
     const { productId } = useParams()
     
     // navigation
     const navigate = useNavigate()
+    const location = useLocation()
    
     // dispatch redux
     const dispatch = useDispatch()
@@ -150,23 +155,25 @@ const InfoProduct = () => {
                 bidPrice,
             })).unwrap()
             
-
-            navigate('/', {
-                state: {
-                    message: "Successfully bid the product"
-                } 
-            })
+            setIsDisabled(true)
+            setFlashMessage("Successfully bid the project")
+            // navigate('/', {
+            //     state: {
+            //         message: "Successfully bid the product"
+            //     } 
+            // })
         } catch(err){
             console.log(err)
         }
     }
 
     const onClose = () => {
-        setAlertOn(false)
+        setFlashMessage("")
     }
 
     const onEdit = () => {
-        navigate('/')
+        // TODO: CHANGE TO ROUTE UPDATE
+        navigate(HOME_ROUTE)
     }
     
     const onCloseAlert = () => {
@@ -178,8 +185,9 @@ const InfoProduct = () => {
     }
 
     const onClickLogout = async () => {
-        await dispatch(userActions.logout())
-        navigate('/login', {
+        dispatch(userActions.logout())
+        console.log("here")
+        navigate(LOGIN_ROUTE, {
             state: {
                 message: "Logout Successfully"
             }
@@ -192,13 +200,15 @@ const InfoProduct = () => {
                 productId: productId
             })).unwrap()
             setProduct(response)
+            console.log(response)
         }
         dispatch(userActions.clearError())
         dispatch(productActions.clearError())
         dispatch(bidActions.clearError())
 
+        navigate(location.pathname, { replace: true })
         fetchData()
-	  }, [dispatch, productId, setProduct])
+	  }, [dispatch, productId, setProduct, navigate, location.pathname])
 
 
     return (
@@ -211,7 +221,7 @@ const InfoProduct = () => {
                 {
                     datas.map((data, id) => (
                         <div key={id}>
-                            <NotifItems redirectTo={`/product/${id}`}
+                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
                                         seen={data.seen}
                                         imageUrl={Image}
                                         actionName="Penawaran Produk"
@@ -233,7 +243,7 @@ const InfoProduct = () => {
                 </div>
                 <div className="content d-flex flex-column">
                     <ImagePreview url={Image} />
-                    <Link to='/user/profile' className='d-flex align-items-center pt-5 pb-1'>
+                    <Link to={USER_PROFILE_ROUTE} className='d-flex align-items-center pt-5 pb-1'>
                         <i className="fa-solid fa-pen-to-square me-3"></i>
                         <span>Ubah Akun</span>
                     </Link>
@@ -243,7 +253,7 @@ const InfoProduct = () => {
                         <span>Pengaturan Akun</span>
                     </Link>
                     <hr />
-                    <Link to='' className='d-flex align-items-center pt-3 pb-1' onClick={onClickLogout}>
+                    <Link to={LOGIN_ROUTE} className='d-flex align-items-center pt-3 pb-1' onClick={onClickLogout}>
                         <i className="fa-solid fa-arrow-right-from-bracket me-3"></i>
                         <span>Logout Akun</span>
                     </Link>
@@ -262,8 +272,8 @@ const InfoProduct = () => {
                     style={{ margin: "7.5px 12px" }}  
                     />
 
-            <Alert active={alertOn} 
-                    text="test" 
+            <Alert active={flashMessage.length > 0} 
+                    text={flashMessage} 
                     backgroundColor="var(--alert-success)" 
                     color="white" 
                     onClick={onClose}
@@ -274,26 +284,27 @@ const InfoProduct = () => {
                     product ? (
                         <>
                             <Preview active={true}
-                                    // TODO: change to product.images
-                                    images={images}
+                                    images={product.images}
                                     name={product.name}
                                     price={product.price}
                                     owner={product.owner}
                                     description={product.description}
                                     category={product.category.name}
                                     actionButtons={[
-                                        <ActionButton text={isLoggedIn ? (currentUser.user.id === 5 ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
+                                        <ActionButton text={isLoggedIn ? (currentUser.user.id === product.owner.id ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
                                                         width="90%"
                                                         color="#7126B5"
-                                                        onClick={isLoggedIn ? (currentUser.user.id === 5 ? onEdit : () => onClick(true)) : () => navigate('/login')}
+                                                        onClick={isLoggedIn ? (currentUser.user.id === product.owner.id ? onEdit : () => onClick(true)) : () => navigate(LOGIN_ROUTE)}
+                                                        disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
                                                     />
                                         ]
                                     }
                                     mobileButton={
-                                        <ActionButton text={isLoggedIn ? (currentUser.user.id === 5 ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
+                                        <ActionButton text={isLoggedIn ? (currentUser.user.id === product.owner.id ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
                                                     width="calc(90% + 5px)"
                                                     color="#7126B5"
-                                                    onClick={isLoggedIn ? (currentUser.user.id === 5 ? onEdit : () => onClick(true)) : () => navigate('/login')}
+                                                    onClick={isLoggedIn ? (currentUser.user.id === product.owner.id ? onEdit : () => onClick(true)) : () => navigate(LOGIN_ROUTE)}
+                                                    disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
                                                     style={
                                                             { 
                                                                 position: "fixed", 
