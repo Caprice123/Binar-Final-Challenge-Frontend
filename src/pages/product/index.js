@@ -7,6 +7,7 @@ import NotifItems from '../../components/NotifItems'
 import Slider from '../../components/Slider'
 import ImagePreview from '../../components/ImagePreview'
 import Image from '../../200774.jpg'
+import NoImage from '../../assets/images/no-image-found.jpg'
 import SellerInfo from '../../components/SellerInfo'
 import BorderOnlyButton from '../../components/BorderOnlyButton'
 import Grid from '../../components/Grid'
@@ -134,6 +135,8 @@ const ListProducts = () => {
                     status: false,
                 }))
 
+                console.log(response)
+
                 setProducts(response)
             } catch(err){
                 console.log(err)
@@ -181,7 +184,7 @@ const ListProducts = () => {
                     <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Account")} aria-label="Close"></button>
                 </div>
                 <div className="content d-flex flex-column">
-                    <ImagePreview url={Image} />
+                    <ImagePreview url={currentUser.user.image_url ? currentUser.user.image_url : NoImage} />
                     <Link to='' className='d-flex align-items-center pt-5 pb-1'>
                         <i className="fa-solid fa-pen-to-square me-3"></i>
                         <span>Ubah Akun</span>
@@ -209,7 +212,7 @@ const ListProducts = () => {
                     />
 
             <Content className="mx-auto"> 
-                <SellerInfo imageUrl={Image}
+                <SellerInfo imageUrl={currentUser.user.image_url}
                             sellerName={currentUser.user.name}
                             sellerCity={currentUser.user.city}
                             withShadow
