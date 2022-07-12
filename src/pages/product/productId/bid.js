@@ -242,9 +242,6 @@ const ProductBid = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
-		// dispatch(userActions.clearError())
-		// dispatch(productActions.clearError())
-		// dispatch(bidActions.clearError())
 
         fetchData()
 	}, [dispatch, productId])
