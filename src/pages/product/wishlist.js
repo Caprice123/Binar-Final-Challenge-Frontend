@@ -28,7 +28,7 @@ import { statusActions } from '../../store/status'
 
 // services
 import { getCurrentUser } from '../../services/user'
-import { getProducts } from '../../services/product'
+// import { getProducts } from '../../services/product'
 
 // pages
 import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
