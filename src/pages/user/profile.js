@@ -158,11 +158,13 @@ const InfoProfile = () => {
 
     useEffect(() => {
         const fetchImage = async (image_url) => {
-            const response = await fetch(image_url);
-            // here image is url/location of image
-            const blob = await response.blob();
-            const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
-            setImage(file)
+            if (image_url){
+                const response = await fetch(image_url);
+                // here image is url/location of image
+                const blob = await response.blob();
+                const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
+                setImage(file)
+            }
         }
 
         const getUser = async () => {
@@ -183,7 +185,7 @@ const InfoProfile = () => {
                 setName(user.name)
                 setCity(user.city)
                 setAddress(user.address)
-                setPhone(user.phone)
+                validatePhoneNumber(user.phone ? user.phone : "", "0", setPhone)
                 await fetchImage(user.image_url)
             } catch(err){
                 console.log(err)

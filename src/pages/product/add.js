@@ -181,7 +181,10 @@ const AddProduct = () => {
 	const onDrop = useCallback((acceptedFiles) => {
 		const additionalImages = acceptedFiles.map((file) => {
 			if (validateSizeFile(file)){
-				return URL.createObjectURL(file)
+				return {
+					file,
+					imageUrl: URL.createObjectURL(file)
+				}
 			}
 			return null
 		})

@@ -6,39 +6,40 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
 
 // components
-import Navbar from '../../components/Navbar'
-import Preview from '../../components/Preview'
-import Input from '../../components/Input'
-import ActionButton from '../../components/ActionButton'
-import Popup from '../../components/Popup'
-import Notif from '../../components/Notif/index'
-import SellerInfo from '../../components/SellerInfo'
-import Alert from '../../components/Alert'
-import Image from '../../200774.jpg'
-import Slider from '../../components/Slider'
-import NotifItems from '../../components/NotifItems'
-import ImagePreview from '../../components/ImagePreview'
-import LoadingSpinner from '../../components/LoadingSpinner'
+import Navbar from '../../../components/Navbar'
+import Preview from '../../../components/Preview'
+import Input from '../../../components/Input'
+import ActionButton from '../../../components/ActionButton'
+import Popup from '../../../components/Popup'
+import Notif from '../../../components/Notif/index'
+import SellerInfo from '../../../components/SellerInfo'
+import Alert from '../../../components/Alert'
+import Image from '../../../200774.jpg'
+import NoContentImage from '../../../assets/images/no-image-found.jpg'
+import Slider from '../../../components/Slider'
+import NotifItems from '../../../components/NotifItems'
+import ImagePreview from '../../../components/ImagePreview'
+import LoadingSpinner from '../../../components/LoadingSpinner'
 
 // styles
-import { Wrapper, Content } from '../../pagesStyle/product/productId.styles'
+import { Wrapper, Content } from '../../../pagesStyle/product/productId/index.styles'
 
 // helpers
-import { validateNumber } from '../../helpers/validateNumber'
+import { validateNumber } from '../../../helpers/validateNumber'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-import { userActions } from '../../store/user'
-import { statusActions } from '../../store/status'
+import { userActions } from '../../../store/user'
+import { statusActions } from '../../../store/status'
 
 // services
-import { addBidPrice, getProductOneByID } from '../../services/product'
-import { useFlashMessage } from '../../hooks/useFlashMessage'
+import { addBidPrice, getProductOneByID } from '../../../services/product'
+import { useFlashMessage } from '../../../hooks/useFlashMessage'
 
 // pages
-import { HOME_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../types/pages'
+import { HOME_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../../types/pages'
 
 const InfoProduct = () => {
     const datas = [
@@ -356,7 +357,7 @@ const InfoProduct = () => {
                                     />
                             {
                                 isLoggedIn ? (
-                                    currentUser.user.id !== 5 && (
+                                    currentUser.user.id !== product.user_id && (
                                         <Popup show={show}
                                             onClick={onClick}
                                             >
@@ -364,8 +365,7 @@ const InfoProduct = () => {
                                             <p className='mb-4'>
                                                 Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
                                             </p>
-                                            {/* move into one component */}
-                                            <SellerInfo imageUrl={Image}
+                                            <SellerInfo imageUrl={product.images[0]}
                                                         // TODO: change to user.name
                                                         sellerName={product.name}
                                                         sellerCity={`Rp. ${product.price.toLocaleString()}`}
