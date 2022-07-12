@@ -22,15 +22,14 @@ import { Wrapper, Content } from '../../../pagesStyle/product/productId/bid.styl
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-// import { bidActions } from '../../../store/bids'
-// import { productActions } from '../../../store/product'
-// import { userActions } from '../../../store/user'
+import { statusActions } from '../../../store/status'
 
 // services
 import { acceptBid, rejectBid, updateStatusBid } from '../../../services/bids'
 import { getProductByID } from '../../../services/product'
+
+// pages
 import { HOME_ROUTE } from '../../../types/pages'
-import { statusActions } from '../../../store/status'
 
 const ProductBid = () => {
     // Settings
@@ -81,7 +80,6 @@ const ProductBid = () => {
 
     // redux state
     const { currentUser } = useSelector(state => state.user)
-    // const { loading, error } = useSelector(state => state.bids)
     const { loading, error } = useSelector(state => state.status)
     
     // state
@@ -217,7 +215,6 @@ const ProductBid = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
-        // dispatch(bidActions.clearError())
     }
 
     useEffect(() => {

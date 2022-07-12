@@ -20,18 +20,16 @@ import { validateEmail } from '../helpers/validateEmail';
 import { useDispatch, useSelector } from 'react-redux';
 
 // actions
-// import { userActions } from '../store/user';
-// import { productActions } from '../store/product';
-// import { bidActions } from '../store/bids';
+import { statusActions } from '../store/status';
 
 // services
 import { register } from '../services/user';
+
+// pages
 import { LOGIN_ROUTE } from '../types/pages';
-import { statusActions } from '../store/status';
 
 const Registrasi = () => {
     // redux state
-    // const { loading, error } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
     
     // state
@@ -117,16 +115,12 @@ const Registrasi = () => {
         dispatch(statusActions.setError({
             message: "",
         }))
-        // dispatch(userActions.clearError())
     }
 
     useEffect(() => {
         dispatch(statusActions.setError({
             message: "",
         }))
-		// dispatch(userActions.clearError())
-		// dispatch(productActions.clearError())
-		// dispatch(bidActions.clearError())
 	}, [dispatch])
 
     return (

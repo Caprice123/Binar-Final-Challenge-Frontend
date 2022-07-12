@@ -23,12 +23,15 @@ import { Wrapper, Content } from '../../pagesStyle/user/profile.styles'
 // react redux
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getCurrentUser, updateUser } from '../../services/user'
+// actions
 import { userActions } from '../../store/user'
-// import { productActions } from '../../store/product'
-// import { bidActions } from '../../store/bids'
-import { HOME_ROUTE } from '../../types/pages'
 import { statusActions } from '../../store/status'
+
+// services
+import { getCurrentUser, updateUser } from '../../services/user'
+
+// pages
+import { HOME_ROUTE } from '../../types/pages'
 
 const InfoProfile = () => {
     // redux state
@@ -144,7 +147,6 @@ const InfoProfile = () => {
 	} 
 
     const onCloseAlert = () => {
-        // dispatch(userActions.clearError())
         dispatch(statusActions.setError({
             message: ""
         }))
@@ -195,9 +197,6 @@ const InfoProfile = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
-        // dispatch(userActions.clearError())
-        // dispatch(productActions.clearError())
-        // dispatch(bidActions.clearError())
         dispatch(userActions.getCities())
         getUser()
     }, [dispatch, navigate, location.pathname])

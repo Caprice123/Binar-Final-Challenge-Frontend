@@ -30,15 +30,15 @@ import { validateNumber } from '../../helpers/validateNumber'
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-// import { productActions } from '../../store/product'
 import { userActions } from '../../store/user'
-// import { bidActions } from '../../store/bids'
+import { statusActions } from '../../store/status'
 
 // services
 import { addBidPrice, getProductOneByID } from '../../services/product'
 import { useFlashMessage } from '../../hooks/useFlashMessage'
+
+// pages
 import { HOME_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../types/pages'
-import { statusActions } from '../../store/status'
 
 const InfoProduct = () => {
     const datas = [
@@ -87,7 +87,6 @@ const InfoProduct = () => {
     
     // redux state
     const { currentUser, isLoggedIn } = useSelector(state => state.user)
-    // const { loading, error } = useSelector(state => state.product)
     const { loading, error } = useSelector(state => state.status)
     
     // state
@@ -193,7 +192,6 @@ const InfoProduct = () => {
         dispatch(statusActions.setError({
             message: "",
         }))
-        // dispatch(productActions.clearError())
     }
     
     const onMarkAsRead = () => {
@@ -242,10 +240,7 @@ const InfoProduct = () => {
         dispatch(statusActions.setError({
             message: "",
         }))
-        // dispatch(userActions.clearError())
-        // dispatch(productActions.clearError())
-        // dispatch(bidActions.clearError())
-
+        
         navigate(location.pathname, { replace: true })
         fetchData()
 	  }, [dispatch, productId, setProduct, navigate, location.pathname])

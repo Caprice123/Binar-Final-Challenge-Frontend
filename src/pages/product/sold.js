@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-
+// components
 import Image from '../../200774.jpg'
 import Navbar from '../../components/Navbar'
 import Notif from '../../components/Notif'
@@ -8,21 +8,30 @@ import NotifItems from '../../components/NotifItems'
 import Slider from '../../components/Slider'
 import ImagePreview from '../../components/ImagePreview'
 import ImagePerson from '../../assets/images/belumadaminat.png'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-
-
-import { Wrapper, Content } from '../../pagesStyle/product/sold.styles.js'
 import SellerInfo from '../../components/SellerInfo'
-import { useDispatch, useSelector } from 'react-redux'
-import { getCurrentUser } from '../../services/user'
 import BorderOnlyButton from '../../components/BorderOnlyButton'
 import Grid from '../../components/Grid'
-import { getProducts } from '../../services/product'
 import ProductCard from '../../components/ProductCard'
 import ActionButton from '../../components/ActionButton'
 import LoadingSpinner from '../../components/LoadingSpinner'
-import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+
+// styles
+import { Wrapper, Content } from '../../pagesStyle/product/sold.styles.js'
+
+// redux
+import { useDispatch, useSelector } from 'react-redux'
+
+// actions
 import { statusActions } from '../../store/status'
+
+// services
+import { getCurrentUser } from '../../services/user'
+import { getProducts } from '../../services/product'
+
+// pages
+import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
 
 const SoldProducts = () => {
     const datas = [
@@ -57,7 +66,6 @@ const SoldProducts = () => {
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
 
-    // const { currentUser, loading, error } = useSelector(state => state.user)
     const { currentUser } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
 

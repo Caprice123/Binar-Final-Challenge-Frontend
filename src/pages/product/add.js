@@ -24,17 +24,16 @@ import { validateSizeFile } from '../../helpers/validateSizeFile'
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-// import { productActions } from '../../store/product'
-// import { userActions } from '../../store/user'
-// import { bidActions } from '../../store/bids'
+import { statusActions } from '../../store/status'
 
 // services
 import { addProduct, getAllCategories } from '../../services/product'
 
 // styles
 import { Wrapper, Content } from '../../pagesStyle/product/add.styles'
-import { DAFTAR_JUAL_ROUTE, HOME_ROUTE, PRODUCTS_ROUTE } from '../../types/pages'
-import { statusActions } from '../../store/status'
+
+// pages
+import { DAFTAR_JUAL_ROUTE, HOME_ROUTE } from '../../types/pages'
 
 const AddProduct = () => {
 	// redux state
@@ -202,7 +201,6 @@ const AddProduct = () => {
 		dispatch(statusActions.setError({
 			message: "",
 		}))
-		// dispatch(productActions.clearError())
 	}
 	  
 	const onCloseFlash = () => {
@@ -235,9 +233,6 @@ const AddProduct = () => {
 		dispatch(statusActions.setError({
 			message: "",
 		}))
-		// dispatch(userActions.clearError())
-		// dispatch(productActions.clearError())
-		// dispatch(bidActions.clearError())
 
 		fetchCategories()
 	}, [dispatch])

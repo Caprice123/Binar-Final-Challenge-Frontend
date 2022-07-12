@@ -19,9 +19,6 @@ import { validateEmail } from '../helpers/validateEmail';
 import { useDispatch, useSelector } from 'react-redux';
 
 // actions
-// import { userActions } from '../store/user';
-// import { productActions } from '../store/product';
-// import { bidActions } from '../store/bids';
 import { statusActions } from '../store/status'
 
 // services
@@ -29,11 +26,12 @@ import { login } from '../services/user';
 
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage';
+
+// pages
 import { HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
 
 const Login = () => {
     // redux state
-    // const { loading, error } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
     
     // state
@@ -109,7 +107,6 @@ const Login = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
-        // dispatch(userActions.clearError())
     }
       
 	const onCloseFlash = () => {
@@ -120,9 +117,7 @@ const Login = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
-		// dispatch(userActions.clearError())
-		// dispatch(productActions.clearError())
-		// dispatch(bidActions.clearError())
+        
         navigate(location.pathname, { replace: true })
 	}, [dispatch, navigate, location.pathname])
 

@@ -19,14 +19,19 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 // styles
 import { Wrapper, Content } from '../../pagesStyle/product/index.styles.js'
 
+
 // redux
 import { useDispatch, useSelector } from 'react-redux'
+
+// actions
+import { statusActions } from '../../store/status'
 
 // services
 import { getCurrentUser } from '../../services/user'
 import { getProducts } from '../../services/product'
+
+// pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
-import { statusActions } from '../../store/status'
 
 const ListProducts = () => {
     const datas = [
@@ -61,7 +66,6 @@ const ListProducts = () => {
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
 
-    // const { currentUser, loading, error } = useSelector(state => state.user)
     const { currentUser } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
 
@@ -129,7 +133,7 @@ const ListProducts = () => {
                 dispatch(statusActions.setLoading({
                     status: false,
                 }))
-                
+
                 setProducts(response)
             } catch(err){
                 console.log(err)

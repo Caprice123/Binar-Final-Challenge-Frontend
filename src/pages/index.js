@@ -21,14 +21,20 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+// hooks
+import { useFlashMessage } from '../hooks/useFlashMessage';
+
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 
+// actions
+import { statusActions } from '../store/status';
+
 // services
 import { getAllCategories, getProducts } from '../services/product';
-import { useFlashMessage } from '../hooks/useFlashMessage';
+
+// pages
 import { ADD_PRODUCT_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
-import { statusActions } from '../store/status';
 
 
 const Home = () => {
@@ -46,7 +52,6 @@ const Home = () => {
     
     const { isLoggedIn, currentUser } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
-    // const { loading, error } = useSelector(state => state.product)
     
     const [flashMessage, setFlashMessage] = useFlashMessage("")
     const [isNavbarOn, setIsNavbarOn] = useState(false)
@@ -91,7 +96,7 @@ const Home = () => {
                 dispatch(statusActions.setLoading({
                     status: false,
                 }))
-                
+
                 setAvailableCategories(responseGetAllCategories)
                 setProducts(responseGetProducts)
             } catch(err){
@@ -99,26 +104,6 @@ const Home = () => {
                     message: err.message
                 }))
             }
-            // if (isLoggedIn){
-            //     const [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
-            //         dispatch(getAllCategories()).unwrap(),
-            //         dispatch(getProducts({
-            //             excludeStatusProduct: "sold",
-            //             excludeUserId: currentUser.user.id
-            //         })).unwrap()
-            //     ])
-            //     setAvailableCategories(responseGetAllCategories)
-            //     setProducts(responseGetProducts)
-            // } else {
-            //     const [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
-            //         dispatch(getAllCategories()).unwrap(),
-            //         dispatch(getProducts({
-            //             excludeStatusProduct: "sold"
-            //         })).unwrap()
-            //     ])
-            //     setAvailableCategories(responseGetAllCategories)
-            //     setProducts(responseGetProducts)
-            // }
         }
         navigate(location.pathname, { replace: true })
         fetchData()
@@ -170,7 +155,7 @@ const Home = () => {
                     backgroundColor="red"
                     color="white" 
                     text={error}
-                    onClick={onClickAlert}
+                    onClick={onCloseAlertError}
                     />
             <Alert active={flashMessage.length > 0}
                     backgroundColor="green"
