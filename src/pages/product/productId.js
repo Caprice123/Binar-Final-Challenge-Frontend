@@ -30,14 +30,15 @@ import { validateNumber } from '../../helpers/validateNumber'
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-import { productActions } from '../../store/product'
+// import { productActions } from '../../store/product'
 import { userActions } from '../../store/user'
-import { bidActions } from '../../store/bids'
+// import { bidActions } from '../../store/bids'
 
 // services
 import { addBidPrice, getProductOneByID } from '../../services/product'
 import { useFlashMessage } from '../../hooks/useFlashMessage'
 import { HOME_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../types/pages'
+import { statusActions } from '../../store/status'
 
 const InfoProduct = () => {
     const datas = [
@@ -86,7 +87,8 @@ const InfoProduct = () => {
     
     // redux state
     const { currentUser, isLoggedIn } = useSelector(state => state.user)
-    const { loading, error } = useSelector(state => state.product)
+    // const { loading, error } = useSelector(state => state.product)
+    const { loading, error } = useSelector(state => state.status)
     
     // state
     const [product, setProduct] = useState(null)
@@ -150,10 +152,18 @@ const InfoProduct = () => {
         setShow(false)
 
         try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+
             await dispatch(addBidPrice({
                 productId,
                 bidPrice,
             })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
             
             setIsDisabled(true)
             setFlashMessage("Successfully bid the project")
@@ -164,6 +174,9 @@ const InfoProduct = () => {
             // })
         } catch(err){
             console.log(err)
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
         }
     }
 
@@ -177,7 +190,10 @@ const InfoProduct = () => {
     }
     
     const onCloseAlert = () => {
-        dispatch(productActions.clearError())
+        dispatch(statusActions.setError({
+            message: "",
+        }))
+        // dispatch(productActions.clearError())
     }
     
     const onMarkAsRead = () => {
@@ -186,7 +202,6 @@ const InfoProduct = () => {
 
     const onClickLogout = async () => {
         dispatch(userActions.logout())
-        console.log("here")
         navigate(LOGIN_ROUTE, {
             state: {
                 message: "Logout Successfully"
@@ -194,17 +209,42 @@ const InfoProduct = () => {
         })
     }
 
+    // const actionButtonFnc = (isLoggedIn) => {
+    //     if (isLoggedIn){
+    //         return ""
+    //     }
+    // }
+
     useEffect(() => {
         const fetchData = async () => {
-            const response = await dispatch(getProductOneByID({
-                productId: productId
-            })).unwrap()
-            setProduct(response)
-            console.log(response)
+            try{
+                dispatch(statusActions.setLoading({
+                    status: true,
+                }))
+
+                const response = await dispatch(getProductOneByID({
+                    productId: productId
+                })).unwrap()
+
+                dispatch(statusActions.setLoading({
+                    status: false,
+                }))
+
+                setProduct(response)
+            } catch(err){
+                console.log(err)
+                dispatch(statusActions.setError({
+                    message: err.message,
+                }))
+            }
         }
-        dispatch(userActions.clearError())
-        dispatch(productActions.clearError())
-        dispatch(bidActions.clearError())
+
+        dispatch(statusActions.setError({
+            message: "",
+        }))
+        // dispatch(userActions.clearError())
+        // dispatch(productActions.clearError())
+        // dispatch(bidActions.clearError())
 
         navigate(location.pathname, { replace: true })
         fetchData()

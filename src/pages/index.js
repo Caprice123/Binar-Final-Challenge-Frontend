@@ -28,6 +28,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories, getProducts } from '../services/product';
 import { useFlashMessage } from '../hooks/useFlashMessage';
 import { ADD_PRODUCT_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
+import { statusActions } from '../store/status';
 
 
 const Home = () => {
@@ -44,7 +45,8 @@ const Home = () => {
     const location = useLocation()
     
     const { isLoggedIn, currentUser } = useSelector(state => state.user)
-    const { loading, error } = useSelector(state => state.product)
+    const { loading, error } = useSelector(state => state.status)
+    // const { loading, error } = useSelector(state => state.product)
     
     const [flashMessage, setFlashMessage] = useFlashMessage("")
     const [isNavbarOn, setIsNavbarOn] = useState(false)
@@ -63,27 +65,60 @@ const Home = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            let responseGetAllCategories
+            let responseGetProducts
+            try{
+                dispatch(statusActions.setLoading({
+                    status: true,
+                }))
 
-            if (isLoggedIn){
-                const [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
-                    dispatch(getAllCategories()).unwrap(),
-                    dispatch(getProducts({
-                        excludeStatusProduct: "sold",
-                        excludeUserId: currentUser.user.id
-                    })).unwrap()
-                ])
+                if (isLoggedIn){
+                    [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
+                        dispatch(getAllCategories()).unwrap(),
+                        dispatch(getProducts({
+                            excludeStatusProduct: "sold",
+                            excludeUserId: currentUser.user.id
+                        })).unwrap()
+                    ])
+                } else{
+                    [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
+                        dispatch(getAllCategories()).unwrap(),
+                        dispatch(getProducts({
+                            excludeStatusProduct: "sold",
+                        })).unwrap()
+                    ])
+                }
+                dispatch(statusActions.setLoading({
+                    status: false,
+                }))
+                
                 setAvailableCategories(responseGetAllCategories)
                 setProducts(responseGetProducts)
-            } else {
-                const [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
-                    dispatch(getAllCategories()).unwrap(),
-                    dispatch(getProducts({
-                        excludeStatusProduct: "sold"
-                    })).unwrap()
-                ])
-                setAvailableCategories(responseGetAllCategories)
-                setProducts(responseGetProducts)
+            } catch(err){
+                dispatch(statusActions.setError({
+                    message: err.message
+                }))
             }
+            // if (isLoggedIn){
+            //     const [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
+            //         dispatch(getAllCategories()).unwrap(),
+            //         dispatch(getProducts({
+            //             excludeStatusProduct: "sold",
+            //             excludeUserId: currentUser.user.id
+            //         })).unwrap()
+            //     ])
+            //     setAvailableCategories(responseGetAllCategories)
+            //     setProducts(responseGetProducts)
+            // } else {
+            //     const [ responseGetAllCategories, responseGetProducts ] = await Promise.all([
+            //         dispatch(getAllCategories()).unwrap(),
+            //         dispatch(getProducts({
+            //             excludeStatusProduct: "sold"
+            //         })).unwrap()
+            //     ])
+            //     setAvailableCategories(responseGetAllCategories)
+            //     setProducts(responseGetProducts)
+            // }
         }
         navigate(location.pathname, { replace: true })
         fetchData()
@@ -93,13 +128,35 @@ const Home = () => {
     const onSelectCategory = async(e) => {
         const { value } = e.currentTarget.dataset
 
-        setSelectedCategory(value)
-        const response = await dispatch(getProducts({
-            excludeStatusProduct: "sold",
-            excludeUserId: currentUser.user.id,
-            category: value
-        })).unwrap()
-        setProducts(response)
+        try{
+            setSelectedCategory(value)
+
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+
+            const response = await dispatch(getProducts({
+                excludeStatusProduct: "sold",
+                excludeUserId: currentUser.user.id,
+                category: value
+            })).unwrap()
+            
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            setProducts(response)
+        } catch(err){
+            console.log(err)
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
+        }
+    }
+    const onCloseAlertError = () => {
+        dispatch(statusActions.setError({
+            message: "",
+        }))
     }
 
     const onClickAlert = () => {
@@ -109,6 +166,12 @@ const Home = () => {
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0}
+                    backgroundColor="red"
+                    color="white" 
+                    text={error}
+                    onClick={onClickAlert}
+                    />
             <Alert active={flashMessage.length > 0}
                     backgroundColor="green"
                     color="white" 

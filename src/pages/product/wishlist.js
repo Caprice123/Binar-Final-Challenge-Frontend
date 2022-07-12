@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentUser } from '../../services/user'
 import { getProducts } from '../../services/product'
 import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import { statusActions } from '../../store/status'
 
 const Wishlist = () => {
     const datas = [
@@ -61,7 +62,9 @@ const Wishlist = () => {
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
 
-    const { currentUser, loading, error } = useSelector(state => state.user)
+    // const { currentUser, loading, error } = useSelector(state => state.user)
+    const { currentUser } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.status)
 
     const [isMobile, setIsMobile] = useState(false)
     const [products, setProducts] = useState([])
@@ -114,13 +117,27 @@ const Wishlist = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await dispatch(getCurrentUser()).unwrap()
+            try{
+                dispatch(statusActions.setLoading({
+                    status: true,
+                }))
 
-            // TODO: change url or change redux
-            const response = await dispatch(getProducts({
-                user_id: -1
-            })).unwrap()
-            // setProducts(response)
+                await dispatch(getCurrentUser()).unwrap()
+    
+                // TODO: change url or change redux
+                const response = await dispatch(getProducts({
+                    user_id: -1
+                })).unwrap()
+
+                dispatch(statusActions.setLoading({
+                    status: false,
+                }))
+                // setProducts(response)
+            } catch(err){
+                dispatch(statusActions.setError({
+                    message: err.message,
+                }))
+            }
         }
 
         fetchData()

@@ -25,13 +25,15 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { getCurrentUser, updateUser } from '../../services/user'
 import { userActions } from '../../store/user'
-import { productActions } from '../../store/product'
-import { bidActions } from '../../store/bids'
+// import { productActions } from '../../store/product'
+// import { bidActions } from '../../store/bids'
 import { HOME_ROUTE } from '../../types/pages'
+import { statusActions } from '../../store/status'
 
 const InfoProfile = () => {
     // redux state
-    const { loading, error, availableCities } = useSelector(state => state.user)
+    const { availableCities } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.status)
     // state
     const [flashMessage, setFlashMessage] = useState("")
     
@@ -110,9 +112,17 @@ const InfoProfile = () => {
         }
 
         try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+
             await dispatch(
                 updateUser(payload)
             ).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
 
             setFlashMessage("Successfully updated profile")
             // navigate(location.pathname, {
@@ -123,6 +133,9 @@ const InfoProfile = () => {
             // })
         } catch(err){
             console.log(err)
+            dispatch(statusActions.setError({
+                message: err.message
+            }))
         }
     }
     
@@ -131,7 +144,10 @@ const InfoProfile = () => {
 	} 
 
     const onCloseAlert = () => {
-        dispatch(userActions.clearError())
+        // dispatch(userActions.clearError())
+        dispatch(statusActions.setError({
+            message: ""
+        }))
     }
     
     const onCloseFlash = () => {
@@ -148,20 +164,40 @@ const InfoProfile = () => {
         }
 
         const getUser = async () => {
-            const response = await dispatch(
-                getCurrentUser()
-            ).unwrap()
+            let user
+            try{
+                dispatch(statusActions.setLoading({
+                    status: true,
+                }))
 
-            setName(response.name)
-            setCity(response.city)
-            setAddress(response.address)
-            setPhone(response.phone)
-            await fetchImage(response.image_url)
+                user = await dispatch(
+                    getCurrentUser()
+                ).unwrap()
+
+                dispatch(statusActions.setLoading({
+                    status: false,
+                }))
+
+                setName(user.name)
+                setCity(user.city)
+                setAddress(user.address)
+                setPhone(user.phone)
+                await fetchImage(user.image_url)
+            } catch(err){
+                console.log(err)
+                dispatch(statusActions.setError({
+                    message: err.message
+                }))
+            }
+
         }
         
-        dispatch(userActions.clearError())
-        dispatch(productActions.clearError())
-        dispatch(bidActions.clearError())
+        dispatch(statusActions.setError({
+            message: ""
+        }))
+        // dispatch(userActions.clearError())
+        // dispatch(productActions.clearError())
+        // dispatch(bidActions.clearError())
         dispatch(userActions.getCities())
         getUser()
     }, [dispatch, navigate, location.pathname])

@@ -20,17 +20,19 @@ import { validateEmail } from '../helpers/validateEmail';
 import { useDispatch, useSelector } from 'react-redux';
 
 // actions
-import { userActions } from '../store/user';
-import { productActions } from '../store/product';
-import { bidActions } from '../store/bids';
+// import { userActions } from '../store/user';
+// import { productActions } from '../store/product';
+// import { bidActions } from '../store/bids';
 
 // services
 import { register } from '../services/user';
 import { LOGIN_ROUTE } from '../types/pages';
+import { statusActions } from '../store/status';
 
 const Registrasi = () => {
     // redux state
-    const { loading, error } = useSelector(state => state.user)
+    // const { loading, error } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.status)
     
     // state
     const [name, setName] = useState("")
@@ -83,12 +85,21 @@ const Registrasi = () => {
         }
 
         try{
+
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+
             await dispatch(register({
                 name,
                 email,
                 password
             })).unwrap()
     
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
             navigate(LOGIN_ROUTE, {
                 state: {
                     message: "Successfully register"
@@ -96,17 +107,26 @@ const Registrasi = () => {
             })
         } catch(err){
             console.log(err);
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
         }
     }
 
     const onCloseAlert = () => {
-        dispatch(userActions.clearError())
+        dispatch(statusActions.setError({
+            message: "",
+        }))
+        // dispatch(userActions.clearError())
     }
 
     useEffect(() => {
-		dispatch(userActions.clearError())
-		dispatch(productActions.clearError())
-		dispatch(bidActions.clearError())
+        dispatch(statusActions.setError({
+            message: "",
+        }))
+		// dispatch(userActions.clearError())
+		// dispatch(productActions.clearError())
+		// dispatch(bidActions.clearError())
 	}, [dispatch])
 
     return (

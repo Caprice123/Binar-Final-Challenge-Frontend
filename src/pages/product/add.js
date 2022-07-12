@@ -24,20 +24,22 @@ import { validateSizeFile } from '../../helpers/validateSizeFile'
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-import { productActions } from '../../store/product'
-import { userActions } from '../../store/user'
-import { bidActions } from '../../store/bids'
+// import { productActions } from '../../store/product'
+// import { userActions } from '../../store/user'
+// import { bidActions } from '../../store/bids'
 
 // services
 import { addProduct, getAllCategories } from '../../services/product'
 
 // styles
 import { Wrapper, Content } from '../../pagesStyle/product/add.styles'
-import { HOME_ROUTE, PRODUCTS_ROUTE } from '../../types/pages'
+import { DAFTAR_JUAL_ROUTE, HOME_ROUTE, PRODUCTS_ROUTE } from '../../types/pages'
+import { statusActions } from '../../store/status'
 
 const AddProduct = () => {
 	// redux state
-	const { loading, error } = useSelector(state => state.product)
+	// const { loading, error } = useSelector(state => state.product)
+	const { loading, error } = useSelector(state => state.status)
 	
 	// state
 	const [availableCategories, setAvailableCategories] = useState([])
@@ -48,6 +50,14 @@ const AddProduct = () => {
 	const [description, setDescription] = useState("")
 	const [productImages, setProductImages] = useState([])
 	const [preview, setPreview] = useState(false)
+	// const [product, setProduct] = useState({
+	// 	name: "",
+	// 	price: "",
+	// 	category: "",
+	// 	description: "",
+	// 	productImages: []
+	// })
+
 	
 	// navigation
 	const navigate = useNavigate()
@@ -57,8 +67,11 @@ const AddProduct = () => {
 
 	const onChange = (e) => {
 		const { id, value } = e.currentTarget
+		// const oldProduct = product
+
 		switch (id){
 			case "Nama-Product":
+				// oldProduct.name = value
 				setName(value)
 				break
 			case "Harga-Product":
@@ -70,6 +83,9 @@ const AddProduct = () => {
 			default:
 				break
 		}
+		// setProduct({
+		// 	...oldProduct,
+		// })
 	}
 
 	const onSelect = (e) => {
@@ -126,6 +142,10 @@ const AddProduct = () => {
 			return
 		}
 		try{
+			dispatch(statusActions.setLoading({
+				status: true,
+			}))
+
 			const categoryId = availableCategories.find(cat => cat.name === category).id
 			const product = await dispatch(addProduct({
 				name,
@@ -135,15 +155,22 @@ const AddProduct = () => {
 				productImages
 			})).unwrap()
 
+			dispatch(statusActions.setLoading({
+				status: false,
+			}))
+
 			console.log(product)
 
-			navigate(`${PRODUCTS_ROUTE}/${product.id}`, {
+			navigate(DAFTAR_JUAL_ROUTE, {
 				state: {
 					message: "Successfully created product"
 				}
 			})
 		} catch(err){
 			console.log(err)
+			dispatch(statusActions.setError({
+				message: err.message,
+			}))
 		}
 	}
 
@@ -172,7 +199,10 @@ const AddProduct = () => {
 	}
 
 	const onCloseAlert = () => {
-		dispatch(productActions.clearError())
+		dispatch(statusActions.setError({
+			message: "",
+		}))
+		// dispatch(productActions.clearError())
 	}
 	  
 	const onCloseFlash = () => {
@@ -181,15 +211,33 @@ const AddProduct = () => {
 
 	useEffect(() => {
 		const fetchCategories = async () => {
-			const response = await dispatch(
-				getAllCategories()
-			).unwrap()
-			setAvailableCategories(response)
+			try{
+				dispatch(statusActions.setLoading({
+					status: true,
+				}))
+
+				const response = await dispatch(
+					getAllCategories()
+				).unwrap()
+
+				dispatch(statusActions.setLoading({
+					status: false,
+				}))
+				setAvailableCategories(response)
+			} catch(err){
+				console.log(err)
+				dispatch(statusActions.setError({
+					message: err.message,
+				}))
+			}
 		}
 
-		dispatch(userActions.clearError())
-		dispatch(productActions.clearError())
-		dispatch(bidActions.clearError())
+		dispatch(statusActions.setError({
+			message: "",
+		}))
+		// dispatch(userActions.clearError())
+		// dispatch(productActions.clearError())
+		// dispatch(bidActions.clearError())
 
 		fetchCategories()
 	}, [dispatch])
