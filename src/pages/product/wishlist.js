@@ -18,7 +18,7 @@ import LoadingSpinner from '../../components/LoadingSpinner'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 // styles
-import { Wrapper, Content } from '../../pagesStyle/products/wishlist.styles.js'
+import { Wrapper, Content } from '../../pagesStyle/product/wishlist.styles.js'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'

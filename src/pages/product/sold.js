@@ -11,7 +11,7 @@ import ImagePerson from '../../assets/images/belumadaminat.png'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 
-import { Wrapper, Content } from '../../pagesStyle/products/sold.styles.js'
+import { Wrapper, Content } from '../../pagesStyle/product/sold.styles.js'
 import SellerInfo from '../../components/SellerInfo'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentUser } from '../../services/user'
