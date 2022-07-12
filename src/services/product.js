@@ -20,7 +20,7 @@ export const getProducts = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            return new Error(errorMessage)
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -38,7 +38,7 @@ export const getProductOneByID = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            return new Error(errorMessage)
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -57,7 +57,7 @@ export const getProductByID = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            return new Error(errorMessage)
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )

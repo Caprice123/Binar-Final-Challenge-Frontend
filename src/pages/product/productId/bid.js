@@ -22,13 +22,13 @@ import { Wrapper, Content } from '../../../pagesStyle/product/productId/bid.styl
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-import { bidActions } from '../../../store/bids'
-import { productActions } from '../../../store/product'
-import { userActions } from '../../../store/user'
+import { statusActions } from '../../../store/status'
 
 // services
 import { acceptBid, rejectBid, updateStatusBid } from '../../../services/bids'
 import { getProductByID } from '../../../services/product'
+
+// pages
 import { HOME_ROUTE } from '../../../types/pages'
 
 const ProductBid = () => {
@@ -80,7 +80,7 @@ const ProductBid = () => {
 
     // redux state
     const { currentUser } = useSelector(state => state.user)
-    const { loading, error } = useSelector(state => state.bids)
+    const { loading, error } = useSelector(state => state.status)
     
     // state
 
@@ -88,6 +88,9 @@ const ProductBid = () => {
     const [isAcceptApprove, setIsAcceptApprove] = useState(false)
     const [isUpdateStatusApprove, setIsUpdateStatusApprove] = useState(false)
     const [updateStatus, setUpdateStatus] = useState("sold")
+
+    const [isRejected, setIsRejected] = useState(false)
+    const [isAccepted, setIsAccepted] = useState(false)
     
     const { productId } = useParams()
 
@@ -105,11 +108,20 @@ const ProductBid = () => {
     const onReject = async () => {
         try{
             setIsRejectApprove(false)
+
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+
             const response = await dispatch(rejectBid({
                 bidsId: 1,
             })).unwrap()
 
-            window.location.reload()
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            // window.location.reload()
             // TODO: Change navigation url
             navigate(HOME_ROUTE, {
                 state: {
@@ -118,6 +130,9 @@ const ProductBid = () => {
             })
         } catch(err){
             console.log(err)
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
         }
     }
     
@@ -129,8 +144,16 @@ const ProductBid = () => {
         try{
             setIsAcceptApprove(false)
             
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+
             await dispatch(acceptBid({
                 transactionId: 1,
+            }))
+
+            dispatch(statusActions.setLoading({
+                status: false,
             }))
 
             navigate(HOME_ROUTE, {
@@ -140,6 +163,9 @@ const ProductBid = () => {
             })
         } catch(err){
             console.log(err)
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
         }
     }
     
@@ -150,10 +176,20 @@ const ProductBid = () => {
     const onUpdateStatus = async () => {
         try{
             setIsUpdateStatusApprove(false)
+
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+
             await dispatch(updateStatusBid({
                 transactionId: 1,
                 updateStatus,
             }))
+            
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
             navigate(HOME_ROUTE, {
                 state: {
                     message: "Successfully update transaction"
@@ -161,6 +197,9 @@ const ProductBid = () => {
             })
         } catch(err){
             console.log(err)
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
         }
     }   
     
@@ -173,19 +212,39 @@ const ProductBid = () => {
     }
 
     const onCloseAlert = () => {
-        dispatch(bidActions.clearError())
+        dispatch(statusActions.setError({
+            message: ""
+        }))
     }
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await dispatch(getProductByID({
-                productId
-            })).unwrap()
-            setProduct(response)
+            try{
+                dispatch(statusActions.setLoading({
+                    status: true,
+                }))
+
+                const response = await dispatch(getProductByID({
+                    productId
+                })).unwrap()
+                
+                dispatch(statusActions.setLoading({
+                    status: false,
+                }))
+                setProduct(response)
+            } catch(err){
+                console.log(err)
+                dispatch(statusActions.setError({
+                    message: err.message,
+                }))
+            }
         }
-		dispatch(userActions.clearError())
-		dispatch(productActions.clearError())
-		dispatch(bidActions.clearError())
+        dispatch(statusActions.setError({
+            message: ""
+        }))
+		// dispatch(userActions.clearError())
+		// dispatch(productActions.clearError())
+		// dispatch(bidActions.clearError())
 
         fetchData()
 	}, [dispatch, productId])
@@ -251,7 +310,9 @@ const ProductBid = () => {
                             <></>
                         )
                     ) : (
-                        <></>
+                        <>
+                            Unauthorized
+                        </>
                     )
                    
                 }

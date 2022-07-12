@@ -19,20 +19,20 @@ import { validateEmail } from '../helpers/validateEmail';
 import { useDispatch, useSelector } from 'react-redux';
 
 // actions
-import { userActions } from '../store/user';
-import { productActions } from '../store/product';
-import { bidActions } from '../store/bids';
+import { statusActions } from '../store/status'
 
 // services
 import { login } from '../services/user';
 
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage';
+
+// pages
 import { HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
 
 const Login = () => {
     // redux state
-    const { loading, error } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.status)
     
     // state
     const [flashMessage, setFlashMessage] = useFlashMessage("")
@@ -77,10 +77,19 @@ const Login = () => {
         }
 
         try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+            
             await dispatch(login({
                 email,
                 password
             })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
             navigate(HOME_ROUTE, { 
                 state: {
                     message: "Login Successful",
@@ -88,11 +97,16 @@ const Login = () => {
             })
         } catch(err){
             console.log(err);
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
         }
     }
 
     const onCloseAlert = () => {
-        dispatch(userActions.clearError())
+        dispatch(statusActions.setError({
+            message: ""
+        }))
     }
       
 	const onCloseFlash = () => {
@@ -100,9 +114,10 @@ const Login = () => {
 	}
 
     useEffect(() => {
-		dispatch(userActions.clearError())
-		dispatch(productActions.clearError())
-		dispatch(bidActions.clearError())
+        dispatch(statusActions.setError({
+            message: ""
+        }))
+        
         navigate(location.pathname, { replace: true })
 	}, [dispatch, navigate, location.pathname])
 

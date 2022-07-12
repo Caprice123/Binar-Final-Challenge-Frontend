@@ -19,12 +19,18 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 // styles
 import { Wrapper, Content } from '../../pagesStyle/product/index.styles.js'
 
+
 // redux
 import { useDispatch, useSelector } from 'react-redux'
+
+// actions
+import { statusActions } from '../../store/status'
 
 // services
 import { getCurrentUser } from '../../services/user'
 import { getProducts } from '../../services/product'
+
+// pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
 
 const ListProducts = () => {
@@ -60,7 +66,8 @@ const ListProducts = () => {
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
 
-    const { currentUser, loading, error } = useSelector(state => state.user)
+    const { currentUser } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.status)
 
     const [isMobile, setIsMobile] = useState(false)
     const [products, setProducts] = useState([])
@@ -113,17 +120,35 @@ const ListProducts = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await dispatch(getCurrentUser()).unwrap()
-            const response = await dispatch(getProducts({
-                user_id: currentUser.user.id
-            })).unwrap()
-            setProducts(response)
+            try{
+                dispatch(statusActions.setLoading({
+                    status: true,
+                }))
+                
+                await dispatch(getCurrentUser()).unwrap()
+                const response = await dispatch(getProducts({
+                    user_id: currentUser.user.id
+                })).unwrap()
+
+                dispatch(statusActions.setLoading({
+                    status: false,
+                }))
+
+                setProducts(response)
+            } catch(err){
+                console.log(err)
+                dispatch(statusActions.setError({
+                    message: err.message,
+                }))
+            }
         }
 
+        dispatch(statusActions.setError({
+            message: ""
+        }))
         fetchData()
     }, [dispatch, currentUser.user.id])
     
-    console.log(isMobile)
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />

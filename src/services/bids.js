@@ -19,7 +19,7 @@ export const rejectBid = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            return new Error(errorMessage)
+            throw new Error(errorMessage)
         }
     }
 )
