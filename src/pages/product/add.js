@@ -38,6 +38,7 @@ import { DAFTAR_JUAL_ROUTE, HOME_ROUTE } from '../../types/pages'
 const AddProduct = () => {
 	// redux state
 	// const { loading, error } = useSelector(state => state.product)
+	const { currentUser } = useSelector(state => state.user)
 	const { loading, error } = useSelector(state => state.status)
 	
 	// state
@@ -320,10 +321,10 @@ const AddProduct = () => {
 				</div>
 			</Content>
 			<Preview active={preview}
-						images={productImages}
+						images={productImages.map(productImage => productImage.imageUrl)}
 						name={name}
 						price={price}
-						owner={{ name: "Seller Info", city: "City"}}
+						owner={currentUser.user}
 						category={category}
 						description={description}
 						onClose={onClosePreview}
