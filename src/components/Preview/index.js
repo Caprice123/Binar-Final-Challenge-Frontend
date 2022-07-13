@@ -74,7 +74,7 @@ const Preview = ({ active, images, name, price, category, owner, description, on
                         
 
                         <SellerInfo width="90%"
-                                    imageUrl={Image}
+                                    imageUrl={owner.image_url}
                                     sellerName={owner.name}
                                     sellerCity={owner.city}
                                     additionalClass="my-5"
