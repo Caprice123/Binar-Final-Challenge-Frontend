@@ -105,6 +105,9 @@ const Home = () => {
                 }))
             }
         }
+        dispatch(statusActions.setError({
+            message: ""
+        }))
         navigate(location.pathname, { replace: true })
         fetchData()
 

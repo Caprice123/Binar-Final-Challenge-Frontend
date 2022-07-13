@@ -28,10 +28,11 @@ import { statusActions } from '../../store/status'
 
 // services
 import { getCurrentUser } from '../../services/user'
-import { getProducts } from '../../services/product'
+// import { getProducts } from '../../services/product'
 
 // pages
 import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import { getWishlist } from '../../services/bids'
 
 const Wishlist = () => {
     const datas = [
@@ -128,21 +129,23 @@ const Wishlist = () => {
                 await dispatch(getCurrentUser()).unwrap()
     
                 // TODO: change url or change redux
-                const response = await dispatch(getProducts({
-                    user_id: -1
+                const response = await dispatch(getWishlist({
+                    statusBid: "pending",
                 })).unwrap()
 
                 dispatch(statusActions.setLoading({
                     status: false,
                 }))
-                // setProducts(response)
+                setProducts(response)
             } catch(err){
                 dispatch(statusActions.setError({
                     message: err.message,
                 }))
             }
         }
-
+        dispatch(statusActions.setError({
+            message: "",
+        }))
         fetchData()
     }, [dispatch, currentUser.user.id])
     
@@ -295,7 +298,7 @@ const Wishlist = () => {
 
                             </>
                         ) : (
-                            <></>
+                            <>a</>
                         )
                     }
                 </div>

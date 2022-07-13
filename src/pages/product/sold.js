@@ -145,6 +145,9 @@ const SoldProducts = () => {
             }
         }
 
+        dispatch(statusActions.setError({
+            message: "",
+        }))
         fetchData()
     }, [dispatch, currentUser.user.id])
     
