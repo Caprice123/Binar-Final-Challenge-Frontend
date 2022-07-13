@@ -66,7 +66,7 @@ export const Content = styled.div`
 
             a{
                 width: 100%;
-                height: 250px;
+                min-height: 250px;
                 border: 1px dashed #D0D0D0;
                 border-radius: 4px;
 
@@ -94,7 +94,7 @@ export const Content = styled.div`
 
                 a{
                     width: 100%;
-                    height: 200px;
+                    min-height: 200px;
                     border: 1px dashed #D0D0D0;
                     border-radius: 4px;
 

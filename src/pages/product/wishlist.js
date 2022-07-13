@@ -32,7 +32,7 @@ import { getCurrentUser } from '../../services/user'
 
 // pages
 import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
-import { getWishlist } from '../../services/bids'
+import { getWishlist } from '../../services/product'
 
 const Wishlist = () => {
     const datas = [
@@ -129,9 +129,7 @@ const Wishlist = () => {
                 await dispatch(getCurrentUser()).unwrap()
     
                 // TODO: change url or change redux
-                const response = await dispatch(getWishlist({
-                    statusBid: "pending",
-                })).unwrap()
+                const response = await dispatch(getWishlist()).unwrap()
 
                 dispatch(statusActions.setLoading({
                     status: false,
