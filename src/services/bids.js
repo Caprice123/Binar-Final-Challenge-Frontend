@@ -9,11 +9,11 @@ export const rejectBid = createAsyncThunk(
         try{
             const { bidsId } = payload
             const response = await api.put(
-                `/bids/${bidsId}`,
-                authHeader(),
+                `/api/v1/bids/${bidsId}`,
                 {
                     status: "rejected"
-                }
+                },
+                authHeader(),
             )
             const data = response.data
             return data

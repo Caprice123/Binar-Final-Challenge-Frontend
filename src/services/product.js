@@ -42,7 +42,7 @@ export const getProducts = createAsyncThunk(
     }
 )
 
-// TODO: change to getProductByID
+// TODO: change to getProductBidByProductID
 export const getProductOneByID = createAsyncThunk(
     'product/getProductOneByID',
     async (payload) => {
@@ -61,8 +61,8 @@ export const getProductOneByID = createAsyncThunk(
 )
 
 // TODO: change to getProductBidByProductID
-export const getProductByID = createAsyncThunk(
-    'product/getProductByID',
+export const getProductBidByProductID = createAsyncThunk(
+    'product/getProductBidByProductID',
     async (payload) => {
         try{
             const { productId } = payload
