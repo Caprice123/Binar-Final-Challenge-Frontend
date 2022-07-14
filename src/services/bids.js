@@ -27,10 +27,21 @@ export const rejectBid = createAsyncThunk(
 export const acceptBid = createAsyncThunk(
     'bid/acceptBid',
     async (payload) => {
-        console.log(payload)
-        const response = await api.get(`/transaction/${payload.transactionId}/accept`)
-        const data = response.data
-        return data
+        try{
+            const { bidsId } = payload
+            const response = await api.put(
+                `/api/v1/bids/${bidsId}`,
+                {
+                    status: "waiting_for_negotiation"
+                },
+                authHeader(),
+            )
+            const data = response.data
+            return data
+        } catch(err){
+            const errorMessage = err.response.data
+            throw new Error(errorMessage)
+        }
     }
 )
 
