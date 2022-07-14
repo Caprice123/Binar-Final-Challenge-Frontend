@@ -1,6 +1,6 @@
 
 // BLOM REAL TIME
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 // components
 import Navbar from '../../../components/Navbar'
@@ -15,7 +15,7 @@ import Popup from '../../../components/Popup'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import Alert from '../../../components/Alert'
 
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom'
 
 // styles
 import { Wrapper, Content } from '../../../pagesStyle/product/productId/bid.styles'
@@ -33,7 +33,7 @@ import { getProductBidByProductID } from '../../../services/product'
 // pages
 import { HOME_ROUTE } from '../../../types/pages'
 import { dateToString } from '../../../helpers/converter/dateToString'
-
+import { useFlashMessage } from '../../../hooks/useFlashMessage'
 const ProductBid = () => {
     // Settings
     // TODO: update the id of transaction id
@@ -56,7 +56,6 @@ const ProductBid = () => {
     //     // status: "pending"
     // }
     const [product, setProduct] = useState({})
-
 
     const navLinks = [
         {
@@ -86,8 +85,8 @@ const ProductBid = () => {
     const { loading, error } = useSelector(state => state.status)
     
     // state
-    const [selectedBidsId, setSelectedBidsId] = useState(0)
-    const [flashMessage, setFlashMessage] = useState("")
+    const [selectedBids, setSelectedBids] = useState({})
+    const [flashMessage, setFlashMessage] = useFlashMessage("")
     const [isRejectApprove, setIsRejectApprove] = useState(false)
     const [isAcceptApprove, setIsAcceptApprove] = useState(false)
     const [isUpdateStatusApprove, setIsUpdateStatusApprove] = useState(false)
@@ -103,13 +102,15 @@ const ProductBid = () => {
     const dispatch = useDispatch()
 
 
-    const onRejectApproval = (value, bidsId) => {
+    const onRejectApproval = useCallback((value) => {
         setIsRejectApprove(value)
-    }
+        if (!value){
+            setSelectedBids({})
+        }
+    }, [])
 
     const onReject = async () => {
         try{
-            console.log(selectedBidsId)
             setIsRejectApprove(false)
 
             dispatch(statusActions.setLoading({
@@ -117,7 +118,7 @@ const ProductBid = () => {
             }))
 
             const response = await dispatch(rejectBid({
-                bidsId: selectedBidsId,
+                bidsId: selectedBids.id,
             })).unwrap()
 
             const responseProduct = await dispatch(getProductBidByProductID({
@@ -145,9 +146,12 @@ const ProductBid = () => {
         }
     }
     
-    const onAcceptApproval = (value) => {
+    const onAcceptApproval = useCallback((value) => {
         setIsAcceptApprove(value)
-    }
+        if (!value){
+            setSelectedBids({})
+        }
+    }, [])
 
     const onAccept = async () => {
         try{
@@ -157,19 +161,26 @@ const ProductBid = () => {
                 status: true,
             }))
 
-            await dispatch(acceptBid({
-                transactionId: 1,
-            }))
+            const response = await dispatch(acceptBid({
+                bidsId: selectedBids.id,
+            })).unwrap()
+
+            const responseProduct = await dispatch(getProductBidByProductID({
+                productId
+            })).unwrap()
 
             dispatch(statusActions.setLoading({
                 status: false,
             }))
 
-            navigate(HOME_ROUTE, {
-                state: {
-                    message: "Successfully accept product bid"
-                }
-            })
+            onCallByWA(selectedBids.user.phone)
+            setFlashMessage(response)
+            setProduct(responseProduct)
+            // navigate(HOME_ROUTE, {
+            //     state: {
+            //         message: "Successfully accept product bid"
+            //     }
+            // })
         } catch(err){
             console.log(err)
             dispatch(statusActions.setError({
@@ -178,9 +189,12 @@ const ProductBid = () => {
         }
     }
     
-    const onUpdateStatusApproval = (value) => {
+    const onUpdateStatusApproval = useCallback((value) => {
         setIsUpdateStatusApprove(value)
-    }   
+        if (!value){
+            setSelectedBids({})
+        }
+    }, [])
 
     const onUpdateStatus = async () => {
         try{
@@ -212,8 +226,9 @@ const ProductBid = () => {
         }
     }   
     
-    const onCallByWA = () => {
-        window.open("https://stackoverflow.com", '_blank', 'noopener,noreferrer').focus();
+    const onCallByWA = (phone) => {
+        console.log(phone)
+        window.open(`https://wa.me/${phone}`, '_blank', 'noopener,noreferrer').focus();
     }
 
     const onChange = (e) => {
@@ -244,7 +259,6 @@ const ProductBid = () => {
                 dispatch(statusActions.setLoading({
                     status: false,
                 }))
-                console.log(response.bids[0].user.image)
                 setProduct(response)
             } catch(err){
                 console.log(err)
@@ -293,8 +307,7 @@ const ProductBid = () => {
                     currentUser.user.id !== product?.user_id ? (
                         product?.bids ? (
                             product?.bids.map((bid) => (
-                                <div key={bid.id} onClick={() => setSelectedBidsId(bid.id)}>
-                                    {/* TODO: Change it to based on bid variable */}
+                                <div key={bid.id} onClick={() => setSelectedBids(bid)}>
                                     <NotifItems imageUrl={bid.user.image}
                                                 actionName="Penawaran Product"
                                                 time={dateToString(bid.createdAt)}
@@ -324,7 +337,7 @@ const ProductBid = () => {
                                                                             style={{ padding: "5px 12px", marginLeft: "1rem" }} 
                                                                             onClick={bid.status === "pending" ? () => {
                                                                                 onAcceptApproval(true)
-                                                                            } : onCallByWA}
+                                                                            } : () => onCallByWA(bid.user.phone)}
                                                                             />
                                                     </>
                                                 ) : (
