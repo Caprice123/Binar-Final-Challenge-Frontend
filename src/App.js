@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 import store from './store';
 import Login from './pages/login';
@@ -21,13 +22,15 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path="/daftar-jual" element={
-              <ProtectedRoute allowedRoles={[]}>
+            //   <ProtectedRoute allowedRoles={[]}>
 								<DaftarJual />
-							</ProtectedRoute>
+							// </ProtectedRoute>
             } 
           />
 					<Route path="/login" element={
+						<GoogleOAuthProvider clientId='120494598409-3fi90au9drcp47tkm4t180fekpf1qeb0.apps.googleusercontent.com'>
 							<Login/>
+						</GoogleOAuthProvider>
 						} 
 					/>
 					<Route path="/daftar" element={
