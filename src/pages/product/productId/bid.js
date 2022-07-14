@@ -1,3 +1,5 @@
+
+// BLOM REAL TIME
 import React, { useEffect, useState } from 'react'
 
 // components
@@ -26,10 +28,11 @@ import { statusActions } from '../../../store/status'
 
 // services
 import { acceptBid, rejectBid, updateStatusBid } from '../../../services/bids'
-import { getProductByID } from '../../../services/product'
+import { getProductBidByProductID } from '../../../services/product'
 
 // pages
 import { HOME_ROUTE } from '../../../types/pages'
+import { dateToString } from '../../../helpers/converter/dateToString'
 
 const ProductBid = () => {
     // Settings
@@ -83,14 +86,13 @@ const ProductBid = () => {
     const { loading, error } = useSelector(state => state.status)
     
     // state
-
+    const [selectedBidsId, setSelectedBidsId] = useState(0)
+    const [flashMessage, setFlashMessage] = useState("")
     const [isRejectApprove, setIsRejectApprove] = useState(false)
     const [isAcceptApprove, setIsAcceptApprove] = useState(false)
     const [isUpdateStatusApprove, setIsUpdateStatusApprove] = useState(false)
     const [updateStatus, setUpdateStatus] = useState("sold")
 
-    const [isRejected, setIsRejected] = useState(false)
-    const [isAccepted, setIsAccepted] = useState(false)
     
     const { productId } = useParams()
 
@@ -101,12 +103,13 @@ const ProductBid = () => {
     const dispatch = useDispatch()
 
 
-    const onRejectApproval = (value) => {
+    const onRejectApproval = (value, bidsId) => {
         setIsRejectApprove(value)
     }
 
     const onReject = async () => {
         try{
+            console.log(selectedBidsId)
             setIsRejectApprove(false)
 
             dispatch(statusActions.setLoading({
@@ -114,20 +117,26 @@ const ProductBid = () => {
             }))
 
             const response = await dispatch(rejectBid({
-                bidsId: 1,
+                bidsId: selectedBidsId,
+            })).unwrap()
+
+            const responseProduct = await dispatch(getProductBidByProductID({
+                productId
             })).unwrap()
 
             dispatch(statusActions.setLoading({
                 status: false,
             }))
 
+            setFlashMessage(response)
+            setProduct(responseProduct)
             // window.location.reload()
             // TODO: Change navigation url
-            navigate(HOME_ROUTE, {
-                state: {
-                    message: "Successfully reject transaction"
-                }
-            })
+            // navigate(HOME_ROUTE, {
+            //     state: {
+            //         message: "Successfully reject transaction"
+            //     }
+            // })
         } catch(err){
             console.log(err)
             dispatch(statusActions.setError({
@@ -217,6 +226,10 @@ const ProductBid = () => {
         }))
     }
 
+    const onCloseFlash = () => {
+        setFlashMessage("")
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -224,13 +237,14 @@ const ProductBid = () => {
                     status: true,
                 }))
 
-                const response = await dispatch(getProductByID({
+                const response = await dispatch(getProductBidByProductID({
                     productId
                 })).unwrap()
                 
                 dispatch(statusActions.setLoading({
                     status: false,
                 }))
+                console.log(response.bids[0].user.image)
                 setProduct(response)
             } catch(err){
                 console.log(err)
@@ -255,6 +269,12 @@ const ProductBid = () => {
                     text={error} 
                     onClick={onCloseAlert} 
                     />
+            <Alert active={flashMessage.length > 0} 
+                    backgroundColor="green" 
+                    color="white" 
+                    text={flashMessage} 
+                    onClick={onCloseFlash} 
+                    />
             
             <Navbar centeredText="Info Penawar" 
                     />
@@ -263,40 +283,54 @@ const ProductBid = () => {
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
                 <SellerInfo width="100%"
-                            imageUrl={Image}
-                            sellerName="seller name"
-                            sellerCity="seller city"
+                            imageUrl={product.images ? product?.images[0].name : ""}
+                            sellerName={product.name ? product.name : ""}
+                            sellerCity={product.category ? product.category.categoryName : ""}
                             style={{ boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.15)" }}
                             />
                 <h4 className='my-4'>Daftar Produkmu yang Ditawar</h4>
                 {
                     currentUser.user.id !== product?.user_id ? (
                         product?.bids ? (
-                            product?.bids.map((bid, id) => (
-                                <div key={id}>
+                            product?.bids.map((bid) => (
+                                <div key={bid.id} onClick={() => setSelectedBidsId(bid.id)}>
                                     {/* TODO: Change it to based on bid variable */}
-                                    <NotifItems imageUrl={Image}
+                                    <NotifItems imageUrl={bid.user.image}
                                                 actionName="Penawaran Product"
-                                                time="20 Apr 14:04"
-                                                productName="Jam Tangan Casio"
-                                                originalPrice={Number("250000")}
-                                                bidPrice={Number("200000")}
+                                                time={dateToString(bid.createdAt)}
+                                                productName={bid.user.name}
+                                                originalPrice={Number(product.price)}
+                                                bidPrice={Number(bid.request_price)}
                                                 />
             
                                     {
                                         <div className='d-flex buttons justify-content-end px-2' style={{ width: "90%", margin: "0 auto" }}>
-                                            <BorderOnlyButton text={product.status === "open_for_bid" ? "Tolak" : "Status"}
-                                                                width="30%"
-                                                                color="#7126B5"
-                                                                style={{ padding: "5px 12px"}}
-                                                                onClick={product.status === "open_for_bid" ? () => onRejectApproval(true) : () => onUpdateStatusApproval(true)}
-                                                                />
-                                            <ActionButton text={product.status === "open_for_bid" ? "Terima" : "Hubungi di WA"}
-                                                                width="30%"
-                                                                color="#7126B5"
-                                                                style={{ padding: "5px 12px", marginLeft: "1rem" }} 
-                                                                onClick={product.status === "open_for_bid" ? () => onAcceptApproval(true) : onCallByWA}
-                                                                />
+                                            {
+                                                bid.status === "pending" || bid.status === "waiting_for_negotiation" ? (
+                                                    <>
+                                                        <BorderOnlyButton text={bid.status === "pending" ? "Tolak" : "Status"}
+                                                                            width="30%"
+                                                                            color="#7126B5"
+                                                                            style={{ padding: "5px 12px"}}
+                                                                            onClick={bid.status === "pending" ? () => {{
+                                                                                onRejectApproval(true)         
+                                                                            }} : () => {
+                                                                                onUpdateStatusApproval(true)
+                                                                            }}
+                                                                            />
+                                                        <ActionButton text={bid.status === "pending" ? "Terima" : "Hubungi di WA"}
+                                                                            width="30%"
+                                                                            color="#7126B5"
+                                                                            style={{ padding: "5px 12px", marginLeft: "1rem" }} 
+                                                                            onClick={bid.status === "pending" ? () => {
+                                                                                onAcceptApproval(true)
+                                                                            } : onCallByWA}
+                                                                            />
+                                                    </>
+                                                ) : (
+                                                    <p>{ bid.status.toUpperCase() }</p>
+                                                )
+                                            }
                                         </div>
                                     }
                                     <hr className='my-3' />

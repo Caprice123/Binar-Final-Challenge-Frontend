@@ -1,6 +1,6 @@
 import React from 'react'
 
-
+import NoImage from '../../assets/images/no-image-found.jpg'
 import { WrapperLink, WrapperDiv, Content, Title } from './NotifItems.styles'
 
 const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName, originalPrice, bidPrice, onClick  }) => {
@@ -12,7 +12,7 @@ const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName,
                         className={`notif-items d-flex py-3 px-2 align-items-center ${seen ? "seen" : "not-seen"}`} 
                         onClick={onClick}
                         >
-                    <img src={imageUrl} 
+                    <img src={imageUrl ? imageUrl : NoImage} 
                             alt="test"
                             className='me-3'
                             />
@@ -31,7 +31,7 @@ const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName,
                         className={`notif-items d-flex py-3 px-2 align-items-center ${seen ? "seen" : "not-seen"}`} 
                         onClick={onClick}
                         >
-                    <img src={imageUrl} 
+                    <img src={imageUrl ? imageUrl : NoImage} 
                             alt="test"
                             className='me-3'
                             />
