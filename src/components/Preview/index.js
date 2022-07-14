@@ -25,8 +25,9 @@ const Preview = ({ active, images, name, price, category, owner, description, on
         window.addEventListener("resize", checkMobile)
         checkMobile()
     }, [])
+    console.log(description)
     return (
-        <Wrapper className={active && "active"}>
+        <Wrapper className={active ? "active" : ""}>
             <Content className="position-relative py-5">
                 <LeftSection className='d-flex justify-content-center'>
                     <div className="image-preview d-flex me-5 position-relative">
@@ -86,11 +87,16 @@ const Preview = ({ active, images, name, price, category, owner, description, on
                 <RightSection className='d-flex justify-content-center'>
                     <div className='description d-flex flex-column me-5 my-5'>
                         <label>Description</label>
-                        <p>
-                            {
-                                description
-                            }
-                        </p>
+                        {
+                            description.split("\n").map(paragraph => (
+                                <p>
+                                    {
+                                        paragraph
+                                    }
+                                </p>
+                            ))
+
+                        }
                     </div>
                     <div className='empty ms-5'>&nbsp;</div>
 
