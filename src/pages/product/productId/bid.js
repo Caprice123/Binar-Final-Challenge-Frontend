@@ -120,11 +120,16 @@ const ProductBid = () => {
                 bidsId: selectedBidsId,
             })).unwrap()
 
+            const responseProduct = await dispatch(getProductBidByProductID({
+                productId
+            })).unwrap()
+
             dispatch(statusActions.setLoading({
                 status: false,
             }))
 
             setFlashMessage(response)
+            setProduct(responseProduct)
             // window.location.reload()
             // TODO: Change navigation url
             // navigate(HOME_ROUTE, {
