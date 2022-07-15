@@ -22,9 +22,9 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path="/daftar-jual" element={
-            //   <ProtectedRoute allowedRoles={[]}>
+                    <ProtectedRoute allowedRoles={[]}>
 								<DaftarJual />
-							// </ProtectedRoute>
+						</ProtectedRoute>
             } 
           />
 					<Route path="/login" element={

@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios'
 import {useGoogleLogin } from '@react-oauth/google'
+import { FcGoogle } from "react-icons/fc";
+
+
+
 
 // components
 import ActiveButton from '../components/ActionButton';
@@ -120,7 +124,8 @@ const Login = () => {
                                                 />
                                 <ActiveButton width="100%"
                                                 color="#7126B5"
-                                                text="Masuk Dengan Google"
+                                                text={`Masuk dengan Google`}
+                                                icon={<FcGoogle />}
                                                 style={{ margin: "1.5rem 0" }}
                                                 onClick={googleLogin}
                                                 />
