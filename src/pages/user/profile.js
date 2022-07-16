@@ -34,28 +34,49 @@ import { getCurrentUser, updateUser } from '../../services/user'
 import { HOME_ROUTE } from '../../types/pages'
 
 const InfoProfile = () => {
-    // redux state
+    /**************************************************************/
+    // REDUX STATE
     const { availableCities } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
-    // state
+    /**************************************************************/
+    
+
+    /**************************************************************/
+    // STATE
+    // FLASH STATE
     const [flashMessage, setFlashMessage] = useState("")
     
+    // MAIN STATE
     const [name, setName] = useState("")
     const [city, setCity] = useState("")
     const [address, setAddress] = useState("")
     const [phone, setPhone] = useState("")
     const [image, setImage] = useState(null)
     
+    // OPTIONS CITY STATE
     const [optionCity, setOptionCity] = useState([])
-    
-    // navigation 
-    const navigate = useNavigate()
-    const location = useLocation()
+    /**************************************************************/
 
-    // dispatch redux
+
+    /**************************************************************/
+    // REACT-ROUTER-DOM STATE
+    // NAVIGATION
+    const navigate = useNavigate()
+
+    // LOCATION
+    const location = useLocation()
+    /**************************************************************/
+    
+
+    /**************************************************************/
+    // REDUX DISPATCH
     const dispatch = useDispatch()
+    /**************************************************************/
     
     
+    /**************************************************************/
+    // ACTIONS
+    // onChange for changing the state eveytime user input something in input tag
     const onChange = (e) => {
         const { id, value } = e.currentTarget
         switch (id){
@@ -76,20 +97,24 @@ const InfoProfile = () => {
         }
     }
 
+    // onSelect for selecting the city everytime user click the dropdown
     const onSelect = (e) => {
         const { dataset } = e.currentTarget
 		setCity(dataset.value)
     }
     
+    // onInputImage for setting image when user insert image
     const onInputImage = (e) => {
         const file = e.currentTarget.files[0]
         setImage(file)
     }
 
+    // onDelete for resetting the image state when user click remove button image
     const onDeleteImage = () => {
         setImage(null)
     }
 
+    // onSubmit for calling updateUserProfile api when user click save button
     const onSubmit =async () => {
         if(name.length === 0){
             alert("Tolong isi nama anda")
@@ -142,20 +167,28 @@ const InfoProfile = () => {
         }
     }
     
+    // onClickGoBack for backing one history route
     const onClickGoBack = () => {
 		navigate(-1)
 	} 
 
+    // onCloseAlert for resetting error when close button alert for errror message is clicked
     const onCloseAlert = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
     }
     
+    // onCloseFlash for resetting flash message when close button flash message is clicked
     const onCloseFlash = () => {
 		setFlashMessage("")
 	}
+    /**************************************************************/
 
+
+    /**************************************************************/
+    // USEEFFECT
+    // for setting default value on input field tag
     useEffect(() => {
         const fetchImage = async (image_url) => {
             if (image_url){
@@ -203,6 +236,7 @@ const InfoProfile = () => {
         getUser()
     }, [dispatch, navigate, location.pathname])
 
+    // for updating availableCities when user input something
     useEffect(() => {
         if (city){
             setOptionCity(availableCities.filter(({ name }) => 
@@ -212,6 +246,8 @@ const InfoProfile = () => {
             setOptionCity(availableCities)
         }
     }, [city, availableCities])
+    /**************************************************************/
+
 
     return (
         <Wrapper>

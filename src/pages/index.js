@@ -28,6 +28,9 @@ import "swiper/css/navigation";
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage';
 
+// helpers
+import { objectToQueryString } from '../helpers/converter/objectToQuery';
+
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -38,44 +41,90 @@ import { statusActions } from '../store/status';
 import { getAllCategories, getProducts } from '../services/product';
 
 // pages
-import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
-import { objectToQueryString } from '../helpers/converter/objectToQuery';
+import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
 
 // TODO ALWAYS FECTH DATA WHEN STATE CHANGE
 // TODO ALWAYS FETCH CATEGORY WHEN STATE CHANGE
 const Home = () => {
-    const datas = [
-        {
-            seen: true,
-        }, {
-            seen: false
-        }, {
-            seen: true
-        }
-    ]
+    /**************************************************************/
+    // REDUX STATE
+    const { isLoggedIn, currentUser } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.status)
+    /**************************************************************/
 
-    const navLinks = [
-        {
-            type: "text",
-            to: DAFTAR_JUAL_ROUTE,
-            additionalIcon: <i className="fa-solid fa-list"></i>,
-            mobileComponent: <p>Daftar Jual</p>
-        }, {
-            type: "others",
-            to: "",
-            additionalIcon: <Notif datas={datas} />,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")}>Notifications</p>
-        }, {
-            type: "text",
-            to: "",
-            additionalIcon: <i className="fa-solid fa-user"></i>,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Account")}>Akun Saya</p>
-        }, 
-    ]
+
+    /**************************************************************/
+    // STATE
+    // NAVBAR STATE
+    const [isNavbarOn, setIsNavbarOn] = useState(false)
+    const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
+    const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
+
+    // SEARCH STATE
+    const [search, setSearch] = useState({
+        name: "",
+        category: "",
+    })
+
+    // FLASH MESSAGE STATE
+    const [flashMessage, setFlashMessage] = useFlashMessage("")
+
+    // MAIN STATE
+    const [availableCategories, setAvailableCategories] = useState([])
+    const [products, setProducts] = useState([])
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // REACT-ROUTER-DOM HOOKS
+    // NAVIGATION
+    const navigate = useNavigate()
+
+    // LOCATION
+    const location = useLocation()
+    /**************************************************************/
+    
+    
+    /**************************************************************/
+    // REDUX DISPATCH
+    const dispatch = useDispatch()
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // ACTIONS
+    // onSelectCategory for updating uri when category is selected
+    const onSelectCategory = async(e) => {
+        const { value } = e.currentTarget.dataset
+        navigate(`/?${objectToQueryString({
+            ...search,
+            category: value
+        })}`)
+    }
+
+    // onCloseAlertError for resetting error when close button alert for errror message is clicked
+    const onCloseAlertError = () => {
+        dispatch(statusActions.setError({
+            message: "",
+        }))
+    }
+
+    // onClickAlert for resetting flash message when close button flash message is clicked
+    const onClickAlert = () => {
+        setFlashMessage("")
+    }
+
+    // onMarkAsRead for calling api that will make specific notification is read
+    const onMarkAsRead = () => {
+
+    }
+
+    // onOpen for keep track the state of navbar
     const onOpen = (value) => {
         setIsNavbarOn(value)
     }
 
+    // onClickSlider for keep track the state of all slider components
     const onClickSlider = (value, target) => {
         setIsNavbarOn(false)
         switch(target){
@@ -93,58 +142,19 @@ const Home = () => {
 
     }
 
-    const [isNavbarOn, setIsNavbarOn] = useState(false)
-    const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
-    const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
-    const [search, setSearch] = useState({
-        name: "",
-        category: "",
-    })
-
-
-
-    const navigate = useNavigate()
-    const location = useLocation()
-    
-    const { isLoggedIn, currentUser } = useSelector(state => state.user)
-    const { loading, error } = useSelector(state => state.status)
-    
-    const [flashMessage, setFlashMessage] = useFlashMessage("")
-
-    const [availableCategories, setAvailableCategories] = useState([])
-    const [products, setProducts] = useState([])
-
-    const dispatch = useDispatch()
-
-    const onSelectCategory = async(e) => {
-        const { value } = e.currentTarget.dataset
-        navigate(`/?${objectToQueryString({
-            ...search,
-            category: value
-        })}`)
-    }
-
-    const onCloseAlertError = () => {
-        dispatch(statusActions.setError({
-            message: "",
-        }))
-    }
-
-    const onClickAlert = () => {
-        setFlashMessage("")
-    }
-
-    const onMarkAsRead = () => {
-
-    }
-
+    // onSearch for navigating to new page everytime search in navbar is clicked
     const onSearch = (value) => {
         navigate(`/?${objectToQueryString({
             ...search,
             name: value
         })}`)
     }
-    
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // USEEFFECT
+    // useEffect for getting category and update categories everytime page is changed
     useEffect(() => {
         const fetchData = async (queryParams) => {
             let responseGetAllCategories
@@ -233,6 +243,39 @@ const Home = () => {
     //     }
         
     // }, [dispatch, navigate, currentUser.user.id, location.search])
+    /**************************************************************/
+
+    /**************************************************************/
+    // SETTTINGS
+    const datas = [
+        {
+            seen: true,
+        }, {
+            seen: false
+        }, {
+            seen: true
+        }
+    ]
+
+    const navLinks = [
+        {
+            type: "text",
+            to: DAFTAR_JUAL_ROUTE,
+            additionalIcon: <i className="fa-solid fa-list"></i>,
+            mobileComponent: <p>Daftar Jual</p>
+        }, {
+            type: "others",
+            to: "",
+            additionalIcon: <Notif datas={datas} />,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")}>Notifications</p>
+        }, {
+            type: "text",
+            to: "",
+            additionalIcon: <i className="fa-solid fa-user"></i>,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Account")}>Akun Saya</p>
+        }, 
+    ]
+    /**************************************************************/
 
     return (
         <Wrapper>

@@ -1,5 +1,3 @@
-
-// BLOM REAL TIME
 import React, { useCallback, useEffect, useState } from 'react'
 
 // components
@@ -15,10 +13,16 @@ import Popup from '../../../components/Popup'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import Alert from '../../../components/Alert'
 
-import { Link, useParams, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 
 // styles
 import { Wrapper, Content } from '../../../pagesStyle/product/productId/bid.styles'
+
+// helpers
+import { dateToString } from '../../../helpers/converter/dateToString'
+
+// hooks
+import { useFlashMessage } from '../../../hooks/useFlashMessage'
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,29 +36,7 @@ import { getProductBidByProductID } from '../../../services/product'
 
 // pages
 import { HOME_ROUTE, DAFTAR_JUAL_ROUTE } from '../../../types/pages'
-import { dateToString } from '../../../helpers/converter/dateToString'
-import { useFlashMessage } from '../../../hooks/useFlashMessage'
 const ProductBid = () => {
-    // Settings
-    // TODO: update the id of transaction id
-    // const bids = [
-    //     {
-    //         seen: true,
-    //         status: "pending"
-    //     }, {
-    //         seen: false,
-    //         status: "pending"
-    //     }, {
-    //         seen: true,
-    //         status: "pending"
-    //     }
-    // ]
-
-    // const product = {
-    //     userId: 1,
-    //     status: "sent_to_seller"
-    //     // status: "pending"
-    // }
     const [product, setProduct] = useState({})
 
     const navLinks = [
@@ -76,32 +58,48 @@ const ProductBid = () => {
         }, 
     ]
 
-    // const user = {
-    //     userId: 2,
-    // }
-
-    // redux state
+    /**************************************************************/
+    // REDUX STATE
     const { currentUser } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
-    
-    // state
-    const [selectedBids, setSelectedBids] = useState({})
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // STATE
+    // FLASH STATE
     const [flashMessage, setFlashMessage] = useFlashMessage("")
+
+    // POPUP STATE
     const [isRejectApprove, setIsRejectApprove] = useState(false)
     const [isAcceptApprove, setIsAcceptApprove] = useState(false)
     const [isUpdateStatusApprove, setIsUpdateStatusApprove] = useState(false)
-    const [updateStatus, setUpdateStatus] = useState("sold")
 
+    // UPDATE STATUS
+    const [updateStatus, setUpdateStatus] = useState("sold")
     
+    // MAIN STATE
+    const [selectedBids, setSelectedBids] = useState({})
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // REACT-ROUTER-DOM HOOKS
+    // PAGE PARAMS STATE
     const { productId } = useParams()
 
-    // navigation
+    // NAVIGATION
     const navigate = useNavigate()
+    /**************************************************************/
 
-    // dispatch redux
+    /**************************************************************/
+    // REDUX DISPATCH
     const dispatch = useDispatch()
+    /**************************************************************/
 
-
+    /**************************************************************/
+    // ACTIONS
+    // onRejectApproval for keep tracking the reject popup state
     const onRejectApproval = useCallback((value) => {
         setIsRejectApprove(value)
         if (!value){
@@ -109,6 +107,7 @@ const ProductBid = () => {
         }
     }, [])
 
+    // onReject for calling rejectBid api when user click yes when confirming rejection action
     const onReject = async () => {
         try{
             setIsRejectApprove(false)
@@ -131,13 +130,6 @@ const ProductBid = () => {
 
             setFlashMessage(response)
             setProduct(responseProduct)
-            // window.location.reload()
-            // TODO: Change navigation url
-            // navigate(HOME_ROUTE, {
-            //     state: {
-            //         message: "Successfully reject transaction"
-            //     }
-            // })
         } catch(err){
             console.log(err)
             dispatch(statusActions.setError({
@@ -146,6 +138,7 @@ const ProductBid = () => {
         }
     }
     
+    // onAcceptApproval for keep tracking the accept popup state
     const onAcceptApproval = useCallback((value) => {
         setIsAcceptApprove(value)
         if (!value){
@@ -153,6 +146,7 @@ const ProductBid = () => {
         }
     }, [])
 
+    // onAccept for calling the acceptBid api when user click 'hubungi via WA' button
     const onAccept = async () => {
         try{
             setIsAcceptApprove(false)
@@ -176,11 +170,6 @@ const ProductBid = () => {
             onCallByWA(selectedBids.user.phone)
             setFlashMessage(response)
             setProduct(responseProduct)
-            // navigate(HOME_ROUTE, {
-            //     state: {
-            //         message: "Successfully accept product bid"
-            //     }
-            // })
         } catch(err){
             console.log(err)
             dispatch(statusActions.setError({
@@ -189,6 +178,7 @@ const ProductBid = () => {
         }
     }
     
+    // onUpdateStatusApproval for keep tracking of update popup state
     const onUpdateStatusApproval = useCallback((value) => {
         setIsUpdateStatusApprove(value)
         if (!value){
@@ -196,6 +186,7 @@ const ProductBid = () => {
         }
     }, [])
 
+    // onUpdateStatus for calling updateStatusBid api when user click submit on update popup
     const onUpdateStatus = async () => {
         try{
             setIsUpdateStatusApprove(false)
@@ -226,25 +217,34 @@ const ProductBid = () => {
         }
     }   
     
+    // onCallByWA for open new tab for a buyer phone number
     const onCallByWA = (phone) => {
         console.log(phone)
         window.open(`https://wa.me/${phone}`, '_blank', 'noopener,noreferrer').focus();
     }
 
+    // onChange for changing the updateStatus state everytime user click one of radio buttons
     const onChange = (e) => {
         setUpdateStatus(e.currentTarget.value)
     }
 
+    // onCloseAlert for resetting error when close button alert for errror message is clicked
     const onCloseAlert = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
     }
 
+    // onCloseFlash for resetting flash message when close button alert for errror message is
     const onCloseFlash = () => {
         setFlashMessage("")
     }
+    /**************************************************************/
 
+
+    /**************************************************************/
+    // USEEFFECT
+    // for getting the all bids for current product ID
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -273,6 +273,8 @@ const ProductBid = () => {
 
         fetchData()
 	}, [dispatch, productId])
+    /**************************************************************/
+
 
     return (
         <Wrapper>

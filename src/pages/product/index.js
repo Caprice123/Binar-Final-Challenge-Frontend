@@ -20,6 +20,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 // styles
 import { Wrapper, Content } from '../../pagesStyle/product/index.styles.js'
 
+// helpers
+import { objectToQueryString } from '../../helpers/converter/objectToQuery'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,7 +35,6 @@ import { getProducts } from '../../services/product'
 
 // pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
-import { objectToQueryString } from '../../helpers/converter/objectToQuery'
 
 const ListProducts = () => {
     const datas = [
@@ -64,27 +65,51 @@ const ListProducts = () => {
         }, 
     ]
 
-    const [search, setSearch] = useState("")
+    /**************************************************************/
+    // REDUX STATE
+    const { currentUser } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.status)
+    /**************************************************************/
+    
+
+    /**************************************************************/
+    // STATE
+    // NAVBAR STATE
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
 
-    const { currentUser } = useSelector(state => state.user)
-    const { loading, error } = useSelector(state => state.status)
-
+    // MAIN STATE
     const [isMobile, setIsMobile] = useState(false)
     const [products, setProducts] = useState([])
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // REACT-ROUTER-DOM HOOKS
+    // NAVIGATION
     const navigate = useNavigate()
+    
+    // LOCATION
     const { pathname } = useLocation()
-
     const uri = pathname.split("/").pop()
+    /**************************************************************/
 
+    
+    /**************************************************************/
+    // REDUX DISPATCH
     const dispatch = useDispatch()
+    /**************************************************************/
 
+
+    /**************************************************************/
+    // ACTIONS
+    // onOpen for keep track the state of navbar
     const onOpen = (value) => {
         setIsNavbarOn(value)
     }
 
+    // onClickSlider for keep track the state of all slider components
     const onClickSlider = (value, target) => {
         setIsNavbarOn(false)
         switch(target){
@@ -102,18 +127,26 @@ const ListProducts = () => {
 
     }
 
+    // onMarkAsRead for calling api that will make specific notification is read
     const onMarkAsRead = () => {
 
     }
 
+    // onClickEdit for navigating to edit user profile route
     const onClickEdit = () => {
         navigate(USER_PROFILE_ROUTE)
     }
     
+    // onSearch for navigating to search route
     const onSearch = (value) => {
         navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
     }
+    /**************************************************************/
 
+
+    /**************************************************************/
+    // USEEFFECT
+    // for getting whether user is in mobile version or not
     useEffect(() => {
         const checkMobile = () => {
             const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
@@ -125,6 +158,7 @@ const ListProducts = () => {
         return () => window.removeEventListener("resive", checkMobile)
     }, [])
 
+    // getting all products that user have
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -157,7 +191,9 @@ const ListProducts = () => {
         }))
         fetchData()
     }, [dispatch, currentUser.user.id])
+    /**************************************************************/
     
+
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />

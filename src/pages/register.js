@@ -27,22 +27,38 @@ import { register } from '../services/user';
 
 // pages
 import { LOGIN_ROUTE } from '../types/pages';
-
 const Registrasi = () => {
-    // redux state
+    /**************************************************************/
+    // REDUX STATE
     const { loading, error } = useSelector(state => state.status)
+    /**************************************************************/
     
-    // state
+
+    /**************************************************************/
+    // STATE
+    // MAIN STATE
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    /**************************************************************/
     
-    // navigation
-    const navigate = useNavigate()
-    
-    // dispatch redux
-    const dispatch = useDispatch()
 
+    /**************************************************************/
+    // REACT-ROUTER-DOM HOOKS
+    // NAVIGATION
+    const navigate = useNavigate()
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // REDUX DISPATCH
+    const dispatch = useDispatch()
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // ACTIONS
+    // onChange for changing the state eveytime user input something in input tag
     const onChange = (e) => {
         const { value, id } = e.currentTarget
 
@@ -61,6 +77,7 @@ const Registrasi = () => {
         }
     }
 
+    // onSubmit for calling register api when user click register button
     const onSubmit = async () => {
         if (name.length === 0){
             alert("Tolong isi nama")
@@ -111,17 +128,24 @@ const Registrasi = () => {
         }
     }
 
+    // onCloseAlert for resetting error when close button alert for errror message is clicked
     const onCloseAlert = () => {
         dispatch(statusActions.setError({
             message: "",
         }))
     }
-
+    /**************************************************************/
+    
+    
+    /**************************************************************/
+    // USEEFFECT
+    // resetting error and resetting flash message so that when page load again doesn't include uselocation
     useEffect(() => {
         dispatch(statusActions.setError({
             message: "",
         }))
 	}, [dispatch])
+    /**************************************************************/
 
     return (
         <div>
