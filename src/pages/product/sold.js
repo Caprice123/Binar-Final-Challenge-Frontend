@@ -335,8 +335,8 @@ const SoldProducts = () => {
                                     ) : (
                                         <Grid maxSize="200px">
                                             {
-                                                products.map(product => (
-                                                    <ProductCard to={`${PRODUCTS_ROUTE}/${product.id}${BID_ROUTE}`} product={product} />
+                                                products.map((product, id) => (
+                                                    <ProductCard key={id} to={`${PRODUCTS_ROUTE}/${product.id}${BID_ROUTE}`} product={product} />
 
                                                 ))
                                             }

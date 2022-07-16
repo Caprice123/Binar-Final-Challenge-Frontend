@@ -50,7 +50,8 @@ const Notif = ({ datas }) => {
                 {
                     datas.map((data, id) => (
                         <>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
+                            <NotifItems key={id}
+                                        redirectTo={`${PRODUCTS_ROUTE}/${id}`}
                                         seen={data.seen}
                                         imageUrl={Image}
                                         actionName="Penawaran Produk"

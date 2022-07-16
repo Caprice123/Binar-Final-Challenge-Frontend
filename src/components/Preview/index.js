@@ -66,8 +66,10 @@ const Preview = ({ active, images, name, price, category, owner, description, on
                             <p className="my-1">{category}</p>
                             <h5 className="mt-2">Rp {price.toLocaleString()}</h5>
                             {
-                                actionButtons.map((button) => (
-                                    button
+                                actionButtons.map((button, id) => (
+                                    <div key={id}>
+                                        {button}
+                                    </div>    
                                 ))
                             }
                         </div>
@@ -87,8 +89,8 @@ const Preview = ({ active, images, name, price, category, owner, description, on
                     <div className='description d-flex flex-column me-5 my-5'>
                         <label>Description</label>
                         {
-                            description.split("\n").map(paragraph => (
-                                <p>
+                            description.split("\n").map((paragraph, id) => (
+                                <p key={id}>
                                     {
                                         paragraph
                                     }
