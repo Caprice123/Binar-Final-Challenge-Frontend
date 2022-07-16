@@ -24,6 +24,28 @@ export const rejectBid = createAsyncThunk(
     }
 )
 
+export const acceptTransaction = createAsyncThunk(
+    'bid/acceptTransaction',
+    async (payload) => {
+        try{
+            const { bidsId } = payload
+            const response = await api.put(
+                `/api/v1/bids/${bidsId}`,
+                {
+                    status: "accepted"
+                },
+                authHeader(),
+            )
+            const data = response.data
+            return data
+        } catch(err){
+            const errorMessage = err.response.data
+            throw new Error(errorMessage)
+        }
+    }
+)
+
+
 export const acceptBid = createAsyncThunk(
     'bid/acceptBid',
     async (payload) => {
