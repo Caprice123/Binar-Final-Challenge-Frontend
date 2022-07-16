@@ -191,24 +191,30 @@ const ProductBid = () => {
         try{
             setIsUpdateStatusApprove(false)
 
+            let response
             dispatch(statusActions.setLoading({
                 status: true,
             }))
 
-            await dispatch(updateStatusBid({
-                transactionId: 1,
-                updateStatus,
-            }))
+            if (updateStatus === "cancel"){
+                response = await dispatch(rejectBid({
+                    bidsId: selectedBids.id,
+                })).unwrap()
+
+            } else {
+                
+            }
+            const responseProduct = await dispatch(getProductBidByProductID({
+                productId
+            })).unwrap()
+            
             
             dispatch(statusActions.setLoading({
                 status: false,
             }))
 
-            navigate(HOME_ROUTE, {
-                state: {
-                    message: "Successfully update transaction"
-                }
-            })
+            setFlashMessage(response)
+            setProduct(responseProduct)
         } catch(err){
             console.log(err)
             dispatch(statusActions.setError({
