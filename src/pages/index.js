@@ -38,7 +38,7 @@ import { statusActions } from '../store/status';
 import { getAllCategories, getProducts } from '../services/product';
 
 // pages
-import { ADD_PRODUCT_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
+import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
 import { objectToQueryString } from '../helpers/converter/objectToQuery';
 
 // TODO ALWAYS FECTH DATA WHEN STATE CHANGE
@@ -57,7 +57,7 @@ const Home = () => {
     const navLinks = [
         {
             type: "text",
-            to: PRODUCTS_ROUTE,
+            to: DAFTAR_JUAL_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {

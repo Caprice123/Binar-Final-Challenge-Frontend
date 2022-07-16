@@ -39,7 +39,7 @@ import { addBidPrice, getProductOneByID } from '../../../services/product'
 import { useFlashMessage } from '../../../hooks/useFlashMessage'
 
 // pages
-import { HOME_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../../types/pages'
+import { HOME_ROUTE, LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../../types/pages'
 import { objectToQueryString } from '../../../helpers/converter/objectToQuery'
 
 const InfoProduct = () => {
@@ -55,7 +55,7 @@ const InfoProduct = () => {
     const navLinks = [
         {
             type: "text",
-            to: PRODUCTS_ROUTE,
+            to: DAFTAR_JUAL_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {

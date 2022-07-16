@@ -48,7 +48,7 @@ const ListProducts = () => {
     const navLinks = [
         {
             type: "text",
-            to: PRODUCTS_ROUTE,
+            to: DAFTAR_JUAL_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {
