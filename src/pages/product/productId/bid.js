@@ -198,7 +198,7 @@ const ProductBid = () => {
 
             if (updateStatus === "cancel"){
                 response = await dispatch(rejectBid({
-                    bidsId: 1,
+                    bidsId: selectedBids.id,
                 })).unwrap()
 
             } else {
