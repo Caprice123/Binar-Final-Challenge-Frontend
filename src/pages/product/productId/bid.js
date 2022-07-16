@@ -31,7 +31,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { statusActions } from '../../../store/status'
 
 // services
-import { acceptBid, rejectBid, updateStatusBid } from '../../../services/bids'
+import { acceptBid, acceptTransaction, rejectBid, updateStatusBid } from '../../../services/bids'
 import { getProductBidByProductID } from '../../../services/product'
 
 // pages
@@ -202,7 +202,9 @@ const ProductBid = () => {
                 })).unwrap()
 
             } else {
-                
+                response = await dispatch(acceptTransaction({
+                    bidsId: selectedBids.id,
+                })).unwrap()
             }
             const responseProduct = await dispatch(getProductBidByProductID({
                 productId
