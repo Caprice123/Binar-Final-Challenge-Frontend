@@ -1,5 +1,6 @@
 export const LOGIN_ROUTE = "/login"
 export const REGISTER_ROUTE = "/register"
+export const LOGOUT_ROUTE = "/logout"
 
 export const HOME_ROUTE = "/"
 

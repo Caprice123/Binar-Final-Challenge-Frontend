@@ -19,13 +19,16 @@ const Notif = ({ datas }) => {
 
 
     useEffect(() => {
-        window.addEventListener("click", e => {
+        const onResize = (e) => {
             if (containerRef.current){
                 if (!containerRef.current.contains(e.target)){
                     notifRef.current.classList.remove("show")
                 }
             }
-        })
+        }
+        window.addEventListener("click", onResize)
+
+        return () => window.removeEventListener("resize", onResize)
     }, [])
 
     return (

@@ -18,7 +18,8 @@ import Wishlist from './pages/product/wishlist';
 import SoldProducts from './pages/product/sold';
 import Home from './pages';
 
-import { ADD_PRODUCT_ROUTE, BID_ROUTE, DAFTAR_JUAL_ROUTE, HOME_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE, REGISTER_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from './types/pages';
+import { ADD_PRODUCT_ROUTE, BID_ROUTE, DAFTAR_JUAL_ROUTE, HOME_ROUTE, LOGIN_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, REGISTER_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from './types/pages';
+import Logout from './pages/logout';
 
 function App() {
 	return (
@@ -38,6 +39,10 @@ function App() {
 					<Route path={REGISTER_ROUTE} element={
 							<Registrasi/>
 						} 
+					/>
+					<Route path={LOGOUT_ROUTE} element={
+							<Logout />
+						}
 					/>
 
 					{/* User Routes */}

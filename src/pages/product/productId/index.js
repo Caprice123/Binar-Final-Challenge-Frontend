@@ -15,7 +15,7 @@ import Notif from '../../../components/Notif/index'
 import SellerInfo from '../../../components/SellerInfo'
 import Alert from '../../../components/Alert'
 import Image from '../../../200774.jpg'
-import NoContentImage from '../../../assets/images/no-image-found.jpg'
+import NoImage from '../../../assets/images/no-image-found.jpg'
 import Slider from '../../../components/Slider'
 import NotifItems from '../../../components/NotifItems'
 import ImagePreview from '../../../components/ImagePreview'
@@ -32,7 +32,6 @@ import { objectToQueryString } from '../../../helpers/converter/objectToQuery'
 import { useDispatch, useSelector } from 'react-redux'
 
 // actions
-import { userActions } from '../../../store/user'
 import { statusActions } from '../../../store/status'
 
 // services
@@ -40,7 +39,8 @@ import { addBidPrice, getProductOneByID } from '../../../services/product'
 import { useFlashMessage } from '../../../hooks/useFlashMessage'
 
 // pages
-import { HOME_ROUTE, LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../../types/pages'
+import { HOME_ROUTE, LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE } from '../../../types/pages'
+import AccountDropdown from '../../../components/AccountDropdown'
 
 const InfoProduct = () => {
     const datas = [
@@ -57,17 +57,17 @@ const InfoProduct = () => {
             type: "text",
             to: DAFTAR_JUAL_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
-            mobileComponent: <p>Daftar Jual</p>
+            mobileComponent: <Link to={DAFTAR_JUAL_ROUTE}>Daftar Jual</Link>
         }, {
             type: "others",
             to: "",
             additionalIcon: <Notif datas={datas} />,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")}>Notifications</p>
+            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")} style={{ cursor: "pointer" }}>Notifications</p>
         }, {
-            type: "text",
+            type: "others",
             to: "",
-            additionalIcon: <i className="fa-solid fa-user"></i>,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Account")}>Akun Saya</p>
+            additionalIcon: <AccountDropdown />,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Account")} style={{ cursor: "pointer" }}>Akun Saya</p>
         }, 
     ]
     
@@ -212,16 +212,6 @@ const InfoProduct = () => {
     const onMarkAsRead = () => {
 
     }
-
-    // onClickLogout for logout user
-    const onClickLogout = async () => {
-        dispatch(userActions.logout())
-        navigate(LOGIN_ROUTE, {
-            state: {
-                message: "Logout Successfully"
-            }
-        })
-    }
     /**************************************************************/
 
 
@@ -292,18 +282,18 @@ const InfoProduct = () => {
                     <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Account")} aria-label="Close"></button>
                 </div>
                 <div className="content d-flex flex-column">
-                    <ImagePreview url={Image} />
+                    <ImagePreview url={currentUser.user.image_url ? currentUser.user.image_url : NoImage} />
                     <Link to={USER_PROFILE_ROUTE} className='d-flex align-items-center pt-5 pb-1'>
                         <i className="fa-solid fa-pen-to-square me-3"></i>
                         <span>Ubah Akun</span>
                     </Link>
                     <hr />
-                    <Link to='' className='d-flex align-items-center pt-3 pb-1'>
+                    <Link to={USER_PROFILE_ROUTE} className='d-flex align-items-center pt-3 pb-1'>
                         <i className="fa-solid fa-gear me-3"></i>
                         <span>Pengaturan Akun</span>
                     </Link>
                     <hr />
-                    <Link to={LOGIN_ROUTE} className='d-flex align-items-center pt-3 pb-1' onClick={onClickLogout}>
+                    <Link to={LOGOUT_ROUTE} className='d-flex align-items-center pt-3 pb-1'>
                         <i className="fa-solid fa-arrow-right-from-bracket me-3"></i>
                         <span>Logout Akun</span>
                     </Link>

@@ -165,23 +165,9 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                     <div className="offcanvas-body">
                         { 
                             navLinks?.map((navLink, id) => (
-                                <Link key={id} 
-                                        className="nav-link d-flex align-items-center active" 
-                                        aria-current="page" 
-                                        to={navLink.to}
-                                        >
-                                            {/* TODO: change to mobile compoennt only no component here */}
-                                            {
-                                                navLink.type === "button" ? (
-                                                    <ActionButton color="#7126B5"
-                                                                    icon={navLink.additionalIcon}
-                                                                    text={navLink.text}
-                                                                    />
-                                                ) : (
-                                                    navLink.mobileComponent 
-                                                )
-                                            }
-                                </Link>
+                                <div key={id}>
+                                    { navLink.mobileComponent }
+                                </div>
                             ))
                         }
                     </div>
