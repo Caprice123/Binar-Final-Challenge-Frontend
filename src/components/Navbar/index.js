@@ -1,16 +1,20 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 
 // components
-import { Link } from 'react-router-dom'
-import { HOME_ROUTE } from '../../types/pages'
+import { Link, useNavigate } from 'react-router-dom'
+import { HOME_ROUTE, LOGIN_ROUTE } from '../../types/pages'
 import ActionButton from '../ActionButton'
 
 // styles
 import { Wrapper, Content, Actions } from './Navbar.styles'
 
-const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick, ...styles }) => {
+const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick, searchValue, onChangeSearchText, onSearch, ...styles }) => {
     const offcanvasRef = useRef(null)
     const closeButtonRef = useRef(null)
+    const { isLoggedIn } = useSelector(state => state.user)
+    const [searchName, setSearchName] = useState("")
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!isOffcanvasOn) {
@@ -44,6 +48,16 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
         }
     }
 
+    const onChange = (e) => {
+        const { value } = e.currentTarget
+        setSearchName(value)
+    }
+
+    const onClickSearchButton = () => {
+        console.log(searchName)
+        onSearch(searchName)
+    }
+
     return (
         <Wrapper className="fixed-top navbar navbar-expand-lg navbar-light">
             <Content className="position-relative mx-auto" {...styles}>
@@ -69,13 +83,16 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                             {
                                 withSearchBar && (
                                     <>
-                                        <input className="form-control" 
-                                                type="search" 
-                                                placeholder="Search" 
-                                                aria-label="Search" 
+                                        <input type="search"
+                                                className='form-control'
+                                                placeholder='Cari di sini...'
+                                                aria-label="Search"
+                                                value={searchName}
+                                                onChange={onChange}
                                                 />
-                                        <button className="btn btn-outline-success" 
-                                                type="submit">
+                                        <button className="btn btn-outline-success search-btn" 
+                                                type="submit"
+                                                onClick={onClickSearchButton}>
                                                 <i className="fa-solid fa-magnifying-glass"></i>
                                         </button>
                                     </>
@@ -83,46 +100,58 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                             }
                         </div>
                         <div className="nav-links d-flex align-items-center">
-                            { 
-                                navLinks?.map((navLink, id) => (
-                                    navLink.type === "others" ? (
-                                        <div className='nav-link d-flex align-items-center active'>
-                                            <span>
-                                                { navLink.additionalIcon }
-                                            </span>
-                                            { navLink.text }
-                                        </div>
-                                    ) : (
-
-                                        <Link key={id} 
-                                                className="nav-link d-flex align-items-center active" 
-                                                aria-current="page" 
-                                                to={navLink.to}
-                                                >
-                                                    {
-                                                        navLink.type === "text" && (
-                                                            <>
-                                                                <span>
-                                                                    { navLink.additionalIcon }
-                                                                </span>
-                                                                { navLink.text }
-                                                            </>
-                                                        )
-                                                    }
-    
-                                                    {
-                                                        navLink.type === "button" && (
-                                                        
-                                                            <ActionButton color="#7126B5"
-                                                                            icon={navLink.additionalIcon}
-                                                                            text={navLink.text}
-                                                                            />
-                                                        )
-                                                    }
-                                        </Link>
-                                    )
-                                    
-                                ))
+                            {
+                                !isLoggedIn ? (
+                                    <ActionButton color="#7126B5"
+                                                    icon={<i className="fa-solid fa-arrow-right-to-bracket me-3" style={{ color: "white" }}></i>}
+                                                    text="Masuk"
+                                                    onClick={() => navigate(LOGIN_ROUTE)}
+                                                    />
+                                ) : (
+                                    <>
+                                    { 
+                                        navLinks?.map((navLink, id) => (
+                                            navLink.type === "others" ? (
+                                                <div className='nav-link d-flex align-items-center active'>
+                                                    <span>
+                                                        { navLink.additionalIcon }
+                                                    </span>
+                                                    { navLink.text }
+                                                </div>
+                                            ) : (
+        
+                                                <Link key={id} 
+                                                        className="nav-link d-flex align-items-center active" 
+                                                        aria-current="page" 
+                                                        to={navLink.to}
+                                                        >
+                                                            {
+                                                                navLink.type === "text" && (
+                                                                    <>
+                                                                        <span>
+                                                                            { navLink.additionalIcon }
+                                                                        </span>
+                                                                        { navLink.text }
+                                                                    </>
+                                                                )
+                                                            }
+            
+                                                            {
+                                                                navLink.type === "button" && (
+                                                                
+                                                                    <ActionButton color="#7126B5"
+                                                                                    icon={navLink.additionalIcon}
+                                                                                    text={navLink.text}
+                                                                                    />
+                                                                )
+                                                            }
+                                                </Link>
+                                            )
+                                            
+                                        ))
+                                    }
+                                    </>
+                                )
                             }
                         </div>
                     </div>

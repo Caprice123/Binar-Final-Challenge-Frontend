@@ -33,6 +33,7 @@ import { getProducts } from '../../services/product'
 
 // pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import { objectToQueryString } from '../../helpers/converter/objectToQuery'
 
 const ListProducts = () => {
     const datas = [
@@ -63,6 +64,7 @@ const ListProducts = () => {
         }, 
     ]
 
+    const [search, setSearch] = useState("")
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
@@ -106,6 +108,10 @@ const ListProducts = () => {
 
     const onClickEdit = () => {
         navigate(USER_PROFILE_ROUTE)
+    }
+    
+    const onSearch = (value) => {
+        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
     }
 
     useEffect(() => {
@@ -208,6 +214,7 @@ const ListProducts = () => {
                     isOffcanvasOn={isNavbarOn}
                     onClick={onOpen}
                     withSearchBar  
+                    onSearch={onSearch}
                     style={{ margin: "7.5px 12px" }}  
                     />
 
