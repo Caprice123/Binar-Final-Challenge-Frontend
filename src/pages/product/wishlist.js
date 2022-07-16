@@ -20,6 +20,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 // styles
 import { Wrapper, Content } from '../../pagesStyle/product/wishlist.styles.js'
 
+// helpers
+import { objectToQueryString } from '../../helpers/converter/objectToQuery'
+
 // redux
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -28,12 +31,10 @@ import { statusActions } from '../../store/status'
 
 // services
 import { getCurrentUser } from '../../services/user'
-// import { getProducts } from '../../services/product'
+import { getWishlist } from '../../services/product'
 
 // pages
 import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
-import { getWishlist } from '../../services/product'
-import { objectToQueryString } from '../../helpers/converter/objectToQuery'
 
 const Wishlist = () => {
     const datas = [
@@ -64,26 +65,51 @@ const Wishlist = () => {
         }, 
     ]
 
+    /**************************************************************/
+    // REDUX STATE
+    const { currentUser } = useSelector(state => state.user)
+    const { loading, error } = useSelector(state => state.status)
+    /**************************************************************/
+    
+    
+    /**************************************************************/
+    // STATE
+    // NAVBAR STATE
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
 
-    const { currentUser } = useSelector(state => state.user)
-    const { loading, error } = useSelector(state => state.status)
-
+    // MAIN STATE
     const [isMobile, setIsMobile] = useState(false)
     const [products, setProducts] = useState([])
+    /**************************************************************/
+    
+    
+    /**************************************************************/
+    // REACT-ROUTER-DOM HOOKS
+    // NAVIGATION
     const navigate = useNavigate()
+
+    // LOCATION
     const { pathname } = useLocation()
-
     const uri = pathname.split("/").pop()
+    /**************************************************************/
 
+
+    /**************************************************************/
+    // REDUX DISPATCH
     const dispatch = useDispatch()
+    /**************************************************************/
 
+    
+    /**************************************************************/
+    // ACTIONS
+    // onOpen for keep track the state of navbar
     const onOpen = (value) => {
         setIsNavbarOn(value)
     }
 
+    // onClickSlider for keep track the state of all slider components
     const onClickSlider = (value, target) => {
         setIsNavbarOn(false)
         switch(target){
@@ -101,14 +127,26 @@ const Wishlist = () => {
 
     }
 
+    // onMarkAsRead for calling api that will make specific notification is read
     const onMarkAsRead = () => {
 
     }
 
+    // onClickEdit for navigating to edit user profile page
     const onClickEdit = () => {
         navigate(USER_PROFILE_ROUTE)
     }
 
+    // onSearch for navigating to home page everytime search in navbar is clicked
+    const onSearch = (value) => {
+        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
+    }
+    /**************************************************************/
+
+    
+    /**************************************************************/
+    // USEEFFECT
+    // for getting whether user is in mobile mode
     useEffect(() => {
         const checkMobile = () => {
             const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
@@ -120,6 +158,7 @@ const Wishlist = () => {
         return () => window.removeEventListener("resive", checkMobile)
     }, [])
 
+    // for getting wishlist data from getWishlist api
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -129,8 +168,9 @@ const Wishlist = () => {
 
                 await dispatch(getCurrentUser()).unwrap()
     
-                // TODO: change url or change redux
-                const response = await dispatch(getWishlist()).unwrap()
+                const response = await dispatch(
+                    getWishlist()
+                ).unwrap()
 
                 dispatch(statusActions.setLoading({
                     status: false,
@@ -147,10 +187,8 @@ const Wishlist = () => {
         }))
         fetchData()
     }, [dispatch, currentUser.user.id])
-
-    const onSearch = (value) => {
-        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
-    }
+    /**************************************************************/
+    
 
     return (
         <Wrapper>

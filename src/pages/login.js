@@ -31,21 +31,42 @@ import { useFlashMessage } from '../hooks/useFlashMessage';
 import { HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
 
 const Login = () => {
-    // redux state
+    /**************************************************************/
+    // REDUX STATE
     const { loading, error } = useSelector(state => state.status)
-    
-    // state
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // STATE
+    // FLASH STATE
     const [flashMessage, setFlashMessage] = useFlashMessage("")
+
+    // MAIN STATE
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    
-    const navigate = useNavigate()
-    const location = useLocation()
+    /**************************************************************/
 
-    // dispatch redux
+
+    /**************************************************************/
+    // REACT-ROUTER-DOM HOOKS
+    // NAVIGATION
+    const navigate = useNavigate()
+
+    // LOCATION
+    const location = useLocation()
+    /**************************************************************/
+    
+
+    /**************************************************************/
+    // REDUX DISPATCH
     const dispatch = useDispatch()
-    
-    
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // ACTIONS
+    // onChange for changing the state eveytime user input something in input tag
     const onChange = (e) => {
         const { value, id } = e.currentTarget
         switch (id){
@@ -60,6 +81,7 @@ const Login = () => {
         }
     }
 
+    // onSubmit for calling api when user click login button
     const onSubmit = async () => {
         if (email.length === 0){
             alert("Tolong isi email")
@@ -103,16 +125,23 @@ const Login = () => {
         }
     }
 
+    // onCloseAlert for resetting error when close button alert for errror message is clicked
     const onCloseAlert = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
     }
-      
+
+    // onCloseFlash for resetting flash message when close button flash message is clicked
 	const onCloseFlash = () => {
 		setFlashMessage("")
 	}
+    /**************************************************************/
 
+
+    /**************************************************************/
+    // USEEFFECT
+    // resetting error and resetting flash message so that when page load again doesn't include uselocation
     useEffect(() => {
         dispatch(statusActions.setError({
             message: ""
@@ -120,6 +149,7 @@ const Login = () => {
         
         navigate(location.pathname, { replace: true })
 	}, [dispatch, navigate, location.pathname])
+    /**************************************************************/
 
     return (
         <div>

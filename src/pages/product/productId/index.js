@@ -26,6 +26,7 @@ import { Wrapper, Content } from '../../../pagesStyle/product/productId/index.st
 
 // helpers
 import { validateNumber } from '../../../helpers/validateNumber'
+import { objectToQueryString } from '../../../helpers/converter/objectToQuery'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,7 +41,6 @@ import { useFlashMessage } from '../../../hooks/useFlashMessage'
 
 // pages
 import { HOME_ROUTE, LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../../../types/pages'
-import { objectToQueryString } from '../../../helpers/converter/objectToQuery'
 
 const InfoProduct = () => {
     const datas = [
@@ -71,53 +71,59 @@ const InfoProduct = () => {
         }, 
     ]
     
-    // const images = [
-    //     {
-    //         imageUrl: Image,
-    //     }, {
-    //         imageUrl: Image,
-    //     },
-    // ]
-    
-    
-    // const user = {
-    //     ID: 1
-    // }
-    // const product = {
-    //     ownerID: 2
-    // }
-    
-    // redux state
+    /**************************************************************/
+    // REDUX STATE
     const { currentUser, isLoggedIn } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
-    
-    // state
-    const [product, setProduct] = useState(null)
-    const [isDisabled, setIsDisabled] = useState(false)
+    /**************************************************************/
 
+    /**************************************************************/
+    // STATE
+    // NAVIGATION STATE
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
 
+    // POPUP SATTE
     const [show, setShow] = useState(false)
     const [bidPrice, setBidPrice] = useState(0)
+    
+    // FLASH STATE
     const [flashMessage, setFlashMessage] = useFlashMessage("")
     
-    // params
+    // MAIN STATE 
+    const [product, setProduct] = useState(null)
+    const [isDisabled, setIsDisabled] = useState(false)
+    /**************************************************************/
+    
+
+    /**************************************************************/
+    // REACT-ROUTER-DOM HOOKS
+    // LOCATION STATE
     const { productId } = useParams()
     
-    // navigation
+    // NAVIGATION
     const navigate = useNavigate()
+
+    // LOCATION
     const location = useLocation()
+   /**************************************************************/
+
    
-    // dispatch redux
+   /**************************************************************/
+    // REDUX DISPATCH
     const dispatch = useDispatch()
-    
-    
+    /**************************************************************/
+
+
+    /**************************************************************/
+    // ACTIONS
+    // onOpen for keep track the state of navbar
     const onOpen = (value) => {
         setIsNavbarOn(value)
     }
 
+    // onClickSlider for keep track the state of all slider components
     const onClickSlider = (value, target) => {
         setIsNavbarOn(false)
         switch(target){
@@ -135,15 +141,18 @@ const InfoProduct = () => {
 
     }
 
+    // onClick for keep track of the popup components
     const onClick = (value) => {
         setShow(value)
     }
 
+    // onChange for keep track the bid price input tag
     const onChange = (e) => {
         const { value } = e.currentTarget
         validateNumber(value, setBidPrice)
     }
 
+    // onSubmit for calling addBidPrice api when user click add bid price
     const onSubmit = async () => {
         if (bidPrice === 0){
             alert("Please insert bid price")
@@ -168,11 +177,6 @@ const InfoProduct = () => {
             
             setIsDisabled(true)
             setFlashMessage("Successfully bid the project")
-            // navigate('/', {
-            //     state: {
-            //         message: "Successfully bid the product"
-            //     } 
-            // })
         } catch(err){
             console.log(err)
             dispatch(statusActions.setError({
@@ -181,25 +185,35 @@ const InfoProduct = () => {
         }
     }
 
+    // onClose for for resetting flash message when close button flash message is clicked
     const onClose = () => {
         setFlashMessage("")
     }
 
+    // onEdit for navigte to update product
     const onEdit = () => {
         // TODO: CHANGE TO ROUTE UPDATE
         navigate(HOME_ROUTE)
     }
     
+    // onCloseAlert for resetting error when close button alert for errror message is clicked
     const onCloseAlert = () => {
         dispatch(statusActions.setError({
             message: "",
         }))
     }
+
+    // onSearch for navigating to home page and search for specific name
+    const onSearch = (value) => {
+        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
+    }
     
+    // onMarkAsRead for calling api that will make specific notification is read
     const onMarkAsRead = () => {
 
     }
 
+    // onClickLogout for logout user
     const onClickLogout = async () => {
         dispatch(userActions.logout())
         navigate(LOGIN_ROUTE, {
@@ -208,13 +222,11 @@ const InfoProduct = () => {
             }
         })
     }
+    /**************************************************************/
 
-    // const actionButtonFnc = (isLoggedIn) => {
-    //     if (isLoggedIn){
-    //         return ""
-    //     }
-    // }
 
+    /**************************************************************/
+    // for getting the current product details
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -246,10 +258,8 @@ const InfoProduct = () => {
         navigate(location.pathname, { replace: true })
         fetchData()
     }, [dispatch, productId, setProduct, navigate, location.pathname])
-
-    const onSearch = (value) => {
-        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
-    }
+    /**************************************************************/
+    
 
     return (
         <Wrapper>

@@ -36,42 +36,54 @@ import { Wrapper, Content } from '../../pagesStyle/product/add.styles'
 import { DAFTAR_JUAL_ROUTE, HOME_ROUTE } from '../../types/pages'
 
 const AddProduct = () => {
-	// redux state
-	// const { loading, error } = useSelector(state => state.product)
+	/**************************************************************/
+	// REDUX STATE
 	const { currentUser } = useSelector(state => state.user)
 	const { loading, error } = useSelector(state => state.status)
+	/**************************************************************/
+
 	
-	// state
-	const [availableCategories, setAvailableCategories] = useState([])
+	/**************************************************************/
+	// STATE
+	// FLASH STATE
 	const [flashMessage, setFlashMessage] = useState("")
+
+	// CATEGORY STATE
+	const [availableCategories, setAvailableCategories] = useState([])
+	
+	// PREVIEW STATE
+	const [preview, setPreview] = useState(false)
+	
+	// MAIN STATE
 	const [name, setName] = useState("")
 	const [price, setPrice] = useState(0)
 	const [category, setCategory] = useState("")
 	const [description, setDescription] = useState("")
 	const [productImages, setProductImages] = useState([])
-	const [preview, setPreview] = useState(false)
-	// const [product, setProduct] = useState({
-	// 	name: "",
-	// 	price: "",
-	// 	category: "",
-	// 	description: "",
-	// 	productImages: []
-	// })
-
+	/**************************************************************/
 	
-	// navigation
+
+	/**************************************************************/
+	// REACT-ROUTER-DOM HOOKS
+	// NAVIGATION
 	const navigate = useNavigate()
+	/**************************************************************/
 
-	// dispatch redux
+
+	/**************************************************************/
+	// REDUX DISPATCH
 	const dispatch = useDispatch()
+	/**************************************************************/
 
+
+	/**************************************************************/
+	// ACTIONS
+	// onChange for changing the state eveytime user input something in input tag
 	const onChange = (e) => {
 		const { id, value } = e.currentTarget
-		// const oldProduct = product
 
 		switch (id){
 			case "Nama-Product":
-				// oldProduct.name = value
 				setName(value)
 				break
 			case "Harga-Product":
@@ -83,16 +95,15 @@ const AddProduct = () => {
 			default:
 				break
 		}
-		// setProduct({
-		// 	...oldProduct,
-		// })
 	}
 
+	// onSelect for keep tracking the category when user click on dropdown category
 	const onSelect = (e) => {
 		const { dataset } = e.currentTarget
 		setCategory(dataset.value)
 	}
 
+	// onPreview for open the preview page
 	const onPreview = () => {
 		if (name.length === 0){
 			alert("Tolong isi nama product")
@@ -118,11 +129,13 @@ const AddProduct = () => {
 		setPreview(true)
 	}
 
+	// onClosePreview for closing the preview page
 	const onClosePreview = () => {
 		window.scrollTo(0, 0);
 		setPreview(false)
 	}
 
+	// onSubmit for calling addProduc api when user click 'terbitkan' button 
 	const onSubmit = async () => {
 		if (name.length === 0){
 			alert("Tolong isi nama product")
@@ -174,11 +187,13 @@ const AddProduct = () => {
 		}
 	}
 
+	// onDelete for deleting specific image from image preview
 	const onDelete = (e) => {
 		const deletedIndex = Number(e.currentTarget.dataset.imageindex)
 		setProductImages([...productImages.slice(0, deletedIndex), ...productImages.slice(deletedIndex + 1)])
 	}
 
+	// onDrop for saving the image when user drop them on dropdown images
 	const onDrop = useCallback((acceptedFiles) => {
 		const additionalImages = acceptedFiles.map((file) => {
 			if (validateSizeFile(file)){
@@ -197,20 +212,28 @@ const AddProduct = () => {
 		setProductImages(productImagesUpdated.slice(0, 4))
 	}, [productImages])
 
+	// onClickGoBack for go back history
 	const onClickGoBack = () => {
 		navigate(-1)
 	}
 
+	// onCloseAlert for resetting error when close button alert for errror message is clicked
 	const onCloseAlert = () => {
 		dispatch(statusActions.setError({
 			message: "",
 		}))
 	}
-	  
+	
+	// onCloseFlash for resetting error when close button alert for errror message is clicked
 	const onCloseFlash = () => {
 		setFlashMessage("")
 	}
+	/**************************************************************/
 
+
+    /**************************************************************/
+    // USEEFFECT
+	// for getting all categories
 	useEffect(() => {
 		const fetchCategories = async () => {
 			try{
@@ -240,7 +263,7 @@ const AddProduct = () => {
 
 		fetchCategories()
 	}, [dispatch])
-
+	/**************************************************************/
 
 	return (
 		<Wrapper>
