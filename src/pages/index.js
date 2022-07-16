@@ -399,8 +399,8 @@ const Home = () => {
                     </div>
                     <Grid maxSize="175px" className='py-3'>
                         {
-                            products.map(product => (
-                                <ProductCard to={`${PRODUCTS_ROUTE}/${product.id}`} product={product} />
+                            products.map((product, id) => (
+                                <ProductCard key={id} to={`${PRODUCTS_ROUTE}/${product.id}`} product={product} />
                             ))
                         }
                     </Grid>

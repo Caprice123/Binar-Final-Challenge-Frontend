@@ -331,8 +331,8 @@ const ListProducts = () => {
                                         <p>Tambah Produk</p>
                                     </Link>
                                     {
-                                        products.map(product => (
-                                            <ProductCard to={`${PRODUCTS_ROUTE}/${product.id}`} product={product} />
+                                        products.map((product, id) => (
+                                            <ProductCard key={id} to={`${PRODUCTS_ROUTE}/${product.id}`} product={product} />
 
                                         ))
                                     }

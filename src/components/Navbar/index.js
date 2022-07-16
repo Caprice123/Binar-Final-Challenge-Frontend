@@ -112,7 +112,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                                     { 
                                         navLinks?.map((navLink, id) => (
                                             navLink.type === "others" ? (
-                                                <div className='nav-link d-flex align-items-center active'>
+                                                <div key={id} className='nav-link d-flex align-items-center active'>
                                                     <span>
                                                         { navLink.additionalIcon }
                                                     </span>
