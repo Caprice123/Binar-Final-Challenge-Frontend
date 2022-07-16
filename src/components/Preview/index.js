@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
 // components
-import Image from '../../200774.jpg'
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper";
 

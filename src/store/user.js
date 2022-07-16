@@ -2,16 +2,21 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { City } from 'country-state-city'
 
-import { getCurrentUser, updateUser, login, register } from '../services/user'
+import { getCurrentUser, login } from '../services/user'
 
 const defaultState = {
     currentUser: {
-        user: null,
+        user: {
+            address: null,
+            city: null,
+            email: null,
+            id: null,
+            name: null,
+            phone: null,
+        },
         token: null,
     },
     availableCities: [],
-    // loading: false,
-    // error: "",
     isLoggedIn: false
 }
 
@@ -35,7 +40,7 @@ const userSlice = createSlice({
             localStorage.setItem("userState", JSON.stringify(state))
         },
         logout: (state) => {
-            state.currentUser = {}
+            state.currentUser = defaultState.currentUser
             state.isLoggedIn = false
             localStorage.setItem("userState", JSON.stringify(state))
         }

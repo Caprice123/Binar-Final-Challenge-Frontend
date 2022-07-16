@@ -6,6 +6,7 @@ import Navbar from '../../components/Navbar'
 import Notif from '../../components/Notif'
 import NotifItems from '../../components/NotifItems'
 import Slider from '../../components/Slider'
+import NoImage from '../../assets/images/no-image-found.jpg'
 import ImagePreview from '../../components/ImagePreview'
 import ImagePerson from '../../assets/images/belumadaminat.png'
 import SellerInfo from '../../components/SellerInfo'
@@ -34,7 +35,8 @@ import { getCurrentUser } from '../../services/user'
 import { getProducts } from '../../services/product'
 
 // pages
-import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import { BID_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import AccountDropdown from '../../components/AccountDropdown'
 
 const SoldProducts = () => {
     const datas = [
@@ -51,17 +53,17 @@ const SoldProducts = () => {
             type: "text",
             to: DAFTAR_JUAL_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
-            mobileComponent: <p>Daftar Jual</p>
+            mobileComponent: <Link to={DAFTAR_JUAL_ROUTE}>Daftar Jual</Link>
         }, {
             type: "others",
             to: "",
             additionalIcon: <Notif datas={datas} />,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")}>Notifications</p>
+            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")} style={{ cursor: "pointer" }}>Notifications</p>
         }, {
-            type: "text",
+            type: "others",
             to: "",
-            additionalIcon: <i className="fa-solid fa-user"></i>,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Account")}>Akun Saya</p>
+            additionalIcon: <AccountDropdown />,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Account")} style={{ cursor: "pointer" }}>Akun Saya</p>
         }, 
     ]
 
@@ -228,20 +230,20 @@ const SoldProducts = () => {
                     <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Account")} aria-label="Close"></button>
                 </div>
                 <div className="content d-flex flex-column">
-                    <ImagePreview url={Image} />
-                    <Link to='' className='d-flex align-items-center pt-5 pb-1'>
+                    <ImagePreview url={currentUser.user.image_url ? currentUser.user.image_url : NoImage} />
+                    <Link to={USER_PROFILE_ROUTE} className='d-flex align-items-center pt-5 pb-1'>
                         <i className="fa-solid fa-pen-to-square me-3"></i>
                         <span>Ubah Akun</span>
                     </Link>
                     <hr />
-                    <Link to='' className='d-flex align-items-center pt-3 pb-1'>
+                    <Link to={USER_PROFILE_ROUTE} className='d-flex align-items-center pt-3 pb-1'>
                         <i className="fa-solid fa-gear me-3"></i>
                         <span>Pengaturan Akun</span>
                     </Link>
                     <hr />
-                    <Link to='' className='d-flex align-items-center pt-3 pb-1'>
+                    <Link to={LOGOUT_ROUTE} className='d-flex align-items-center pt-3 pb-1'>
                         <i className="fa-solid fa-arrow-right-from-bracket me-3"></i>
-                        <span>Ubah Akun</span>
+                        <span>Logout Akun</span>
                     </Link>
                     <hr />
 

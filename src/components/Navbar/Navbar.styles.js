@@ -53,7 +53,7 @@ export const Content = styled.div`
     }
 
     .offcanvas-body{
-        a{
+        *{
             padding: 0;
             margin: 7.5px 0 !important;
 
