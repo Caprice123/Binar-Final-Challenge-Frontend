@@ -19,6 +19,25 @@ export const Content = styled.div`
         font-weight: 900;
     }
 
+    input{
+        background: #EEEEEE !important;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-color:  #EEEEEE;
+    }
+
+    .search-btn{
+        background: #EEEEEE !important;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        color: grey;
+        border-color: #EEEEEE;
+    }
+
     .offcanvas{
         width: 50vw;
     }

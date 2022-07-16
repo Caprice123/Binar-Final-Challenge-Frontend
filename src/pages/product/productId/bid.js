@@ -31,7 +31,7 @@ import { acceptBid, rejectBid, updateStatusBid } from '../../../services/bids'
 import { getProductBidByProductID } from '../../../services/product'
 
 // pages
-import { HOME_ROUTE } from '../../../types/pages'
+import { HOME_ROUTE, DAFTAR_JUAL_ROUTE } from '../../../types/pages'
 import { dateToString } from '../../../helpers/converter/dateToString'
 import { useFlashMessage } from '../../../hooks/useFlashMessage'
 const ProductBid = () => {
@@ -60,7 +60,7 @@ const ProductBid = () => {
     const navLinks = [
         {
             type: "text",
-            to: HOME_ROUTE,
+            to: DAFTAR_JUAL_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {

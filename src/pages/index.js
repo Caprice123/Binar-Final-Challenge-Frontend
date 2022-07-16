@@ -7,6 +7,10 @@ import Alert from '../components/Alert'
 import ActionButton from '../components/ActionButton';
 import Grid from '../components/Grid';
 import ProductCard from '../components/ProductCard';
+import Slider from '../components/Slider';
+import Notif from '../components/Notif';
+import NotifItems from '../components/NotifItems';
+import ImagePreview from '../components/ImagePreview';
 import { Swiper, SwiperSlide } from "swiper/react";
 import ImageBanner from '../img-banner.png'
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -34,18 +38,70 @@ import { statusActions } from '../store/status';
 import { getAllCategories, getProducts } from '../services/product';
 
 // pages
-import { ADD_PRODUCT_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
+import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGIN_ROUTE, PRODUCTS_ROUTE } from '../types/pages';
+import { objectToQueryString } from '../helpers/converter/objectToQuery';
 
-
+// TODO ALWAYS FECTH DATA WHEN STATE CHANGE
+// TODO ALWAYS FETCH CATEGORY WHEN STATE CHANGE
 const Home = () => {
-    const navLinks = [
+    const datas = [
         {
-            type: "button",
-            to: LOGIN_ROUTE,
-            text: "Masuk",
-            additionalIcon: <i className="fa-solid fa-arrow-right-to-bracket me-3" style={{ color: "white" }}></i>,
+            seen: true,
+        }, {
+            seen: false
+        }, {
+            seen: true
         }
     ]
+
+    const navLinks = [
+        {
+            type: "text",
+            to: DAFTAR_JUAL_ROUTE,
+            additionalIcon: <i className="fa-solid fa-list"></i>,
+            mobileComponent: <p>Daftar Jual</p>
+        }, {
+            type: "others",
+            to: "",
+            additionalIcon: <Notif datas={datas} />,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")}>Notifications</p>
+        }, {
+            type: "text",
+            to: "",
+            additionalIcon: <i className="fa-solid fa-user"></i>,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Account")}>Akun Saya</p>
+        }, 
+    ]
+    const onOpen = (value) => {
+        setIsNavbarOn(value)
+    }
+
+    const onClickSlider = (value, target) => {
+        setIsNavbarOn(false)
+        switch(target){
+            case "Notifications":
+                setIsSliderNotificationOn(value)
+                setIsSliderAccountOn(false)
+                break
+            case "Account":
+                setIsSliderNotificationOn(false)
+                setIsSliderAccountOn(value)
+                break
+            default:
+                break
+        }
+
+    }
+
+    const [isNavbarOn, setIsNavbarOn] = useState(false)
+    const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
+    const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
+    const [search, setSearch] = useState({
+        name: "",
+        category: "",
+    })
+
+
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -54,22 +110,43 @@ const Home = () => {
     const { loading, error } = useSelector(state => state.status)
     
     const [flashMessage, setFlashMessage] = useFlashMessage("")
-    const [isNavbarOn, setIsNavbarOn] = useState(false)
-
-    console.log(flashMessage)
 
     const [availableCategories, setAvailableCategories] = useState([])
     const [products, setProducts] = useState([])
-    const [selectedCategory, setSelectedCategory] = useState("")
 
     const dispatch = useDispatch()
 
-    const onOpen = (value) => {
-        setIsNavbarOn(value)
+    const onSelectCategory = async(e) => {
+        const { value } = e.currentTarget.dataset
+        navigate(`/?${objectToQueryString({
+            ...search,
+            category: value
+        })}`)
     }
 
+    const onCloseAlertError = () => {
+        dispatch(statusActions.setError({
+            message: "",
+        }))
+    }
+
+    const onClickAlert = () => {
+        setFlashMessage("")
+    }
+
+    const onMarkAsRead = () => {
+
+    }
+
+    const onSearch = (value) => {
+        navigate(`/?${objectToQueryString({
+            ...search,
+            name: value
+        })}`)
+    }
+    
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (queryParams) => {
             let responseGetAllCategories
             let responseGetProducts
             try{
@@ -82,7 +159,8 @@ const Home = () => {
                         dispatch(getAllCategories()).unwrap(),
                         dispatch(getProducts({
                             excludeStatusProduct: "sold",
-                            excludeUserId: currentUser.user.id
+                            excludeUserId: currentUser.user.id,
+                            ...queryParams,
                         })).unwrap()
                     ])
                 } else{
@@ -90,13 +168,14 @@ const Home = () => {
                         dispatch(getAllCategories()).unwrap(),
                         dispatch(getProducts({
                             excludeStatusProduct: "sold",
+                            ...queryParams,
                         })).unwrap()
                     ])
                 }
                 dispatch(statusActions.setLoading({
                     status: false,
                 }))
-
+                
                 setAvailableCategories(responseGetAllCategories)
                 setProducts(responseGetProducts)
             } catch(err){
@@ -108,51 +187,104 @@ const Home = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
-        navigate(location.pathname, { replace: true })
-        fetchData()
 
-    }, [dispatch, navigate, isLoggedIn, currentUser.user, location.pathname])
-
-    const onSelectCategory = async(e) => {
-        const { value } = e.currentTarget.dataset
-
-        try{
-            setSelectedCategory(value)
-
-            dispatch(statusActions.setLoading({
-                status: true,
-            }))
-
-            const response = await dispatch(getProducts({
-                excludeStatusProduct: "sold",
-                excludeUserId: currentUser.user.id,
-                category: value
-            })).unwrap()
-            
-            dispatch(statusActions.setLoading({
-                status: false,
-            }))
-
-            setProducts(response)
-        } catch(err){
-            console.log(err)
-            dispatch(statusActions.setError({
-                message: err.message,
-            }))
+        const locationSearch = location.search.slice(1)
+        const queryParams = Object.fromEntries(new URLSearchParams(locationSearch))
+        const searchParams = {
+            name: queryParams.name || "",
+            category: queryParams.category || ""
         }
-    }
-    const onCloseAlertError = () => {
-        dispatch(statusActions.setError({
-            message: "",
-        }))
-    }
 
-    const onClickAlert = () => {
-        setFlashMessage("")
-    }
+        setSearch(searchParams)
+        navigate('/?' + objectToQueryString(searchParams), { replace: true })
+        fetchData(searchParams)
+        // fetchData()
+        
+    }, [dispatch, navigate, isLoggedIn, currentUser.user.id, location.search])
+    
+    // const updateProduct = useMemo((queryObject) => {
+        
+    // }, [second])
+
+    // useEffect(() => {
+    //     const fetchData = async (queryObject) => {
+    //         try{
+    //             dispatch(statusActions.setLoading({
+    //                 status: true,
+    //             }))
+    //             console.log(queryObject)
+    //             const response = await dispatch(getProducts({
+    //                 excludeStatusProduct: "sold",
+    //                 excludeUserId: currentUser.user.id,
+    //                 ...queryObject
+    //             })).unwrap()
+                
+    //             dispatch(statusActions.setLoading({
+    //                 status: false,
+    //             }))
+    
+    //             setProducts(response)
+    //         } catch(err){
+    //             console.log(err)
+    //             dispatch(statusActions.setError({
+    //                 message: err.message,
+    //             }))
+    //         }
+    //     }
+        
+    // }, [dispatch, navigate, currentUser.user.id, location.search])
 
     return (
         <Wrapper>
+            <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
+                <div className="title d-flex justify-content-between py-4">
+                    <h4>Notifications</h4>
+                    <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Notifications")} aria-label="Close"></button>
+                </div>
+                {
+                    datas.map((data, id) => (
+                        <div key={id}>
+                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
+                                        seen={data.seen}
+                                        imageUrl={Image}
+                                        actionName="Penawaran Produk"
+                                        time={"20 Apr, 14:04"}
+                                        productName={"Jam Tangan Casio"}
+                                        originalPrice={250000}
+                                        bidPrice={200000}
+                                        onClick={onMarkAsRead}
+                                        />
+                        </div>
+                    ))
+                }
+            </Slider>
+
+            <Slider topic="Account" active={isSliderAccountOn} slideFrom="left">
+                <div className="title d-flex justify-content-between py-4">
+                    <h4>Akun Saya</h4>
+                    <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Account")} aria-label="Close"></button>
+                </div>
+                <div className="content d-flex flex-column">
+                    <ImagePreview url={Image} />
+                    <Link to='' className='d-flex align-items-center pt-5 pb-1'>
+                        <i className="fa-solid fa-pen-to-square me-3"></i>
+                        <span>Ubah Akun</span>
+                    </Link>
+                    <hr />
+                    <Link to='' className='d-flex align-items-center pt-3 pb-1'>
+                        <i className="fa-solid fa-gear me-3"></i>
+                        <span>Pengaturan Akun</span>
+                    </Link>
+                    <hr />
+                    <Link to='' className='d-flex align-items-center pt-3 pb-1'>
+                        <i className="fa-solid fa-arrow-right-from-bracket me-3"></i>
+                        <span>Ubah Akun</span>
+                    </Link>
+                    <hr />
+
+                    <p>Version 1.0.0</p>
+                </div>
+            </Slider>
             <LoadingSpinner active={loading} />
             <Alert active={error.length > 0}
                     backgroundColor="red"
@@ -169,6 +301,7 @@ const Home = () => {
             <Navbar navLinks={navLinks}
                     isOffcanvasOn={isNavbarOn}
                     onClick={onOpen}
+                    onSearch={onSearch}
                     withSearchBar   
                     />
             <Content>
@@ -200,8 +333,8 @@ const Home = () => {
 
                         <ActionButton icon={<i className="fa-solid fa-magnifying-glass me-3"></i>}
                                         text="Semua"
-                                        color={!selectedCategory ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}
-                                        textColor={!selectedCategory ? "white" : "black"}
+                                        color={!search.category ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}
+                                        textColor={!search.category ? "white" : "black"}
                                         style={{ margin: "0 1rem 0 0" }}
                                         data-value=""
                                         onClick={onSelectCategory}
@@ -212,8 +345,8 @@ const Home = () => {
                                 <ActionButton key={id}
                                                 icon={<i className="fa-solid fa-magnifying-glass me-3"></i>}
                                                 text={name}
-                                                color={selectedCategory === name ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}
-                                                textColor={selectedCategory === name ? "white" : "black"}
+                                                color={search.category === name ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}
+                                                textColor={search.category === name ? "white" : "black"}
                                                 style={{ margin: "0 1rem 0 0" }}
                                                 data-value={name}
                                                 onClick={onSelectCategory}

@@ -15,7 +15,6 @@ import { Wrapper, Content, LeftSection, RightSection } from './Preview.styles'
 import SellerInfo from '../SellerInfo';
 
 const Preview = ({ active, images, name, price, category, owner, description, onClose, actionButtons, mobileButton }) => {
-    console.log(images)
     const [isMobile, setIsMobile] = useState(false)
     useEffect(() => {
         const checkMobile = () => {

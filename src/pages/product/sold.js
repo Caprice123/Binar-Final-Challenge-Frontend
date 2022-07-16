@@ -32,6 +32,7 @@ import { getProducts } from '../../services/product'
 
 // pages
 import { BID_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import { objectToQueryString } from '../../helpers/converter/objectToQuery'
 
 const SoldProducts = () => {
     const datas = [
@@ -46,7 +47,7 @@ const SoldProducts = () => {
     const navLinks = [
         {
             type: "text",
-            to: PRODUCTS_ROUTE,
+            to: DAFTAR_JUAL_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
             mobileComponent: <p>Daftar Jual</p>
         }, {
@@ -150,6 +151,10 @@ const SoldProducts = () => {
         }))
         fetchData()
     }, [dispatch, currentUser.user.id])
+
+    const onSearch = (value) => {
+        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
+    }
     
     console.log(isMobile)
     return (
@@ -208,6 +213,7 @@ const SoldProducts = () => {
                     isOffcanvasOn={isNavbarOn}
                     onClick={onOpen}
                     withSearchBar  
+                    onSearch={onSearch}
                     style={{ margin: "7.5px 12px" }}  
                     />
 
