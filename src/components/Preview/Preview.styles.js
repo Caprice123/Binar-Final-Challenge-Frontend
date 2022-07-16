@@ -4,13 +4,14 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
     position: absolute;
     top: 0%;
-    left: 100%;
+    left: 100vw;
     width: 100vw;
     height: calc(100vh - var(--navbar-height));
     z-index: 100;
     background-color: white;
     transition: 0.5s;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     margin-top: var(--navbar-height);
     
     &.active{
@@ -204,6 +205,7 @@ export const RightSection = styled.div`
         width: 45%;
         box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
         border-radius: 16px;
+        min-height: 50vh;
 
         *{
             padding: 12px 16px;

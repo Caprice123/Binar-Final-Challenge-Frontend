@@ -114,10 +114,12 @@ const AddProduct = () => {
 			return
 		}
 
+		window.scrollTo(0, 0);
 		setPreview(true)
 	}
 
 	const onClosePreview = () => {
+		window.scrollTo(0, 0);
 		setPreview(false)
 	}
 
@@ -158,8 +160,6 @@ const AddProduct = () => {
 			dispatch(statusActions.setLoading({
 				status: false,
 			}))
-
-			console.log(product)
 
 			navigate(DAFTAR_JUAL_ROUTE, {
 				state: {
