@@ -39,7 +39,7 @@ import { addBidPrice, getProductOneByID } from '../../../services/product'
 import { useFlashMessage } from '../../../hooks/useFlashMessage'
 
 // pages
-import { HOME_ROUTE, LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE } from '../../../types/pages'
+import { HOME_ROUTE, LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE, UPDATE_PRODUCT_ROUTE } from '../../../types/pages'
 import AccountDropdown from '../../../components/AccountDropdown'
 
 const InfoProduct = () => {
@@ -192,8 +192,7 @@ const InfoProduct = () => {
 
     // onEdit for navigte to update product
     const onEdit = () => {
-        // TODO: CHANGE TO ROUTE UPDATE
-        navigate(HOME_ROUTE)
+        navigate(PRODUCTS_ROUTE + "/" + productId + UPDATE_PRODUCT_ROUTE)
     }
     
     // onCloseAlert for resetting error when close button alert for errror message is clicked
