@@ -233,8 +233,9 @@ const InfoProfile = () => {
             message: ""
         }))
         dispatch(userActions.getCities())
+        navigate(location.pathname + location.search, { replace: true })
         getUser()
-    }, [dispatch, navigate, location.pathname])
+    }, [dispatch, navigate, location.pathname, location.search])
 
     // for updating availableCities when user input something
     useEffect(() => {
@@ -259,7 +260,7 @@ const InfoProfile = () => {
                     onClick={onCloseAlert} 
                     />
             <Alert active={flashMessage.length > 0} 
-					backgroundColor="green" 
+					backgroundColor="var(--alert-success)" 
 					color="white" 
 					text={flashMessage} 
 					onClick={onCloseFlash} 

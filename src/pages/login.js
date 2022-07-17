@@ -147,19 +147,19 @@ const Login = () => {
             message: ""
         }))
         
-        navigate(location.pathname, { replace: true })
-	}, [dispatch, navigate, location.pathname])
+        navigate(location.pathname + location.search, { replace: true })
+	}, [dispatch, navigate, location.pathname, location.search])
     /**************************************************************/
 
     return (
         <div>
+            <LoadingSpinner active={loading} />
             <Alert active={flashMessage.length > 0} 
-					backgroundColor="green" 
+					backgroundColor="var(--alert-success)" 
 					color="white" 
 					text={flashMessage} 
 					onClick={onCloseFlash} 
 					/>
-            <LoadingSpinner active={loading} />
             <Alert active={error.length > 0} 
                     backgroundColor="var(--redalert-font)" 
                     color="var(--redalert-background)" 

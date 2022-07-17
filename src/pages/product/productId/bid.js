@@ -289,12 +289,12 @@ const ProductBid = () => {
             <LoadingSpinner active={loading} />
             <Alert active={error.length > 0} 
                     backgroundColor="var(--redalert-font)" 
-                    color="var(--redalert-background)" 
+                    color="var(--redalert-background)"
                     text={error} 
                     onClick={onCloseAlert} 
                     />
             <Alert active={flashMessage.length > 0} 
-                    backgroundColor="green" 
+                    backgroundColor="var(--alert-success)" 
                     color="white" 
                     text={flashMessage} 
                     onClick={onCloseFlash} 

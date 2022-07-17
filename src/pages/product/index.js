@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 // components
+import Alert from '../../components/Alert'
 import Navbar from '../../components/Navbar'
 import Notif from '../../components/Notif'
 import NotifItems from '../../components/NotifItems'
@@ -36,6 +37,7 @@ import { getProducts } from '../../services/product'
 // pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
 import AccountDropdown from '../../components/AccountDropdown'
+import { useFlashMessage } from '../../hooks/useFlashMessage'
 
 const ListProducts = () => {
     const datas = [
@@ -80,6 +82,9 @@ const ListProducts = () => {
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
 
+    // FLASH MESSAGE STATE
+    const [flashMessage, setFlashMessage] = useFlashMessage("")
+
     // MAIN STATE
     const [isMobile, setIsMobile] = useState(false)
     const [products, setProducts] = useState([])
@@ -92,7 +97,7 @@ const ListProducts = () => {
     const navigate = useNavigate()
     
     // LOCATION
-    const { pathname } = useLocation()
+    const { pathname, search } = useLocation()
     const uri = pathname.split("/").pop()
     /**************************************************************/
 
@@ -142,6 +147,18 @@ const ListProducts = () => {
     const onSearch = (value) => {
         navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
     }
+
+    // onCloseAlertError for resetting error when close button alert for errror message is clicked
+    const onCloseAlertError = () => {
+        dispatch(statusActions.setError({
+            message: "",
+        }))
+    }
+
+    // onClickAlert for resetting flash message when close button flash message is clicked
+    const onClickAlert = () => {
+        setFlashMessage("")
+    }
     /**************************************************************/
 
 
@@ -190,14 +207,27 @@ const ListProducts = () => {
         dispatch(statusActions.setError({
             message: ""
         }))
+        navigate(pathname + search, { replace: true })
         fetchData()
-    }, [dispatch, currentUser.user.id])
+    }, [dispatch, navigate, currentUser.user.id, pathname, search])
     /**************************************************************/
     
 
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0}
+                    backgroundColor="var(--redalert-background)"
+                    color="white" 
+                    text={error}
+                    onClick={onCloseAlertError}
+                    />
+            <Alert active={flashMessage.length > 0}
+                    backgroundColor="var(--alert-success)"
+                    color="white" 
+                    text={flashMessage}
+                    onClick={onClickAlert}
+                    />
             <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
                 <div className="title d-flex justify-content-between py-4">
                     <h4>Notifications</h4>
