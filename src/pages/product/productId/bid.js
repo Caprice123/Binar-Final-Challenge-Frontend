@@ -288,14 +288,14 @@ const ProductBid = () => {
         <Wrapper>
             <LoadingSpinner active={loading} />
             <Alert active={error.length > 0} 
-                    backgroundColor="var(--redalert-font)" 
-                    color="var(--redalert-background)"
+                    backgroundColor="var(--redalert-background)" 
+                    color="var(--redalert-font)"
                     text={error} 
                     onClick={onCloseAlert} 
                     />
             <Alert active={flashMessage.length > 0} 
                     backgroundColor="var(--alert-success)" 
-                    color="white" 
+                    color="var(--white-color)" 
                     text={flashMessage} 
                     onClick={onCloseFlash} 
                     />
@@ -333,7 +333,7 @@ const ProductBid = () => {
                                                     <>
                                                         <BorderOnlyButton text={bid.status === "pending" ? "Tolak" : "Status"}
                                                                             width="30%"
-                                                                            color="#7126B5"
+                                                                            color="var(--primary-purple-04)"
                                                                             style={{ padding: "5px 12px"}}
                                                                             onClick={bid.status === "pending" ? () => {{
                                                                                 onRejectApproval(true)         
@@ -343,7 +343,7 @@ const ProductBid = () => {
                                                                             />
                                                         <ActionButton text={bid.status === "pending" ? "Terima" : "Hubungi di WA"}
                                                                             width="30%"
-                                                                            color="#7126B5"
+                                                                            color="var(--primary-purple-04)"
                                                                             style={{ padding: "5px 12px", marginLeft: "1rem" }} 
                                                                             onClick={bid.status === "pending" ? () => {
                                                                                 onAcceptApproval(true)
@@ -378,13 +378,13 @@ const ProductBid = () => {
                     <h4>Are you sure want to reject this offer?</h4>
                     <div className='d-flex justify-content-between w-100 py-3'>
                         <BorderOnlyButton text="No"
-                                            color="#7126B5"
+                                            color="var(--primary-purple-04)"
                                             width="45%"
                                             onClick={() => onRejectApproval(false)}
                                             style={{ padding: "5px 12px"}}
                                             />
                         <ActionButton text="Yes"
-                                        color="#7126B5"
+                                        color="var(--primary-purple-04)"
                                         width="45%"
                                         onClick={onReject}
                                         style={{ padding: "5px 12px"}}
@@ -413,7 +413,7 @@ const ProductBid = () => {
                     </div>
                     <ActionButton text="Hubungi via WA"
                                     width="100%"
-                                    color="#7126B5"
+                                    color="var(--primary-purple-04)"
                                     onClick={onAccept}
                                     style={{ margin: "1.5rem 0", padding: "7.5px 12px"}}
                                     />
@@ -440,7 +440,7 @@ const ProductBid = () => {
                     </div>
                     <ActionButton text="Kirim"
                                     width="100%"
-                                    color="#7126B5"
+                                    color="var(--primary-purple-04)"
                                     onClick={onUpdateStatus}
                                     style={{ margin: "1.5rem 0", padding: "7.5px 12px"}}
                                     />

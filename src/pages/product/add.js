@@ -270,13 +270,13 @@ const AddProduct = () => {
 			<LoadingSpinner active={loading} />
 			<Alert active={flashMessage.length > 0} 
 					backgroundColor="var(--alert-success)" 
-					color="white" 
+					color="var(--white-color)" 
 					text={flashMessage} 
 					onClick={onCloseFlash} 
 					/>
 			<Alert active={error.length > 0} 
-					backgroundColor="var(--redalert-font)" 
-					color="var(--redalert-background)" 
+					backgroundColor="var(--redalert-background)" 
+					color="var(--redalert-font)" 
 					text={error} 
 					onClick={onCloseAlert} 
 					/>
@@ -333,12 +333,12 @@ const AddProduct = () => {
 				<div className='d-flex justify-content-between py-5'>
 					<BorderOnlyButton text="Preview"
 									width="40%" 
-									color="#7126B5"
+									color="var(--primary-purple-04)"
 									onClick={onPreview}
 									/>
 					<ActionButton text="Terbitkan"
 									width="40%"
-									color="#7126B5"
+									color="var(--primary-purple-04)"
 									onClick={onSubmit}
 									/>
 				</div>
@@ -354,20 +354,20 @@ const AddProduct = () => {
 						actionButtons={[
 							<ActionButton text="Terbitakan"
                                             width="90%"
-                                            color="#7126B5"
+                                            color="var(--primary-purple-04)"
                                             onClick={onSubmit}
                                             />,
 
                             <BorderOnlyButton text="Edit"
                                             width="90%" 
-                                            color="#7126B5"
+                                            color="var(--primary-purple-04)"
                                             onClick={onClosePreview}
                                             />
 						]}
 						mobileButton={
 							<ActionButton text="Terbitakan"
                                         width="calc(90% + 5px)"
-                                        color="#7126B5"
+                                        color="var(--primary-purple-04)"
                                         onClick={onSubmit}
                                         style={
                                                 { 

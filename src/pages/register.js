@@ -151,8 +151,8 @@ const Registrasi = () => {
         <div>
             <LoadingSpinner active={loading} />
             <Alert active={error.length > 0} 
-                    backgroundColor="var(--redalert-font)" 
-                    color="var(--redalert-background)" 
+                    backgroundColor="var(--redalert-background)" 
+                    color="var(--redalert-font)" 
                     text={error} 
                     onClick={onCloseAlert} 
                     />
@@ -191,7 +191,7 @@ const Registrasi = () => {
                                             required
                                             />
                                     <ActiveButton width="100%"
-                                                    color="#7126B5"
+                                                    color="var(--primary-purple-04)"
                                                     text="Masuk"
                                                     style={{ margin: "1.5rem 0" }}
                                                     onClick={onSubmit}

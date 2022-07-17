@@ -8,6 +8,6 @@ export const Wrapper = styled.button`
     border-radius: 16px;
     
     &:hover{
-        background-color: white !important;
+        background-color: var(--white-color) !important;
     }
 `

@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
     width: 100vw;
     height: calc(100vh - var(--navbar-height));
     z-index: 100;
-    background-color: white;
+    background-color: var(--white-color);
     transition: 0.5s;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -32,7 +32,7 @@ export const Wrapper = styled.div`
         align-items: center;
         cursor: pointer;
         z-index: 100;
-        background-color: white;
+        background-color: var(--white-color);
         border-radius: 50%;
     }
 `
@@ -88,10 +88,10 @@ export const LeftSection = styled.div`
         }
 
         .swiper-pagination-bullet{
-            border: 1px solid white;
+            border: 1px solid var(--white-color);
         }
         .swiper-pagination-bullet-active{
-            background-color: white;
+            background-color: var(--white-color);
         }
     }
 
@@ -172,7 +172,7 @@ export const LeftSection = styled.div`
             transform: translateY(-50px);
             .overview{
                 
-                background-color: white;
+                background-color: var(--white-color);
                 *{
                     width: 90%;
                 }

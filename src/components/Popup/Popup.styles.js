@@ -19,7 +19,7 @@ export const Content = styled.div`
         top: none;
         left: 0;
         bottom: 0;
-        background-color: white;
+        background-color: var(--white-color);
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         border-bottom-left-radius: 0;

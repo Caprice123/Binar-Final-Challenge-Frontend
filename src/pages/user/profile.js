@@ -254,14 +254,14 @@ const InfoProfile = () => {
         <Wrapper>
             <LoadingSpinner active={loading} />
             <Alert active={error.length > 0} 
-                    backgroundColor="var(--redalert-font)" 
-                    color="var(--redalert-background)" 
+                    backgroundColor="var(--redalert-background)" 
+                    color="var(--redalert-font)" 
                     text={error} 
                     onClick={onCloseAlert} 
                     />
             <Alert active={flashMessage.length > 0} 
 					backgroundColor="var(--alert-success)" 
-					color="white" 
+					color="var(--white-color)" 
 					text={flashMessage} 
 					onClick={onCloseFlash} 
 					/>
@@ -320,7 +320,7 @@ const InfoProfile = () => {
                 <div className='my-4'>
                     <ActionButton text="Simpan"
                                     width="100%"
-                                    color="#7126B5"
+                                    color="var(--primary-purple-04)"
                                     onClick={onSubmit}
                                     />
                 </div>

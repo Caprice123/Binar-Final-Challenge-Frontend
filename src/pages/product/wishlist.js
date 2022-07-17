@@ -214,13 +214,13 @@ const Wishlist = () => {
             <LoadingSpinner active={loading} />
             <Alert active={error.length > 0}
                     backgroundColor="var(--redalert-background)"
-                    color="white" 
+                    color="var(--redalert-font)" 
                     text={error}
                     onClick={onCloseAlertError}
                     />
             <Alert active={flashMessage.length > 0}
                     backgroundColor="var(--alert-success)"
-                    color="white" 
+                    color="var(--white-color)" 
                     text={flashMessage}
                     onClick={onClickAlert}
                     />

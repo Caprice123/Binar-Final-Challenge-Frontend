@@ -17,7 +17,7 @@ export const Wrapper = styled.div`
         }
 
         .product-match{
-            background-color: #EEEEEE;
+            background-color: var(--grey-color);
             border-radius: 1rem;
             
             .seller-info{

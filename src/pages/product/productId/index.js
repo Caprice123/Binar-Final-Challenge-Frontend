@@ -257,12 +257,12 @@ const InfoProduct = () => {
             <Alert active={flashMessage.length > 0} 
                     text={flashMessage} 
                     backgroundColor="var(--alert-success)" 
-                    color="white" 
+                    color="var(--white-color)" 
                     onClick={onClose}
                     />
             <Alert active={error.length > 0} 
-                    backgroundColor="var(--redalert-font)" 
-                    color="var(--redalert-background)" 
+                    backgroundColor="var(--redalert-background)" 
+                    color="var(--redalert-font)" 
                     text={error} 
                     onClick={onCloseAlert} 
                     />
@@ -337,7 +337,7 @@ const InfoProduct = () => {
                                     actionButtons={[
                                         <ActionButton text={isLoggedIn ? (currentUser.user.id === product.owner.id ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
                                                         width="90%"
-                                                        color="#7126B5"
+                                                        color="var(--primary-purple-04)"
                                                         onClick={isLoggedIn ? (currentUser.user.id === product.owner.id ? onEdit : () => onClick(true)) : () => navigate(LOGIN_ROUTE)}
                                                         disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
                                                     />
@@ -346,7 +346,7 @@ const InfoProduct = () => {
                                     mobileButton={
                                         <ActionButton text={isLoggedIn ? (currentUser.user.id === product.owner.id ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
                                                     width="calc(90% + 5px)"
-                                                    color="#7126B5"
+                                                    color="var(--primary-purple-04)"
                                                     onClick={isLoggedIn ? (currentUser.user.id === product.owner.id ? onEdit : () => onClick(true)) : () => navigate(LOGIN_ROUTE)}
                                                     disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
                                                     style={
@@ -379,7 +379,7 @@ const InfoProduct = () => {
                                                         sellerCity={`Rp. ${product.price.toLocaleString()}`}
                                                         width="100%"
                                                         additionalClass="my-3"
-                                                        style={{ background: "#EEEEEE" }}
+                                                        style={{ background: "var(--grey-color)" }}
                                                         withShadow
                                                         />
 
@@ -392,7 +392,7 @@ const InfoProduct = () => {
                                                     />
                                             <ActionButton text="Kirim"
                                                             width="100%"
-                                                            color="#7126B5"
+                                                            color="var(--primary-purple-04)"
                                                             onClick={onSubmit}
                                                             style={{ marginTop: "1rem", marginBottom: "1rem" }}
                                                             />
