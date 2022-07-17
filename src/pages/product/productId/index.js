@@ -1,5 +1,3 @@
-// TODO: BLOM KELAR ACTION BUTTON NEGO
-
 import React, { useEffect, useState } from 'react'
 
 // external hooks
@@ -41,6 +39,7 @@ import { useFlashMessage } from '../../../hooks/useFlashMessage'
 // pages
 import { HOME_ROUTE, LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE } from '../../../types/pages'
 import AccountDropdown from '../../../components/AccountDropdown'
+import { checkBid } from '../../../services/bids'
 
 const InfoProduct = () => {
     const datas = [
@@ -228,11 +227,32 @@ const InfoProduct = () => {
                     productId: productId
                 })).unwrap()
 
+                let bidsCount
+
+                // user alr login
+                if (isLoggedIn){
+
+                    // if user is the owner of the product
+                    if (currentUser.user.id === response.owner.id){
+                        bidsCount = 0
+
+                    // if user is not the owner of the product, then getBids count
+                    } else {
+                        bidsCount = await dispatch(checkBid({
+                            productId: productId,
+                        })).unwrap()  
+                    }
+                // user not yet login
+                } else {
+                    bidsCount = 0 
+                }
+
                 dispatch(statusActions.setLoading({
                     status: false,
                 }))
 
                 setProduct(response)
+                setIsDisabled(bidsCount > 0)
             } catch(err){
                 console.log(err)
                 dispatch(statusActions.setError({
@@ -247,9 +267,30 @@ const InfoProduct = () => {
         
         navigate(location.pathname + location.search, { replace: true })
         fetchData()
-    }, [dispatch, productId, setProduct, navigate, location.pathname, location.search])
+    }, [dispatch, productId, currentUser.user.id, isLoggedIn, setProduct, navigate, location.pathname, location.search])
     /**************************************************************/
     
+    // text={isLoggedIn ? (currentUser.user.id === product.owner.id ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
+    const helperText = () => {
+        if (isLoggedIn){
+            if (currentUser.user.id === product.owner.id){
+                return "Edit"
+            }
+        }
+        return "Saya tertarik dan ingin nego"
+    }
+
+    // onClick={isLoggedIn ? (currentUser.user.id === product.owner.id ? onEdit : () => onClick(true)) : () => navigate(LOGIN_ROUTE)}
+    const helperOnClick = () => {
+        if (isLoggedIn){
+            if (currentUser.user.id === product.owner.id){
+                return () => onEdit()
+            }
+            return () => onClick(true)
+        }
+        console.log("first")
+        return () => navigate(LOGIN_ROUTE)
+    }
 
     return (
         <Wrapper>
@@ -335,20 +376,22 @@ const InfoProduct = () => {
                                     description={product.description}
                                     category={product.category.name}
                                     actionButtons={[
-                                        <ActionButton text={isLoggedIn ? (currentUser.user.id === product.owner.id ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
-                                                        width="90%"
+                                        <ActionButton   text={helperText()}
+                                                        width="100%"
                                                         color="var(--primary-purple-04)"
-                                                        onClick={isLoggedIn ? (currentUser.user.id === product.owner.id ? onEdit : () => onClick(true)) : () => navigate(LOGIN_ROUTE)}
-                                                        disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
+                                                        onClick={helperOnClick()}
+                                                        // disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
+                                                        disabled={isDisabled}
                                                     />
                                         ]
                                     }
                                     mobileButton={
-                                        <ActionButton text={isLoggedIn ? (currentUser.user.id === product.owner.id ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
+                                        <ActionButton text={helperText()}
                                                     width="calc(90% + 5px)"
                                                     color="var(--primary-purple-04)"
-                                                    onClick={isLoggedIn ? (currentUser.user.id === product.owner.id ? onEdit : () => onClick(true)) : () => navigate(LOGIN_ROUTE)}
-                                                    disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
+                                                    onClick={helperOnClick()}
+                                                    // disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
+                                                    disabled={isDisabled}
                                                     style={
                                                             { 
                                                                 position: "fixed", 
@@ -374,7 +417,6 @@ const InfoProduct = () => {
                                                 Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
                                             </p>
                                             <SellerInfo imageUrl={product.images[0]}
-                                                        // TODO: change to user.name
                                                         sellerName={product.name}
                                                         sellerCity={`Rp. ${product.price.toLocaleString()}`}
                                                         width="100%"
