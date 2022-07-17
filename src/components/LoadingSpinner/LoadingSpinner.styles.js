@@ -31,7 +31,7 @@ export const Dot = styled.div`
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background-color: #7126B5;
+    background-color: var(--primary-purple-04);
 
     :nth-child(1){
         animation: movingDots 3s linear infinite;

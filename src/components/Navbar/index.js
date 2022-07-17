@@ -102,8 +102,8 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                         <div className="nav-links d-flex align-items-center">
                             {
                                 !isLoggedIn ? (
-                                    <ActionButton color="#7126B5"
-                                                    icon={<i className="fa-solid fa-arrow-right-to-bracket me-3" style={{ color: "white" }}></i>}
+                                    <ActionButton color="var(--primary-purple-04)"
+                                                    icon={<i className="fa-solid fa-arrow-right-to-bracket me-3" style={{ color: "var(--white-color)" }}></i>}
                                                     text="Masuk"
                                                     onClick={() => navigate(LOGIN_ROUTE)}
                                                     />
@@ -139,7 +139,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                                                             {
                                                                 navLink.type === "button" && (
                                                                 
-                                                                    <ActionButton color="#7126B5"
+                                                                    <ActionButton color="var(--primary-purple-04)"
                                                                                     icon={navLink.additionalIcon}
                                                                                     text={navLink.text}
                                                                                     />

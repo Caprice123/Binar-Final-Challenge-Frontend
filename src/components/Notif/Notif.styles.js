@@ -16,7 +16,7 @@ export const Content = styled.div`
     top: 100%;
     left: -350px;
     display: none;
-    background-color: white;
+    background-color: var(--white-color);
     min-width: 400px;
     height: 212.5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);

@@ -67,7 +67,7 @@ export const Content = styled.div`
             a{
                 width: 100%;
                 min-height: 250px;
-                border: 1px dashed #D0D0D0;
+                border: 1px dashed var(--neutral-02);
                 border-radius: 4px;
 
                 p{
@@ -95,7 +95,7 @@ export const Content = styled.div`
                 a{
                     width: 100%;
                     min-height: 200px;
-                    border: 1px dashed #D0D0D0;
+                    border: 1px dashed var(--neutral-02);
                     border-radius: 4px;
 
                     p{

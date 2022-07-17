@@ -14,7 +14,7 @@ export const Content = styled.div`
     top: 100%;
     display: none;
     width: 200px;
-    background-color: white;
+    background-color: var(--white-color);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
     border-radius: 16px;
     overflow: hidden auto;

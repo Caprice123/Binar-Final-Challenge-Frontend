@@ -24,7 +24,7 @@ export const Wrapper = styled.div`
     width: 100vw;
     height: 100vh;
     z-index: 1000000;
-    background-color: white;
+    background-color: var(--white-color);
     transition: 0.5s;
 
     &.show{

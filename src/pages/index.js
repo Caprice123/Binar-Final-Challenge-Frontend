@@ -333,13 +333,13 @@ const Home = () => {
             <LoadingSpinner active={loading} />
             <Alert active={error.length > 0}
                     backgroundColor="var(--redalert-background)"
-                    color="white" 
+                    color="var(--redalert-font)" 
                     text={error}
                     onClick={onCloseAlertError}
                     />
             <Alert active={flashMessage.length > 0}
                     backgroundColor="var(--alert-success)"
-                    color="white" 
+                    color="var(--white-color)" 
                     text={flashMessage}
                     onClick={onClickAlert}
                     />
@@ -379,7 +379,7 @@ const Home = () => {
                         <ActionButton icon={<i className="fa-solid fa-magnifying-glass me-3"></i>}
                                         text="Semua"
                                         color={!search.category ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}
-                                        textColor={!search.category ? "white" : "black"}
+                                        textColor={!search.category ? "var(--white-color)" : "black"}
                                         style={{ margin: "0 1rem 0 0" }}
                                         data-value=""
                                         onClick={onSelectCategory}
@@ -391,7 +391,7 @@ const Home = () => {
                                                 icon={<i className="fa-solid fa-magnifying-glass me-3"></i>}
                                                 text={name}
                                                 color={search.category === name ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}
-                                                textColor={search.category === name ? "white" : "black"}
+                                                textColor={search.category === name ? "var(--white-color)" : "black"}
                                                 style={{ margin: "0 1rem 0 0" }}
                                                 data-value={name}
                                                 onClick={onSelectCategory}
@@ -415,7 +415,7 @@ const Home = () => {
                 <ActionButton text="Jual" 
                                 color="var(--primary-purple-04)"
                                 icon={<i className="fa-solid fa-plus me-3"></i>}
-                                textColor="white"
+                                textColor="var(--white-color)"
                                 style={{ borderRadius: "12px" }}
                                 />
             </Link>

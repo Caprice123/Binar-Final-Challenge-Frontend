@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
         top: 0;
         padding: 5px;
         background-color: #FA2C5A;
-        color: white;
+        color: var(--white-color);
         cursor: pointer;
     }
 `

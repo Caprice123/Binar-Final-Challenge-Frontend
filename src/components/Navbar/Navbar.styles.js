@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled.nav`
     max-width: 100vw;
-    background-color: white;
+    background-color: var(--white-color);
     min-height: var(--navbar-height);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
 `
@@ -20,22 +20,22 @@ export const Content = styled.div`
     }
 
     input{
-        background: #EEEEEE !important;
+        background: var(--grey-color) !important;
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
-        border-color:  #EEEEEE;
+        border-color:  var(--grey-color);
     }
 
     .search-btn{
-        background: #EEEEEE !important;
+        background: var(--grey-color) !important;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
         color: grey;
-        border-color: #EEEEEE;
+        border-color: var(--grey-color);
     }
 
     .offcanvas{
