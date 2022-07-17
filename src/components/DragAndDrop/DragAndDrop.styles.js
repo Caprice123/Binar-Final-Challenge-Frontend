@@ -6,6 +6,8 @@ export const Wrapper = styled.div`
     border-radius: 12px;
     cursor: pointer;
     
-    
+    p{
+        text-align: center;
+    }
 `
 

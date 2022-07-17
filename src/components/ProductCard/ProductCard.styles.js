@@ -10,11 +10,11 @@ export const Wrapper = styled(Link)`
 
 
 export const Content = styled.div`
-height: 100%;
+    height: 100%;
     img{
         width: 100%;
-        height: 125px;
-        object-fit: cover;
+        height: 112.5px;
+        object-fit: contain;
     }
 
     h5{

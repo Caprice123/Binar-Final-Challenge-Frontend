@@ -6,6 +6,7 @@ export const HOME_ROUTE = "/"
 
 export const PRODUCTS_ROUTE = '/product'
 export const ADD_PRODUCT_ROUTE = PRODUCTS_ROUTE + "/add"
+export const UPDATE_PRODUCT_ROUTE = "/update"
 
 export const USER_PROFILE_ROUTE = "/user/profile"
 

@@ -157,3 +157,44 @@ export const getAllCategories = createAsyncThunk(
         }
     }
 )
+
+export const updateProduct = createAsyncThunk(
+    'product/updateProduct',
+    async (payload) => {
+        try{
+            const { productId, name, price, categoryId, description, productImages } = payload
+            console.log(payload)
+            const requestBody = {
+                name,
+                price,
+                category_id: categoryId,
+                description
+            }
+
+            const formData = new FormData()
+            productImages.forEach(img => {
+                formData.append("files", img.file)
+            })
+            formData.append("productId", productId)
+
+            const [responsePut, responseProductImage] = await Promise.all([
+                api.put(
+                    `/api/v1/products/${productId}`,
+                    requestBody,
+                    authHeader()
+                ),
+
+                api.post(
+                    '/api/v1/productsimageupload',
+                    formData,
+                    authHeader('multipart/form-data')
+                )
+            ])
+            const datas = responsePut.data
+            return datas
+        } catch(err){
+            const errorMessage = err.response.data
+            throw Error(JSON.stringify(errorMessage))
+        }
+    }
+)
