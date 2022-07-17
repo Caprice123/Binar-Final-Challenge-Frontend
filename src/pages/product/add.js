@@ -260,20 +260,20 @@ const AddProduct = () => {
 		dispatch(statusActions.setError({
 			message: "",
 		}))
-
+		
 		fetchCategories()
 	}, [dispatch])
 	/**************************************************************/
 
 	return (
 		<Wrapper>
+			<LoadingSpinner active={loading} />
 			<Alert active={flashMessage.length > 0} 
-					backgroundColor="green" 
+					backgroundColor="var(--alert-success)" 
 					color="white" 
 					text={flashMessage} 
 					onClick={onCloseFlash} 
 					/>
-			<LoadingSpinner active={loading} />
 			<Alert active={error.length > 0} 
 					backgroundColor="var(--redalert-font)" 
 					color="var(--redalert-background)" 

@@ -208,7 +208,7 @@ const Home = () => {
         }
 
         setSearch(searchParams)
-        navigate('/?' + objectToQueryString(searchParams), { replace: true })
+        navigate(`/?${objectToQueryString(searchParams)}`, { replace: true })
         fetchData(searchParams)
         // fetchData()
         
@@ -332,13 +332,13 @@ const Home = () => {
             </Slider>
             <LoadingSpinner active={loading} />
             <Alert active={error.length > 0}
-                    backgroundColor="red"
+                    backgroundColor="var(--redalert-background)"
                     color="white" 
                     text={error}
                     onClick={onCloseAlertError}
                     />
             <Alert active={flashMessage.length > 0}
-                    backgroundColor="green"
+                    backgroundColor="var(--alert-success)"
                     color="white" 
                     text={flashMessage}
                     onClick={onClickAlert}

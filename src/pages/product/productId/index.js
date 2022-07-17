@@ -245,14 +245,35 @@ const InfoProduct = () => {
             message: "",
         }))
         
-        navigate(location.pathname, { replace: true })
+        navigate(location.pathname + location.search, { replace: true })
         fetchData()
-    }, [dispatch, productId, setProduct, navigate, location.pathname])
+    }, [dispatch, productId, setProduct, navigate, location.pathname, location.search])
     /**************************************************************/
     
 
     return (
         <Wrapper>
+            <LoadingSpinner active={loading} />
+            <Alert active={flashMessage.length > 0} 
+                    text={flashMessage} 
+                    backgroundColor="var(--alert-success)" 
+                    color="white" 
+                    onClick={onClose}
+                    />
+            <Alert active={error.length > 0} 
+                    backgroundColor="var(--redalert-font)" 
+                    color="var(--redalert-background)" 
+                    text={error} 
+                    onClick={onCloseAlert} 
+                    />
+       
+            <Navbar navLinks={navLinks}
+                    isOffcanvasOn={isNavbarOn}
+                    onClick={onOpen}
+                    withSearchBar  
+                    onSearch={onSearch}
+                    style={{ margin: "7.5px 12px" }}  
+                    />
             <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
                 <div className="title d-flex justify-content-between py-4">
                     <h4>Notifications</h4>
@@ -302,24 +323,6 @@ const InfoProduct = () => {
                     <p>Version 1.0.0</p>
                 </div>
             </Slider>
-            <LoadingSpinner active={loading} />
-            <Alert active={error.length > 0} backgroundColor="var(--redalert-font)" color="var(--redalert-background)" text={error} onClick={onCloseAlert} />
-       
-            <Navbar navLinks={navLinks}
-                    isOffcanvasOn={isNavbarOn}
-                    onClick={onOpen}
-                    withSearchBar  
-                    onSearch={onSearch}
-                    style={{ margin: "7.5px 12px" }}  
-                    />
-
-            <Alert active={flashMessage.length > 0} 
-                    text={flashMessage} 
-                    backgroundColor="var(--alert-success)" 
-                    color="white" 
-                    onClick={onClose}
-                    />
-            
             <Content>
                 {
                     product ? (

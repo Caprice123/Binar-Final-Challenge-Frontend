@@ -37,6 +37,8 @@ import { getProducts } from '../../services/product'
 // pages
 import { BID_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
 import AccountDropdown from '../../components/AccountDropdown'
+import Alert from '../../components/Alert'
+import { useFlashMessage } from '../../hooks/useFlashMessage'
 
 const SoldProducts = () => {
     const datas = [
@@ -80,6 +82,9 @@ const SoldProducts = () => {
     const [isNavbarOn, setIsNavbarOn] = useState(false)
     const [isSliderNotificationOn, setIsSliderNotificationOn] = useState(false)
     const [isSliderAccountOn, setIsSliderAccountOn] = useState(false)
+
+    // FLASH MESSAGE STATE
+    const [flashMessage, setFlashMessage] = useFlashMessage("")
 
     // MAIN STATE
     const [isMobile, setIsMobile] = useState(false)
@@ -143,6 +148,18 @@ const SoldProducts = () => {
     const onSearch = (value) => {
         navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
     }
+
+    // onCloseAlertError for resetting error when close button alert for errror message is clicked
+    const onCloseAlertError = () => {
+        dispatch(statusActions.setError({
+            message: "",
+        }))
+    }
+
+    // onClickAlert for resetting flash message when close button flash message is clicked
+    const onClickAlert = () => {
+        setFlashMessage("")
+    }
     /**************************************************************/
     
 
@@ -201,6 +218,18 @@ const SoldProducts = () => {
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />
+            <Alert active={error.length > 0}
+                    backgroundColor="var(--redalert-background)"
+                    color="white" 
+                    text={error}
+                    onClick={onCloseAlertError}
+                    />
+            <Alert active={flashMessage.length > 0}
+                    backgroundColor="var(--alert-success)"
+                    color="white" 
+                    text={flashMessage}
+                    onClick={onClickAlert}
+                    />
             <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
                 <div className="title d-flex justify-content-between py-4">
                     <h4>Notifications</h4>
