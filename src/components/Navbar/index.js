@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { HOME_ROUTE, LOGIN_ROUTE } from '../../types/pages'
 import ActionButton from '../ActionButton'
 
+import { validateString } from '../../helpers/validateString'
 // styles
 import { Wrapper, Content, Actions } from './Navbar.styles'
 
@@ -50,7 +51,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
 
     const onChange = (e) => {
         const { value } = e.currentTarget
-        setSearchName(value)
+        validateString(value, setSearchName)
     }
 
     const onClickSearchButton = () => {
