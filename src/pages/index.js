@@ -15,6 +15,7 @@ import ImagePreview from '../components/ImagePreview';
 import { Swiper, SwiperSlide } from "swiper/react";
 import ImageBanner from '../img-banner.png'
 import LoadingSpinner from '../components/LoadingSpinner';
+import AccountDropdown from '../components/AccountDropdown';
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -26,11 +27,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-// hooks
-import { useFlashMessage } from '../hooks/useFlashMessage';
-
 // helpers
 import { objectToQueryString } from '../helpers/converter/objectToQuery';
+
+// hooks
+import { useFlashMessage } from '../hooks/useFlashMessage';
+import { useNotifications } from '../hooks/useNotifications';
+
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -43,10 +46,7 @@ import { getAllCategories, getProducts } from '../services/product';
 
 // pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../types/pages';
-import AccountDropdown from '../components/AccountDropdown';
 
-// TODO ALWAYS FECTH DATA WHEN STATE CHANGE
-// TODO ALWAYS FETCH CATEGORY WHEN STATE CHANGE
 const Home = () => {
     /**************************************************************/
     // REDUX STATE
@@ -70,6 +70,9 @@ const Home = () => {
 
     // FLASH MESSAGE STATE
     const [flashMessage, setFlashMessage] = useFlashMessage("")
+
+    // NOTIFICATION STATE
+    const notifications = useNotifications([])
 
     // MAIN STATE
     const [availableCategories, setAvailableCategories] = useState([])
@@ -117,7 +120,7 @@ const Home = () => {
     }
 
     // onMarkAsRead for calling api that will make specific notification is read
-    const onMarkAsRead = () => {
+    const onMarkAsRead = (notificationId) => {
 
     }
 
@@ -210,55 +213,11 @@ const Home = () => {
         setSearch(searchParams)
         navigate(`/?${objectToQueryString(searchParams)}`, { replace: true })
         fetchData(searchParams)
-        // fetchData()
-        
     }, [dispatch, navigate, isLoggedIn, currentUser.user.id, location.search])
-    
-    // const updateProduct = useMemo((queryObject) => {
-        
-    // }, [second])
-
-    // useEffect(() => {
-    //     const fetchData = async (queryObject) => {
-    //         try{
-    //             dispatch(statusActions.setLoading({
-    //                 status: true,
-    //             }))
-    //             console.log(queryObject)
-    //             const response = await dispatch(getProducts({
-    //                 excludeStatusProduct: "sold",
-    //                 excludeUserId: currentUser.user.id,
-    //                 ...queryObject
-    //             })).unwrap()
-                
-    //             dispatch(statusActions.setLoading({
-    //                 status: false,
-    //             }))
-    
-    //             setProducts(response)
-    //         } catch(err){
-    //             console.log(err)
-    //             dispatch(statusActions.setError({
-    //                 message: err.message,
-    //             }))
-    //         }
-    //     }
-        
-    // }, [dispatch, navigate, currentUser.user.id, location.search])
     /**************************************************************/
 
     /**************************************************************/
     // SETTTINGS
-    const datas = [
-        {
-            seen: true,
-        }, {
-            seen: false
-        }, {
-            seen: true
-        }
-    ]
-
     const navLinks = [
         {
             type: "text",
@@ -268,7 +227,7 @@ const Home = () => {
         }, {
             type: "others",
             to: "",
-            additionalIcon: <Notif datas={datas} />,
+            additionalIcon: <Notif datas={notifications} />,
             mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")} style={{ cursor: "pointer" }}>Notifications</p>
         }, {
             type: "others",
@@ -287,17 +246,17 @@ const Home = () => {
                     <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Notifications")} aria-label="Close"></button>
                 </div>
                 {
-                    datas.map((data, id) => (
-                        <div key={id}>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
-                                        seen={data.seen}
+                    notifications.map((data) => (
+                        <div key={data.id}>
+                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${data.products.id}`}
+                                        seen={data.read}
                                         imageUrl={Image}
-                                        actionName="Penawaran Produk"
-                                        time={"20 Apr, 14:04"}
-                                        productName={"Jam Tangan Casio"}
-                                        originalPrice={250000}
-                                        bidPrice={200000}
-                                        onClick={onMarkAsRead}
+                                        actionName={data.title}
+                                        time={data.createdAt}
+                                        productName={data.products.name}
+                                        originalPrice={data.products.price}
+                                        bidPrice={data.bids.request_price}
+                                        onClick={() => onMarkAsRead(data.id)}
                                         />
                         </div>
                     ))
