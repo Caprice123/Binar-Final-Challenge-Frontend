@@ -279,7 +279,7 @@ const Wishlist = () => {
                     />
 
             <Content className="mx-auto"> 
-                <SellerInfo imageUrl={Image}
+                <SellerInfo imageUrl={currentUser.user.image_url}
                             sellerName={currentUser.user.name}
                             sellerCity={currentUser.user.city}
                             withShadow

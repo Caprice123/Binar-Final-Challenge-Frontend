@@ -401,7 +401,7 @@ const ProductBid = () => {
                     <div className='product-match my-3 py-3'>
                         <h4 className='text-center'>Product Match</h4>
                         <SellerInfo width="100%"
-                                    imageUrl={Image}
+                                    imageUrl={currentUser.user.image_url}
                                     sellerName="Nama Pembeli"
                                     sellerCity="Kota"
                                     />
