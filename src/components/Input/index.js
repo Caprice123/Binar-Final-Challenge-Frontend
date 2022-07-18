@@ -8,13 +8,15 @@ const Input = ({ type, text, placeholder, value, onChange, required, ...addition
     const inputRef = useRef(null)
 
     useEffect(() => {
-        if (showPassword){
-            inputRef.current.type = "text"
-        } else{
-            inputRef.current.type = "password"
+        if (type === "password"){
+            if (showPassword){
+                inputRef.current.type = "text"
+            } else{
+                inputRef.current.type = "password"
+            }
         }
 
-    }, [showPassword])
+    }, [showPassword, type])
 
     const onClickShowPassword = () => {
         setShowPassword(prev => !prev)
