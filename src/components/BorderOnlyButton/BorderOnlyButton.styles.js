@@ -4,7 +4,8 @@ export const Wrapper = styled.button`
     border-color: ${({ color }) => color} !important;
     color: black !important;
     padding: 12px 24px;
-    width: ${({ width }) => width};
+    background-color: var(--white-color) !important;
+    width: ${({ width }) => width} !important;
     border-radius: 16px;
     
     &:hover{
