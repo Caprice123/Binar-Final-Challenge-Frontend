@@ -213,15 +213,30 @@ const InfoProduct = () => {
     }
 
     const onDeleteProduct = async () => {
-        await dispatch(deleteProduct({
-            productId: productId,
-        })).unwrap()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
-        navigate(DAFTAR_JUAL_ROUTE, {
-            state: {
-                message: "Successfully deleting product",
-            }
-        })
+            await dispatch(deleteProduct({
+                productId: productId,
+            })).unwrap()
+    
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(DAFTAR_JUAL_ROUTE, {
+                state: {
+                    message: "Successfully deleting product",
+                }
+            })
+        } catch(err){
+            console.log(err)
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
+        }
     }
     /**************************************************************/
 
