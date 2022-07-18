@@ -246,9 +246,9 @@ const Home = () => {
                     <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Notifications")} aria-label="Close"></button>
                 </div>
                 {
-                    notifications.map((data, id) => (
-                        <div key={id}>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
+                    notifications.map((data) => (
+                        <div key={data.id}>
+                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${data.products.id}`}
                                         seen={data.read}
                                         imageUrl={Image}
                                         actionName={data.title}
