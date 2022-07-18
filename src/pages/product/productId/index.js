@@ -39,7 +39,6 @@ import { statusActions } from '../../../store/status'
 
 // services
 import { addBidPrice, deleteProduct, getProductOneByID } from '../../../services/product'
-import { useFlashMessage } from '../../../hooks/useFlashMessage'
 
 // pages
 import { LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE, UPDATE_PRODUCT_ROUTE } from '../../../types/pages'
