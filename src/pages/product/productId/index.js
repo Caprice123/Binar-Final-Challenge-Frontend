@@ -8,6 +8,7 @@ import Navbar from '../../../components/Navbar'
 import Preview from '../../../components/Preview'
 import Input from '../../../components/Input'
 import ActionButton from '../../../components/ActionButton'
+import BorderOnlyButton from '../../../components/BorderOnlyButton'
 import Popup from '../../../components/Popup'
 import Notif from '../../../components/Notif/index'
 import SellerInfo from '../../../components/SellerInfo'
@@ -37,7 +38,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { statusActions } from '../../../store/status'
 
 // services
-import { addBidPrice, getProductOneByID } from '../../../services/product'
+import { addBidPrice, deleteProduct, getProductOneByID } from '../../../services/product'
+import { useFlashMessage } from '../../../hooks/useFlashMessage'
 
 // pages
 import { LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE, UPDATE_PRODUCT_ROUTE } from '../../../types/pages'
@@ -188,6 +190,33 @@ const InfoProduct = () => {
     const onMarkAsRead = (notificationId) => {
 
     }
+
+    const onDeleteProduct = async () => {
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
+
+            await dispatch(deleteProduct({
+                productId: productId,
+            })).unwrap()
+    
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(DAFTAR_JUAL_ROUTE, {
+                state: {
+                    message: "Successfully deleting product",
+                }
+            })
+        } catch(err){
+            console.log(err)
+            dispatch(statusActions.setError({
+                message: err.message,
+            }))
+        }
+    }
     /**************************************************************/
 
 
@@ -266,8 +295,6 @@ const InfoProduct = () => {
         }, 
     ]
     
-
-    // text={isLoggedIn ? (currentUser.user.id === product.owner.id ? "Edit" : "Saya tertarik dan ingin nego") : "Saya tertarik dan ingin nego"}
     const helperText = () => {
         if (isLoggedIn){
             if (currentUser.user.id === product.owner.id){
@@ -277,7 +304,6 @@ const InfoProduct = () => {
         return "Saya tertarik dan ingin nego"
     }
 
-    // onClick={isLoggedIn ? (currentUser.user.id === product.owner.id ? onEdit : () => onClick(true)) : () => navigate(LOGIN_ROUTE)}
     const helperOnClick = () => {
         if (isLoggedIn){
             if (currentUser.user.id === product.owner.id){
@@ -285,7 +311,6 @@ const InfoProduct = () => {
             }
             return () => onClick(true)
         }
-        console.log("first")
         return () => navigate(LOGIN_ROUTE)
     }
 
@@ -373,35 +398,62 @@ const InfoProduct = () => {
                                     description={product.description}
                                     category={product.category.name}
                                     actionButtons={[
-                                        <ActionButton   text={helperText()}
-                                                        width="100%"
-                                                        color="var(--primary-purple-04)"
-                                                        onClick={helperOnClick()}
-                                                        // disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
-                                                        disabled={isDisabled}
-                                                    />
+                                            <ActionButton   text={helperText()}
+                                                            width="100%"
+                                                            color="var(--primary-purple-04)"
+                                                            onClick={helperOnClick()}
+                                                            disabled={isDisabled}
+                                                        />,
+                                            currentUser.user.id === product.owner.id && (
+                                                <BorderOnlyButton   text="Delete Product"
+                                                                    width="100%"
+                                                                    color="var(--primary-purple-04)"
+                                                                    onClick={onDeleteProduct}
+                                                                    />
+                                            )
                                         ]
                                     }
                                     mobileButton={
-                                        <ActionButton text={helperText()}
-                                                    width="calc(90% + 5px)"
-                                                    color="var(--primary-purple-04)"
-                                                    onClick={helperOnClick()}
-                                                    // disabled={isDisabled || (product.status === "waiting_for_bid" && currentUser.user.id !== product.owner.id) ? true : false}
-                                                    disabled={isDisabled}
-                                                    style={
-                                                            { 
-                                                                position: "fixed", 
-                                                                bottom: "10px",
-                                                                left: "50%", 
-                                                                display: "initial",
-                                                                zIndex: "1000", 
-                                                                transform: "translateX(calc(-50% + 2.5px))",
-                                                                transition: "0.5s" 
+                                        <>
+                                            <ActionButton text={helperText()}
+                                                        width="calc(90% + 5px)"
+                                                        color="var(--primary-purple-04)"
+                                                        onClick={helperOnClick()}
+                                                        disabled={isDisabled}
+                                                        style={
+                                                                { 
+                                                                    position: "fixed", 
+                                                                    bottom: currentUser.user.id === product.owner.id ? "75px": "10px",
+                                                                    left: "50%", 
+                                                                    display: "initial",
+                                                                    zIndex: "1000", 
+                                                                    transform: "translateX(calc(-50% + 2.5px))",
+                                                                    transition: "0.5s" 
+                                                                }
                                                             }
-                                                        }
-                                                    />
-                                        }
+                                                        />
+                                            {
+                                                currentUser.user.id === product.owner.id && ( 
+                                                    <BorderOnlyButton text="Delete Product"
+                                                            width="calc(90% + 5px)"
+                                                            color="var(--primary-purple-04)"
+                                                            onClick={onDeleteProduct}
+                                                            style={
+                                                                    { 
+                                                                        position: "fixed", 
+                                                                        bottom: "10px",
+                                                                        left: "50%", 
+                                                                        display: "initial",
+                                                                        zIndex: "1000", 
+                                                                        transform: "translateX(calc(-50% + 2.5px))",
+                                                                        transition: "0.5s" 
+                                                                    }
+                                                                }
+                                                            />
+                                                )
+                                            }
+                                        </>
+                                    }
                                     />
                             {
                                 isLoggedIn ? (

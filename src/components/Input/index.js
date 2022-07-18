@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 // styles
 import { Wrapper } from './Input.styles'
 
 const Input = ({ type, text, placeholder, value, onChange, required, ...additionalStyles }) => {
+    const [showPassword, setShowPassword] = useState(false)
+    const inputRef = useRef(null)
+
+    useEffect(() => {
+        if (showPassword){
+            inputRef.current.type = "text"
+        } else{
+            inputRef.current.type = "password"
+        }
+
+    }, [showPassword])
+
+    const onClickShowPassword = () => {
+        setShowPassword(prev => !prev)
+    }
+
     return (
-        <Wrapper className='d-flex py-2 flex-column'>
+        <Wrapper className='d-flex py-2 position-relative flex-column'>
             {
                 text && (
                 <label htmlFor={text.replace(" ", "-")}
@@ -20,6 +36,7 @@ const Input = ({ type, text, placeholder, value, onChange, required, ...addition
                 )
             }
             <input type={type} 
+                    ref={inputRef}
                     id={text?.replace(" ", "-")} 
                     placeholder={placeholder} 
                     value={value} 
@@ -27,6 +44,21 @@ const Input = ({ type, text, placeholder, value, onChange, required, ...addition
                     onChange={onChange} 
                     {...additionalStyles}
                     />
+            
+            {
+                type === "password" && (
+                    <>
+                        { 
+                            showPassword ? (
+                                <i className="fa-solid fa-eye-slash" onClick={onClickShowPassword}></i>
+                            ) : (
+                                <i className="fa-solid fa-eye" onClick={onClickShowPassword}></i>
+                            )
+                        }
+                    </>
+                    
+                )
+            }
         </Wrapper>
     )
 }

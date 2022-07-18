@@ -198,3 +198,22 @@ export const updateProduct = createAsyncThunk(
         }
     }
 )
+
+export const deleteProduct = createAsyncThunk(
+    'product/deleteProduct',
+    async (payload) => {
+        try{
+            const { productId } = payload
+
+            const response = await api.delete(
+                `/api/v1/products/${productId}`,
+            )
+            
+            const datas = response.data
+            return datas
+        } catch(err){
+            const errorMessage = err.response.data
+            throw Error(JSON.stringify(errorMessage))
+        }
+    }
+)
