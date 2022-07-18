@@ -48,10 +48,4 @@
     .auth_form_wrapper{
         padding: 0;
     }
-
-    .footer{
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-    }
 }

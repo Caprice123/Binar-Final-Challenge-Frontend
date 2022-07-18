@@ -6,6 +6,7 @@ import Input from '../components/Input';
 import imageCover from '../assets/images/login-reg-banner.png'
 import LoadingSpinner from '../components/LoadingSpinner';
 import Alert from '../components/Alert';
+import { FcGoogle } from "react-icons/fc";
 
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -25,10 +26,15 @@ import { statusActions } from '../store/status'
 import { login } from '../services/user';
 
 // hooks
+import {useGoogleLogin } from '@react-oauth/google'
+
 import { useFlashMessage } from '../hooks/useFlashMessage';
 
 // pages
 import { HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
+
+// others
+import axios from 'axios'
 
 const Login = () => {
     /**************************************************************/
@@ -136,6 +142,18 @@ const Login = () => {
 	const onCloseFlash = () => {
 		setFlashMessage("")
 	}
+
+    const googleLogin = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            const userInfo = await axios.get(
+                'https://www.googleapis.com/oauth2/v3/userinfo',
+                { headers: { Authorization: 'Bearer ' + tokenResponse.access_token } },
+            );
+
+            console.log(userInfo);
+        },
+        onError: errorResponse => console.log(errorResponse),
+    });
     /**************************************************************/
 
 
@@ -170,12 +188,12 @@ const Login = () => {
             <div className={styles.page_auth + " vh-100"}>
                 <div className="container-fluid h-100">
                     <div className="row align-items-center h-100">
-                        <div className={styles.auth_left + " col-md-6 d-none d-md-block"}>
+                        <div className={styles.auth_left + " col-lg-6 d-none d-lg-block"}>
                             <div className={styles.auth_cover}>
                                 <img src={imageCover} alt="" />
                             </div>
                         </div>
-                        <div className="col-md-6 col-12">
+                        <div className="col-lg-6 col-12">
                             <div className={styles.auth_form_wrapper + " mx-auto"}>
                                 <h3 className="title fw-bold">Masuk</h3>
                                    
@@ -198,6 +216,13 @@ const Login = () => {
                                                 text="Masuk"
                                                 style={{ margin: "1.5rem 0" }}
                                                 onClick={onSubmit}
+                                                />
+                                 <ActiveButton width="100%"
+                                                color="var(--primary-purple-04)"
+                                                text="Masuk dengan Google"
+                                                icon={<FcGoogle className="me-3"/>}
+                                                style={{ margin: "1.5rem 0" }}
+                                                onClick={googleLogin}
                                                 />
                                 <div className={styles.footer}>
                                     <p className='text-center mt-3'>

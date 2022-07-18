@@ -160,12 +160,12 @@ const Registrasi = () => {
             <div className={styles.page_auth + " vh-100"}>
                 <div className="container-fluid h-100">
                     <div className="row align-items-center h-100">
-                        <div className={styles.auth_left + " col-md-6 d-none d-md-block"}>
+                        <div className={styles.auth_left + " col-lg-6 d-none d-lg-block"}>
                             <div className={styles.auth_cover}>
                                 <img src={imageCover} alt="" />
                             </div>
                         </div>
-                        <div className={styles.auth_right + " col-md-6 col-12"}>
+                        <div className={styles.auth_right + " col-lg-6 col-12"}>
                             <div className={styles.auth_form_wrapper + " mx-auto"}>
                                 <h3 className="title fw-bold">Daftar</h3>
                                 <form action="">
