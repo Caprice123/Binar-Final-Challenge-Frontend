@@ -9,7 +9,7 @@ const Notif = ({ datas }) => {
     const notifRef = useRef(null)
     const containerRef = useRef(null)
 
-    const onMarkAsRead = () => {
+    const onMarkAsRead = (notificationId) => {
 
     }
 
@@ -37,9 +37,9 @@ const Notif = ({ datas }) => {
                 <i className="fa-solid fa-bell"></i>
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     { 
-                        datas.filter(data => data.seen).length > 99 
+                        datas.filter(data => !data.read).length > 99 
                         ? "99+" 
-                        : datas.filter(data => data.seen).length 
+                        : datas.filter(data => !data.read).length 
                     }
                 </span>
             </button>
@@ -62,7 +62,7 @@ const Notif = ({ datas }) => {
                                         productName={"Jam Tangan Casio"}
                                         originalPrice={250000}
                                         bidPrice={200000}
-                                        onClick={onMarkAsRead}
+                                        onClick={() => onMarkAsRead(data.id)}
                                         />                            
                             { 
                                 id < datas.length - 1 && (

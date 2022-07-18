@@ -18,7 +18,7 @@ export const checkBid = createAsyncThunk(
             const data = response.data
             return data
         } catch(err){
-
+            
         }
     }
 )

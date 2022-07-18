@@ -15,6 +15,7 @@ import Grid from '../../components/Grid'
 import ProductCard from '../../components/ProductCard'
 import ActionButton from '../../components/ActionButton'
 import LoadingSpinner from '../../components/LoadingSpinner'
+import AccountDropdown from '../../components/AccountDropdown'
 
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
@@ -23,6 +24,10 @@ import { Wrapper, Content } from '../../pagesStyle/product/index.styles.js'
 
 // helpers
 import { objectToQueryString } from '../../helpers/converter/objectToQuery'
+
+// hooks
+import { useFlashMessage } from '../../hooks/useFlashMessage'
+import { useNotifications } from '../../hooks/useNotifications'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -36,38 +41,8 @@ import { getProducts } from '../../services/product'
 
 // pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
-import AccountDropdown from '../../components/AccountDropdown'
-import { useFlashMessage } from '../../hooks/useFlashMessage'
 
 const ListProducts = () => {
-    const datas = [
-        {
-            seen: true,
-        }, {
-            seen: false
-        }, {
-            seen: true
-        }
-    ]
-    const navLinks = [
-        {
-            type: "text",
-            to: DAFTAR_JUAL_ROUTE,
-            additionalIcon: <i className="fa-solid fa-list"></i>,
-            mobileComponent: <Link to={DAFTAR_JUAL_ROUTE}>Daftar Jual</Link>
-        }, {
-            type: "others",
-            to: "",
-            additionalIcon: <Notif datas={datas} />,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")} style={{ cursor: "pointer" }}>Notifications</p>
-        }, {
-            type: "others",
-            to: "",
-            additionalIcon: <AccountDropdown />,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Account")} style={{ cursor: "pointer" }}>Akun Saya</p>
-        }, 
-    ]
-
     /**************************************************************/
     // REDUX STATE
     const { currentUser } = useSelector(state => state.user)
@@ -84,6 +59,9 @@ const ListProducts = () => {
 
     // FLASH MESSAGE STATE
     const [flashMessage, setFlashMessage] = useFlashMessage("")
+
+    // NOTIFICATION STATE
+    const notifications = useNotifications([])
 
     // MAIN STATE
     const [isMobile, setIsMobile] = useState(false)
@@ -134,7 +112,7 @@ const ListProducts = () => {
     }
 
     // onMarkAsRead for calling api that will make specific notification is read
-    const onMarkAsRead = () => {
+    const onMarkAsRead = (notificationId) => {
 
     }
 
@@ -212,6 +190,24 @@ const ListProducts = () => {
     }, [dispatch, navigate, currentUser.user.id, pathname, search])
     /**************************************************************/
     
+    const navLinks = [
+        {
+            type: "text",
+            to: DAFTAR_JUAL_ROUTE,
+            additionalIcon: <i className="fa-solid fa-list"></i>,
+            mobileComponent: <Link to={DAFTAR_JUAL_ROUTE}>Daftar Jual</Link>
+        }, {
+            type: "others",
+            to: "",
+            additionalIcon: <Notif datas={notifications} />,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")} style={{ cursor: "pointer" }}>Notifications</p>
+        }, {
+            type: "others",
+            to: "",
+            additionalIcon: <AccountDropdown />,
+            mobileComponent: <p onClick={() => onClickSlider(true, "Account")} style={{ cursor: "pointer" }}>Akun Saya</p>
+        }, 
+    ]
 
     return (
         <Wrapper>
@@ -234,17 +230,17 @@ const ListProducts = () => {
                     <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Notifications")} aria-label="Close"></button>
                 </div>
                 {
-                    datas.map((data, id) => (
+                    notifications.map((data, id) => (
                         <div key={id}>
                             <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
-                                        seen={data.seen}
+                                        seen={data.read}
                                         imageUrl={Image}
-                                        actionName="Penawaran Produk"
-                                        time={"20 Apr, 14:04"}
-                                        productName={"Jam Tangan Casio"}
-                                        originalPrice={250000}
-                                        bidPrice={200000}
-                                        onClick={onMarkAsRead}
+                                        actionName={data.title}
+                                        time={data.createdAt}
+                                        productName={data.products.name}
+                                        originalPrice={data.products.price}
+                                        bidPrice={data.bids.request_price}
+                                        onClick={() => onMarkAsRead(data.id)}
                                         />
                         </div>
                     ))
