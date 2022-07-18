@@ -10,4 +10,11 @@ export const Wrapper = styled.div`
     span{
         color: red;
     }
+
+    i{
+        position: absolute;
+        top: 67.5%;
+        right: 2.5%;
+        transform: translateY(-50%);
+    }
 `
