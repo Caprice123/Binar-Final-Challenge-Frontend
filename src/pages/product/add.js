@@ -14,7 +14,7 @@ import Navbar from '../../components/Navbar'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import Alert from '../../components/Alert'
 
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // helpers
 import { validateNumber } from '../../helpers/validateNumber'
@@ -33,7 +33,7 @@ import { addProduct, getAllCategories } from '../../services/product'
 import { Wrapper, Content } from '../../pagesStyle/product/add.styles'
 
 // pages
-import { DAFTAR_JUAL_ROUTE, HOME_ROUTE } from '../../types/pages'
+import { DAFTAR_JUAL_ROUTE } from '../../types/pages'
 
 const AddProduct = () => {
 	/**************************************************************/
@@ -162,7 +162,7 @@ const AddProduct = () => {
 			}))
 
 			const categoryId = availableCategories.find(cat => cat.name === category).id
-			const product = await dispatch(addProduct({
+			await dispatch(addProduct({
 				name,
 				price,
 				categoryId,

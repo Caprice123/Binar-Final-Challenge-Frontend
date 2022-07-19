@@ -12,7 +12,7 @@ import Textarea from '../../components/Textarea'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import Alert from '../../components/Alert'
 
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 // helpers
 import { validatePhoneNumber } from '../../helpers/validatePhoneNumber'
@@ -29,9 +29,6 @@ import { statusActions } from '../../store/status'
 
 // services
 import { getCurrentUser, updateUser } from '../../services/user'
-
-// pages
-import { HOME_ROUTE } from '../../types/pages'
 
 const InfoProfile = () => {
     /**************************************************************/
@@ -151,7 +148,7 @@ const InfoProfile = () => {
             await dispatch(
                 getCurrentUser()
             ).unwrap()
-            
+
             dispatch(statusActions.setLoading({
                 status: false,
             }))

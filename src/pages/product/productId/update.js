@@ -28,13 +28,13 @@ import { statusActions } from '../../../store/status'
 
 // services
 import { getAllCategories, updateProduct } from '../../../services/product'
+import { getProductOneByID } from '../../../services/product'
 
 // styles
 import { Wrapper, Content } from '../../../pagesStyle/product/update.styles'
 
 // pages
-import { DAFTAR_JUAL_ROUTE, HOME_ROUTE } from '../../../types/pages'
-import { getProductOneByID } from '../../../services/product'
+import { DAFTAR_JUAL_ROUTE } from '../../../types/pages'
 
 const UpdateProduct = () => {
 	/**************************************************************/
@@ -166,7 +166,7 @@ const UpdateProduct = () => {
 			}))
 
 			const categoryId = availableCategories.find(cat => cat.name === category).id
-			const product = await dispatch(updateProduct({
+			await dispatch(updateProduct({
                 productId,
 				name,
 				price,
