@@ -148,17 +148,21 @@ const InfoProfile = () => {
                 updateUser(payload)
             ).unwrap()
 
+            await dispatch(
+                getCurrentUser()
+            ).unwrap()
+            
             dispatch(statusActions.setLoading({
                 status: false,
             }))
 
+            if (location.search){
+                const queryParams = Object.fromEntries(new URLSearchParams(location.search))
+                if (queryParams.next){
+                    return navigate(queryParams.next)
+                }
+            }
             setFlashMessage("Successfully updated profile")
-            // navigate(location.pathname, {
-            //     state: {
-            //         message: "Successfully updated profile"
-            //     },
-            //     replace: true
-            // })
         } catch(err){
             console.log(err)
             dispatch(statusActions.setError({
@@ -201,13 +205,12 @@ const InfoProfile = () => {
         }
 
         const getUser = async () => {
-            let user
             try{
                 dispatch(statusActions.setLoading({
                     status: true,
                 }))
 
-                user = await dispatch(
+                const user = await dispatch(
                     getCurrentUser()
                 ).unwrap()
 
@@ -215,9 +218,9 @@ const InfoProfile = () => {
                     status: false,
                 }))
 
-                setName(user.name)
-                setCity(user.city)
-                setAddress(user.address)
+                setName(user.name ? user.name : "")
+                setCity(user.city ? user.city : "")
+                setAddress(user.address ? user.address : "")
                 validatePhoneNumber(user.phone ? user.phone : "", "0", setPhone)
                 await fetchImage(user.image_url)
             } catch(err){
@@ -270,9 +273,7 @@ const InfoProfile = () => {
                     />
                 
             <Content className='mx-auto position-relative'>
-                <Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
-					<i className="fa-solid fa-arrow-left-long"></i>
-				</Link>
+                <i className="back-icon fa-solid fa-arrow-left-long py-3" onClick={onClickGoBack} style={{ cursor: "pointer" }}></i>
                 <div className='py-3 d-flex justify-content-center align-items-center'>
                     {
                         image ? (

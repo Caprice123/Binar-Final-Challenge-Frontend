@@ -313,9 +313,7 @@ const UpdateProduct = () => {
             
 			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<Content className="mx-auto position-relative">
-				<Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
-					<i className="fa-solid fa-arrow-left-long"></i>
-				</Link>
+				<i className="back-icon fa-solid fa-arrow-left-long py-3" onClick={onClickGoBack} style={{ cursor: "pointer" }}></i>
 				<Input type="text" 
 						text="Nama Product" 
 						placeholder="Nama Product" 
