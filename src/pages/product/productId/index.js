@@ -131,7 +131,8 @@ const InfoProduct = () => {
     }
 
     // onSubmit for calling addBidPrice api when user click add bid price
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
+        e.preventDefault()
         if (bidPrice === 0){
             alert("Please insert bid price")
             return
@@ -182,7 +183,7 @@ const InfoProduct = () => {
 
     // onSearch for navigating to home page and search for specific name
     const onSearch = (value) => {
-        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
+        navigate(`/?${objectToQueryString({ search: value, category: '' })}`)
     }
     
     // onMarkAsRead for calling api that will make specific notification is read
@@ -460,32 +461,34 @@ const InfoProduct = () => {
                                         <Popup show={show}
                                             onClick={onClick}
                                             >
-                                            <h4>Masukkan Harga Tawarmu</h4>
-                                            <p className='mb-4'>
-                                                Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
-                                            </p>
-                                            <SellerInfo imageUrl={product.images[0]}
-                                                        sellerName={product.name}
-                                                        sellerCity={`Rp. ${product.price.toLocaleString()}`}
-                                                        width="100%"
-                                                        additionalClass="my-3"
-                                                        style={{ background: "var(--grey-color)" }}
-                                                        withShadow
-                                                        />
-
-                                            <Input type="text"
-                                                    text="Harga Tawar"
-                                                    placeholder="Rp 0,00"
-                                                    value={`Rp. ${bidPrice.toLocaleString()}`}
-                                                    onChange={onChange}
-                                                    required
-                                                    />
-                                            <ActionButton text="Kirim"
+                                            <form onSubmit={onSubmit}>
+                                                <h4>Masukkan Harga Tawarmu</h4>
+                                                <p className='mb-4'>
+                                                    Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
+                                                </p>
+                                                <SellerInfo imageUrl={product.images[0]}
+                                                            sellerName={product.name}
+                                                            sellerCity={`Rp. ${product.price.toLocaleString()}`}
                                                             width="100%"
-                                                            color="var(--primary-purple-04)"
-                                                            onClick={onSubmit}
-                                                            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                                                            additionalClass="my-3"
+                                                            style={{ background: "var(--grey-color)" }}
+                                                            withShadow
                                                             />
+
+                                                <Input type="text"
+                                                        text="Harga Tawar"
+                                                        placeholder="Rp 0,00"
+                                                        value={`Rp. ${bidPrice.toLocaleString()}`}
+                                                        onChange={onChange}
+                                                        required
+                                                        />
+                                                <ActionButton text="Kirim"
+                                                                width="100%"
+                                                                color="var(--primary-purple-04)"
+                                                                onClick={onSubmit}
+                                                                style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                                                                />
+                                            </form>
                                         </Popup>
                                     )
                                 ) : (

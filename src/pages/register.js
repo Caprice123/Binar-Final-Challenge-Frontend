@@ -78,7 +78,8 @@ const Registrasi = () => {
     }
 
     // onSubmit for calling register api when user click register button
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
+        e.preventDefault()
         if (name.length === 0){
             alert("Tolong isi nama")
             return
@@ -168,7 +169,7 @@ const Registrasi = () => {
                         <div className={styles.auth_right + " col-lg-6 col-12"}>
                             <div className={styles.auth_form_wrapper + " mx-auto"}>
                                 <h3 className="title fw-bold">Daftar</h3>
-                                <form action="">
+                                <form onSubmit={onSubmit}>
                                     <Input type="text"
                                             text="Nama"
                                             placeholder="Masukan nama anda"
