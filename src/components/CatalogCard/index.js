@@ -10,7 +10,7 @@ const Index = ({ data, link }) => {
 
     return (
         <>
-            <div className="col-6 col-md-4">
+            <div className="col-6 col-lg-4">
                 <Link class={styles.catalogLink} to={HOME_ROUTE}>
                     <div class="card h-100">
                         <img src={imageClock} class="card-img-top" alt="..." />

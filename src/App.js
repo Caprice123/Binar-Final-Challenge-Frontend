@@ -17,7 +17,7 @@ import ListProducts from './pages/product';
 import Wishlist from './pages/product/wishlist';
 import SoldProducts from './pages/product/sold';
 import Home from './pages';
-
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { ADD_PRODUCT_ROUTE, BID_ROUTE, DAFTAR_JUAL_ROUTE, HOME_ROUTE, LOGIN_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, REGISTER_ROUTE, SOLD_PRODUCT_ROUTE, UPDATE_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from './types/pages';
 import Logout from './pages/logout';
 import UpdateProduct from './pages/product/productId/update';
@@ -34,7 +34,9 @@ function App() {
 					{/* Auth Routes */}
 					
 					<Route exact path={LOGIN_ROUTE} element={
-							<Login/>
+							<GoogleOAuthProvider clientId='120494598409-3fi90au9drcp47tkm4t180fekpf1qeb0.apps.googleusercontent.com'>
+								<Login/>
+							</GoogleOAuthProvider>
 						} 
 					/>
 					<Route exact path={REGISTER_ROUTE} element={
@@ -48,7 +50,7 @@ function App() {
 
 					{/* User Routes */}
 					<Route exact path={USER_PROFILE_ROUTE} element={
-						<ProtectedRoute allowedRoles={[]}>
+							<ProtectedRoute allowedRoles={[]}>
 								<InfoProfile />
 							</ProtectedRoute>
 						} 
