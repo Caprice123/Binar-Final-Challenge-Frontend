@@ -5,7 +5,7 @@ import { Wrapper } from './ActionButton.styles'
 
 const ActionButton = ({ width, color, textColor, icon, text, onClick, disabled, ...additionalProps }) => {
     return (
-        <Wrapper type="button" 
+        <Wrapper type="submit" 
                 className="btn d-flex align-items-center justify-content-center btn-primary"
                 width={width}
                 color={color} 

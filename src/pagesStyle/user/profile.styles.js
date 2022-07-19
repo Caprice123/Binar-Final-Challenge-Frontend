@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
     
 `
 
-export const Content = styled.div`
+export const Content = styled.form`
     margin-top: var(--navbar-height);
     max-width: 500px;
 

@@ -136,7 +136,8 @@ const AddProduct = () => {
 	}
 
 	// onSubmit for calling addProduc api when user click 'terbitkan' button 
-	const onSubmit = async () => {
+	const onSubmit = async (e) => {
+		e.preventDefault()
 		if (name.length === 0){
 			alert("Tolong isi nama product")
 			return
@@ -282,7 +283,7 @@ const AddProduct = () => {
 					/>
             
 			<Navbar	centeredText="Lengkapi Detail Product"/>
-			<Content className="mx-auto position-relative">
+			<Content className="mx-auto position-relative" onSubmit={onSubmit}>
 				<Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>

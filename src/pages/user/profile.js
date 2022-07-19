@@ -269,7 +269,7 @@ const InfoProfile = () => {
             <Navbar centeredText="Lengkapi Info Akun"
                     />
                 
-            <Content className='mx-auto position-relative'>
+            <Content className='mx-auto position-relative' onSubmit={onSubmit}>
                 <Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
 					<i className="fa-solid fa-arrow-left-long"></i>
 				</Link>
@@ -312,18 +312,16 @@ const InfoProfile = () => {
                 <Input type="text" 
 						text="No Handphone" 
 						placeholder="contoh: +628123456789" 
-						value={`${phone}`} 
+						value={phone} 
 						onChange={onChange}
 						required
 						/>
-
-                <div className='my-4'>
-                    <ActionButton text="Simpan"
-                                    width="100%"
-                                    color="var(--primary-purple-04)"
-                                    onClick={onSubmit}
-                                    />
-                </div>
+                <ActionButton text="Simpan"
+                                width="100%"
+                                color="var(--primary-purple-04)"
+                                onClick={onSubmit}
+                                className='my-4'
+                                />
             </Content>
         </Wrapper>
     )
