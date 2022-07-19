@@ -122,7 +122,7 @@ const ListProducts = () => {
     
     // onSearch for navigating to search route
     const onSearch = (value) => {
-        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
+        navigate(`/?${objectToQueryString({ search: value, category: '' })}`)
     }
 
     // onCloseAlertError for resetting error when close button alert for errror message is clicked

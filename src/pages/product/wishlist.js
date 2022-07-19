@@ -123,7 +123,7 @@ const Wishlist = () => {
 
     // onSearch for navigating to home page everytime search in navbar is clicked
     const onSearch = (value) => {
-        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
+        navigate(`/?${objectToQueryString({ search: value, category: '' })}`)
     }
     
     // onCloseAlertError for resetting error when close button alert for errror message is clicked

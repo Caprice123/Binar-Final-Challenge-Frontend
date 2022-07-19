@@ -207,6 +207,7 @@ export const deleteProduct = createAsyncThunk(
 
             const response = await api.delete(
                 `/api/v1/products/${productId}`,
+                authHeader()
             )
             
             const datas = response.data

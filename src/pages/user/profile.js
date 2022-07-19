@@ -266,16 +266,13 @@ const InfoProfile = () => {
 					onClick={onCloseFlash} 
 					/>
             
-            <Navbar centeredText="Lengkapi Info Akun"
-                    />
-                
-            <Content className='mx-auto position-relative'>
+            <Navbar centeredText="Lengkapi Info Akun" />
+            <Content className='mx-auto position-relative' onSubmit={onSubmit}>
                 <i className="back-icon fa-solid fa-arrow-left-long py-3" onClick={onClickGoBack} style={{ cursor: "pointer" }}></i>
                 <div className='py-3 d-flex justify-content-center align-items-center'>
                     {
                         image ? (
                             <ImagePreview url={URL.createObjectURL(image)}
-
                                             onDelete={onDeleteImage}
                                             />
 
@@ -310,18 +307,16 @@ const InfoProfile = () => {
                 <Input type="text" 
 						text="No Handphone" 
 						placeholder="contoh: +628123456789" 
-						value={`${phone}`} 
+						value={phone} 
 						onChange={onChange}
 						required
 						/>
-
-                <div className='my-4'>
-                    <ActionButton text="Simpan"
-                                    width="100%"
-                                    color="var(--primary-purple-04)"
-                                    onClick={onSubmit}
-                                    />
-                </div>
+                <ActionButton text="Simpan"
+                                width="100%"
+                                color="var(--primary-purple-04)"
+                                onClick={onSubmit}
+                                className='my-4'
+                                />
             </Content>
         </Wrapper>
     )

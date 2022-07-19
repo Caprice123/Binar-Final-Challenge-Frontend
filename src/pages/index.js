@@ -151,7 +151,7 @@ const Home = () => {
     const onSearch = (value) => {
         navigate(`/?${objectToQueryString({
             ...search,
-            name: value
+            search: value
         })}`)
     }
     /**************************************************************/
@@ -205,7 +205,7 @@ const Home = () => {
 
         const queryParams = Object.fromEntries(new URLSearchParams(location.search))
         const searchParams = {
-            name: queryParams.name || "",
+            search: queryParams.search || "",
             category: queryParams.category || ""
         }
 

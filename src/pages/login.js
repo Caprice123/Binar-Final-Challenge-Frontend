@@ -88,7 +88,8 @@ const Login = () => {
     }
 
     // onSubmit for calling api when user click login button
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
+        e.preventDefault()
         if (email.length === 0){
             alert("Tolong isi email")
             return
@@ -145,6 +146,7 @@ const Login = () => {
 
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
+            console.log(tokenResponse)
             const userInfo = await axios.get(
                 'https://www.googleapis.com/oauth2/v3/userinfo',
                 { headers: { Authorization: 'Bearer ' + tokenResponse.access_token } },
@@ -196,27 +198,28 @@ const Login = () => {
                         <div className="col-lg-6 col-12">
                             <div className={styles.auth_form_wrapper + " mx-auto"}>
                                 <h3 className="title fw-bold">Masuk</h3>
-                                   
-                                <Input type="email"
-                                        text="Email"
-                                        placeholder="handayani@gmail.com"
-                                        value={email}
-                                        onChange={onChange}
-                                        required
-                                        />
-                                <Input type="password"
-                                        text="Password"
-                                        placeholder="Masukan password anda"
-                                        value={password}
-                                        onChange={onChange}
-                                        required
-                                        />
-                                <ActiveButton width="100%"
-                                                color="var(--primary-purple-04)"
-                                                text="Masuk"
-                                                style={{ margin: "1.5rem 0" }}
-                                                onClick={onSubmit}
-                                                />
+                                <form  onSubmit={onSubmit}>
+                                    <Input type="email"
+                                            text="Email"
+                                            placeholder="handayani@gmail.com"
+                                            value={email}
+                                            onChange={onChange}
+                                            required
+                                            />
+                                    <Input type="password"
+                                            text="Password"
+                                            placeholder="Masukan password anda"
+                                            value={password}
+                                            onChange={onChange}
+                                            required
+                                            />
+                                    <ActiveButton width="100%"
+                                                    color="var(--primary-purple-04)"
+                                                    text="Masuk"
+                                                    style={{ margin: "1.5rem 0" }}
+                                                    onClick={onSubmit}
+                                                    />
+                                </form>
                                  <ActiveButton width="100%"
                                                 color="var(--primary-purple-04)"
                                                 text="Masuk dengan Google"
