@@ -18,7 +18,8 @@ export const checkBid = createAsyncThunk(
             const data = response.data
             return data
         } catch(err){
-            
+            const errorMessage = err.response.data
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -84,17 +85,5 @@ export const acceptBid = createAsyncThunk(
             const errorMessage = err.response.data
             throw new Error(errorMessage)
         }
-    }
-)
-
-export const updateStatusBid = createAsyncThunk(
-    'bid/updateStatusBid',
-    async (payload) => {
-        console.log(payload)
-        const response = await api.put(`/transaction/${payload.transactionId}`, {
-            status: payload.status,
-        })
-        const data = response.data
-        return data
     }
 )

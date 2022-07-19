@@ -123,8 +123,8 @@ export const addBidPrice = createAsyncThunk(
     'product/addBidPrice',
     async (payload) => {
         console.log(payload)
-        const { productId, bidPrice } = payload
         try{
+            const { productId, bidPrice } = payload
             const response = await api.post(
                 `/api/v1/products/${productId}/bids`,
                 {
