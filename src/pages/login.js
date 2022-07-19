@@ -179,12 +179,14 @@ const Login = () => {
 					color="var(--white-color)" 
 					text={flashMessage} 
 					onClick={onCloseFlash} 
+                    id="flash-message"
 					/>
             <Alert active={error.length > 0} 
                     backgroundColor="var(--redalert-background)" 
                     color="var(--redalert-font)" 
                     text={error} 
-                    onClick={onCloseAlert} 
+                    onClick={onCloseAlert}
+                    id="error-message" 
                     />
             
             <div className={styles.page_auth + " vh-100"}>
@@ -218,6 +220,7 @@ const Login = () => {
                                                     text="Masuk"
                                                     style={{ margin: "1.5rem 0" }}
                                                     onClick={onSubmit}
+                                                    id="submit-btn"
                                                     />
                                 </form>
                                  <ActiveButton width="100%"
@@ -226,12 +229,13 @@ const Login = () => {
                                                 icon={<FcGoogle className="me-3"/>}
                                                 style={{ margin: "1.5rem 0" }}
                                                 onClick={googleLogin}
+                                                id="login-via-google"
                                                 />
                                 <div className={styles.footer}>
                                     <p className='text-center mt-3'>
                                         Belum punya akun? 
                                     
-                                        <Link to={REGISTER_ROUTE} className={`${styles.text_purple} ms-3`}>
+                                        <Link to={REGISTER_ROUTE} className={`${styles.text_purple} ms-3`} id="register-btn">
                                             Daftar disini
                                         </Link>
                                     
