@@ -14,7 +14,7 @@ import Navbar from '../../../components/Navbar'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import Alert from '../../../components/Alert'
 
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // helpers
 import { validateNumber } from '../../../helpers/validateNumber'
