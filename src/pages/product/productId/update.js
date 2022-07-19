@@ -14,7 +14,7 @@ import Navbar from '../../../components/Navbar'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import Alert from '../../../components/Alert'
 
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // helpers
 import { validateNumber } from '../../../helpers/validateNumber'
@@ -28,13 +28,13 @@ import { statusActions } from '../../../store/status'
 
 // services
 import { getAllCategories, updateProduct } from '../../../services/product'
+import { getProductOneByID } from '../../../services/product'
 
 // styles
 import { Wrapper, Content } from '../../../pagesStyle/product/productId/update.styles'
 
 // pages
-import { DAFTAR_JUAL_ROUTE, HOME_ROUTE } from '../../../types/pages'
-import { getProductOneByID } from '../../../services/product'
+import { DAFTAR_JUAL_ROUTE } from '../../../types/pages'
 
 const UpdateProduct = () => {
 	/**************************************************************/
@@ -167,7 +167,7 @@ const UpdateProduct = () => {
 			}))
 
 			const categoryId = availableCategories.find(cat => cat.name === category).id
-			const product = await dispatch(updateProduct({
+			await dispatch(updateProduct({
                 productId,
 				name,
 				price,
@@ -314,9 +314,7 @@ const UpdateProduct = () => {
             
 			<Navbar	centeredText="Lengkapi Detail Product"/>
 			<Content className="mx-auto position-relative" onSubmit={onSubmit}>
-				<Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
-					<i className="fa-solid fa-arrow-left-long"></i>
-				</Link>
+				<i className="back-icon fa-solid fa-arrow-left-long py-3" onClick={onClickGoBack} style={{ cursor: "pointer" }}></i>
 				<Input type="text" 
 						text="Nama Product" 
 						placeholder="Nama Product" 

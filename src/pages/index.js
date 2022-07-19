@@ -203,8 +203,7 @@ const Home = () => {
             message: ""
         }))
 
-        const locationSearch = location.search.slice(1)
-        const queryParams = Object.fromEntries(new URLSearchParams(locationSearch))
+        const queryParams = Object.fromEntries(new URLSearchParams(location.search))
         const searchParams = {
             search: queryParams.search || "",
             category: queryParams.category || ""

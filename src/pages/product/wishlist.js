@@ -37,7 +37,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { statusActions } from '../../store/status'
 
 // services
-import { getCurrentUser } from '../../services/user'
 import { getWishlist } from '../../services/product'
 
 // pages
@@ -162,8 +161,6 @@ const Wishlist = () => {
                 dispatch(statusActions.setLoading({
                     status: true,
                 }))
-
-                await dispatch(getCurrentUser()).unwrap()
     
                 const response = await dispatch(
                     getWishlist()
