@@ -114,7 +114,7 @@ export const addProduct = createAsyncThunk(
             return dataAddProduct
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -136,7 +136,7 @@ export const addBidPrice = createAsyncThunk(
             return datas
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -153,7 +153,7 @@ export const getAllCategories = createAsyncThunk(
             return datas
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -194,7 +194,7 @@ export const updateProduct = createAsyncThunk(
             return datas
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -214,7 +214,7 @@ export const deleteProduct = createAsyncThunk(
             return datas
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )

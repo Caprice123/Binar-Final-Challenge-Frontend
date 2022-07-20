@@ -111,8 +111,9 @@ const ProductBid = () => {
             setProduct(responseProduct)
         } catch(err){
             console.log(err)
+            const error = JSON.parse(err.message)
             dispatch(statusActions.setError({
-                message: err.message,
+                message: error.message,
             }))
         }
     }
@@ -151,8 +152,9 @@ const ProductBid = () => {
             setProduct(responseProduct)
         } catch(err){
             console.log(err)
+            const error = JSON.parse(err.message)
             dispatch(statusActions.setError({
-                message: err.message,
+                message: error.message,
             }))
         }
     }
@@ -198,8 +200,9 @@ const ProductBid = () => {
             setProduct(responseProduct)
         } catch(err){
             console.log(err)
+            const error = JSON.parse(err.message)
             dispatch(statusActions.setError({
-                message: err.message,
+                message: error.message,
             }))
         }
     }   
@@ -253,8 +256,9 @@ const ProductBid = () => {
                 setProduct(response)
             } catch(err){
                 console.log(err)
+                const error = JSON.parse(err.message)
                 dispatch(statusActions.setError({
-                    message: err.message,
+                    message: error.message,
                 }))
             }
         }

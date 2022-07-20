@@ -187,9 +187,10 @@ const UpdateProduct = () => {
 			})
 		} catch(err){
 			console.log(err)
-			dispatch(statusActions.setError({
-				message: err.message,
-			}))
+			const error = JSON.parse(err.message)
+            dispatch(statusActions.setError({
+                message: error.message,
+            }))
 		}
 	}
 
@@ -278,12 +279,12 @@ const UpdateProduct = () => {
                 setDescription(initialProduct.description)
                 setCategory(initialProduct.category.name)
                 const files = await Promise.all(initialProduct.images.map(image => fetchImage(image)))
-                console.log(files)
                 setProductImages(files)
 			} catch(err){
 				console.log(err)
+				const error = JSON.parse(err.message)
 				dispatch(statusActions.setError({
-					message: err.message,
+					message: error.message,
 				}))
 			}
 		}
