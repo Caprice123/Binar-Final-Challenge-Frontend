@@ -60,12 +60,9 @@ const GlobalStyle = createGlobalStyle`
         line-height: 18px;
     }
 
-    *:focus{
+    .btn, .form-control:focus{
         box-shadow: none !important;
         outline: none !important;
-    }
-
-    .form-control:focus{
         border-color: transparent !important;
     }
 

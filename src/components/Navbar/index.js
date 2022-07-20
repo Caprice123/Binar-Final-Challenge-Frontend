@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { HOME_ROUTE, LOGIN_ROUTE } from '../../types/pages'
 import ActionButton from '../ActionButton'
 
-import { validateString } from '../../helpers/validateString'
+import { validateString } from '../../helpers/validator/validateString'
 // styles
 import { Wrapper, Content, Actions } from './Navbar.styles'
 

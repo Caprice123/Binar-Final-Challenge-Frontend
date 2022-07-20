@@ -13,8 +13,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import styles from '../assets/css/auth.module.css'
 
 // helpers
-import { validateString } from '../helpers/validateString';
-import { validateEmail } from '../helpers/validateEmail';
+import { validateString } from '../helpers/validator/validateString';
+import { validateEmail } from '../helpers/validator/validateEmail';
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux';

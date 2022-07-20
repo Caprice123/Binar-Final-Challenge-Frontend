@@ -29,11 +29,11 @@ import "swiper/css/navigation";
 
 // helpers
 import { objectToQueryString } from '../helpers/converter/objectToQuery';
+import { dateToString } from '../helpers/converter/dateToString';
 
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage';
 import { useNotifications } from '../hooks/useNotifications';
-
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,6 +46,7 @@ import { getAllCategories, getProducts } from '../services/product';
 
 // pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../types/pages';
+import { updateNotifications } from '../services/notifications';
 
 const Home = () => {
     /**************************************************************/
@@ -120,8 +121,28 @@ const Home = () => {
     }
 
     // onMarkAsRead for calling api that will make specific notification is read
-    const onMarkAsRead = (notificationId) => {
+    const onMarkAsRead = (e, notification) => {
+        e.preventDefault()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
+            dispatch(updateNotifications({
+                notificationId: notification.id,
+            })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(helperRedirectUrl(notification), { replace: true })
+
+        }catch(err){
+            dispatch(statusActions.setError({
+                message: err.message
+            }))
+        }
     }
 
     // onOpen for keep track the state of navbar
@@ -237,6 +258,34 @@ const Home = () => {
     ]
     /**************************************************************/
 
+    const helperRedirectUrl = (notification) => {
+        const productId = notification.products.product_id
+        switch(notification.message){
+            case "Penawaran terkirim":
+                return `/product/${productId}`
+            case "Penawaran anda dalam negosiasi":
+                return `/product/${productId}`
+            case "Penawaran anda ditolak":
+                return `/product/${productId}`
+            case "Penawaran anda diterima":
+                return `/product/${productId}`
+                
+
+            case "Produk ditawar":
+                return `/product/${productId}/bid`
+            case "Melanjutkan penawaran":
+                return `/product/${productId}/bid`
+            case "Menolak penawaran":
+                return `/product/${productId}/bid`
+            case "Menyelesaikan penawaran":
+                return `/product/${productId}/bid`
+
+
+            default:
+                return `/product/${productId}`
+        }        
+    }
+
     return (
         <Wrapper>
             <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
@@ -247,15 +296,15 @@ const Home = () => {
                 {
                     notifications.map((data) => (
                         <div key={data.id}>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${data.products.id}`}
+                            <NotifItems redirectTo={helperRedirectUrl(data)}
                                         seen={data.read}
-                                        imageUrl={Image}
+                                        imageUrl={data.images.name}
                                         actionName={data.title}
-                                        time={data.createdAt}
+                                        time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
                                         bidPrice={data.bids.request_price}
-                                        onClick={() => onMarkAsRead(data.id)}
+                                        onClick={(e) => onMarkAsRead(e, data)}
                                         />
                         </div>
                     ))

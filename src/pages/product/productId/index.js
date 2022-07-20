@@ -13,7 +13,6 @@ import Popup from '../../../components/Popup'
 import Notif from '../../../components/Notif/index'
 import SellerInfo from '../../../components/SellerInfo'
 import Alert from '../../../components/Alert'
-import Image from '../../../200774.jpg'
 import NoImage from '../../../assets/images/no-image-found.jpg'
 import Slider from '../../../components/Slider'
 import NotifItems from '../../../components/NotifItems'
@@ -24,7 +23,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner'
 import { Wrapper, Content } from '../../../pagesStyle/product/productId/index.styles'
 
 // helpers
-import { validateNumber } from '../../../helpers/validateNumber'
+import { validateNumber } from '../../../helpers/validator/validateNumber'
 import { objectToQueryString } from '../../../helpers/converter/objectToQuery'
 
 // hooks
@@ -44,6 +43,8 @@ import { addBidPrice, deleteProduct, getProductOneByID } from '../../../services
 import { LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE, UPDATE_PRODUCT_ROUTE } from '../../../types/pages'
 import AccountDropdown from '../../../components/AccountDropdown'
 import { checkBid } from '../../../services/bids'
+import { dateToString } from '../../../helpers/converter/dateToString'
+import { updateNotifications } from '../../../services/notifications'
 
 const InfoProduct = () => {
     /**************************************************************/
@@ -187,8 +188,28 @@ const InfoProduct = () => {
     }
     
     // onMarkAsRead for calling api that will make specific notification is read
-    const onMarkAsRead = (notificationId) => {
+    const onMarkAsRead = (e, notification) => {
+        e.preventDefault()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
+            dispatch(updateNotifications({
+                notificationId: notification.id,
+            })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(helperRedirectUrl(notification), { replace: true })
+
+        }catch(err){
+            dispatch(statusActions.setError({
+                message: err.message
+            }))
+        }
     }
 
     const onDeleteProduct = async () => {
@@ -314,6 +335,35 @@ const InfoProduct = () => {
         return () => navigate(LOGIN_ROUTE)
     }
 
+    const helperRedirectUrl = (notification) => {
+        const productId = notification.products.product_id
+        switch(notification.message){
+            case "Penawaran terkirim":
+                return `/product/${productId}`
+            case "Penawaran anda dalam negosiasi":
+                return `/product/${productId}`
+            case "Penawaran anda ditolak":
+                return `/product/${productId}`
+            case "Penawaran anda diterima":
+                return `/product/${productId}`
+                
+
+            case "Produk ditawar":
+                return `/product/${productId}/bid`
+            case "Melanjutkan penawaran":
+                return `/product/${productId}/bid`
+            case "Menolak penawaran":
+                return `/product/${productId}/bid`
+            case "Menyelesaikan penawaran":
+                return `/product/${productId}/bid`
+
+
+            default:
+                return `/product/${productId}`
+        }        
+    }
+    
+
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />
@@ -345,15 +395,15 @@ const InfoProduct = () => {
                 {
                     notifications.map((data) => (
                         <div key={data.id}>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${data.products.id}`}
+                            <NotifItems redirectTo={helperRedirectUrl(data)}
                                         seen={data.read}
-                                        imageUrl={Image}
+                                        imageUrl={data.images.name}
                                         actionName={data.title}
-                                        time={data.createdAt}
+                                        time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
                                         bidPrice={data.bids.request_price}
-                                        onClick={() => onMarkAsRead(data.id)}
+                                        onClick={(e) => onMarkAsRead(e, data)}
                                         />
                         </div>
                     ))

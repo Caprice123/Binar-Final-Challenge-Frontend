@@ -17,8 +17,8 @@ import Alert from '../../../components/Alert'
 import { useNavigate, useParams } from 'react-router-dom'
 
 // helpers
-import { validateNumber } from '../../../helpers/validateNumber'
-import { validateSizeFile } from '../../../helpers/validateSizeFile'
+import { validateNumber } from '../../../helpers/validator/validateNumber'
+import { validateSizeFile } from '../../../helpers/validator/validateSizeFile'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'

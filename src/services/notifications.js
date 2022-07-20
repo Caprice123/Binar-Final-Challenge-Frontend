@@ -18,3 +18,22 @@ export const getNotifications = createAsyncThunk(
         }
     }
 )
+
+export const updateNotifications = createAsyncThunk(
+    'notifications/updateNotifications',
+    async (payload) => {
+        try{
+            const { notificationId } = payload
+            const response = await api.put(
+                `/api/v1/notification/${notificationId}`,
+                {},
+                authHeader()
+            )
+            const data = response.data
+            return data
+        } catch(err){
+            const errorMessage = err.response.data
+            throw new Error(errorMessage)
+        }
+    }
+)
