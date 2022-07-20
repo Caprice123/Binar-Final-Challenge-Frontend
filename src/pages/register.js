@@ -196,6 +196,7 @@ const Registrasi = () => {
                                                     text="Masuk"
                                                     style={{ margin: "1.5rem 0" }}
                                                     onClick={onSubmit}
+                                                    id="submit-btn"
                                                     />
                                 </form>
                                 <div className={styles.footer}>
