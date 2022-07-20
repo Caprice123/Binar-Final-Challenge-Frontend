@@ -7,7 +7,6 @@ import Notif from '../../components/Notif'
 import NotifItems from '../../components/NotifItems'
 import Slider from '../../components/Slider'
 import ImagePreview from '../../components/ImagePreview'
-import Image from '../../200774.jpg'
 import NoImage from '../../assets/images/no-image-found.jpg'
 import SellerInfo from '../../components/SellerInfo'
 import BorderOnlyButton from '../../components/BorderOnlyButton'
@@ -40,6 +39,8 @@ import { getProducts } from '../../services/product'
 
 // pages
 import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import { dateToString } from '../../helpers/converter/dateToString'
+import { updateNotifications } from '../../services/notifications'
 
 const ListProducts = () => {
     /**************************************************************/
@@ -111,8 +112,28 @@ const ListProducts = () => {
     }
 
     // onMarkAsRead for calling api that will make specific notification is read
-    const onMarkAsRead = (notificationId) => {
+    const onMarkAsRead = (e, notification) => {
+        e.preventDefault()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
+            dispatch(updateNotifications({
+                notificationId: notification.id,
+            })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(helperRedirectUrl(notification), { replace: true })
+
+        }catch(err){
+            dispatch(statusActions.setError({
+                message: err.message
+            }))
+        }
     }
 
     // onClickEdit for navigating to edit user profile route
@@ -207,6 +228,34 @@ const ListProducts = () => {
         }, 
     ]
 
+    const helperRedirectUrl = (notification) => {
+        const productId = notification.products.product_id
+        switch(notification.message){
+            case "Penawaran terkirim":
+                return `/product/${productId}`
+            case "Penawaran anda dalam negosiasi":
+                return `/product/${productId}`
+            case "Penawaran anda ditolak":
+                return `/product/${productId}`
+            case "Penawaran anda diterima":
+                return `/product/${productId}`
+                
+
+            case "Produk ditawar":
+                return `/product/${productId}/bid`
+            case "Melanjutkan penawaran":
+                return `/product/${productId}/bid`
+            case "Menolak penawaran":
+                return `/product/${productId}/bid`
+            case "Menyelesaikan penawaran":
+                return `/product/${productId}/bid`
+
+
+            default:
+                return `/product/${productId}`
+        }        
+    }
+
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />
@@ -230,15 +279,15 @@ const ListProducts = () => {
                 {
                     notifications.map((data) => (
                         <div key={data.id}>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${data.products.id}`}
+                            <NotifItems redirectTo={helperRedirectUrl(data)}
                                         seen={data.read}
-                                        imageUrl={Image}
+                                        imageUrl={data.images.name}
                                         actionName={data.title}
-                                        time={data.createdAt}
+                                        time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
                                         bidPrice={data.bids.request_price}
-                                        onClick={() => onMarkAsRead(data.id)}
+                                        onClick={(e) => onMarkAsRead(e, data)}
                                         />
                         </div>
                     ))

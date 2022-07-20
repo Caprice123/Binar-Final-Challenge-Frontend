@@ -15,7 +15,7 @@ import Alert from '../../components/Alert'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 // helpers
-import { validatePhoneNumber } from '../../helpers/validatePhoneNumber'
+import { validatePhoneNumber } from '../../helpers/validator/validatePhoneNumber'
 
 // styles
 import { Wrapper, Content } from '../../pagesStyle/user/profile.styles'
@@ -112,7 +112,8 @@ const InfoProfile = () => {
     }
 
     // onSubmit for calling updateUserProfile api when user click save button
-    const onSubmit =async () => {
+    const onSubmit =async (e) => {
+        e.preventDefault()
         if(name.length === 0){
             alert("Tolong isi nama anda")
             return
@@ -314,6 +315,7 @@ const InfoProfile = () => {
                 <ActionButton text="Simpan"
                                 width="100%"
                                 color="var(--primary-purple-04)"
+                                textColor="var(--white-color)"
                                 onClick={onSubmit}
                                 className='my-4'
                                 />

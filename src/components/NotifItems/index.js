@@ -22,8 +22,12 @@ const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName,
                             <p>{ time }</p>
                         </Title>
                         <h5>{ productName }</h5>
-                        <h5 className='original-price'>Rp. { originalPrice.toLocaleString() }</h5>
-                        <h5>Ditawar Rp. { bidPrice.toLocaleString() }</h5>
+                        <h5 className='original-price'>Rp. { Number(originalPrice)?.toLocaleString() }</h5>
+                        {
+                            bidPrice > 0 && (
+                                <h5>Ditawar Rp. { Number(bidPrice)?.toLocaleString() }</h5>
+                            )
+                        }
                     </Content>
                 </WrapperLink>
             ) : (
@@ -41,8 +45,12 @@ const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName,
                             <p>{ time }</p>
                         </Title>
                         <h5>{ productName }</h5>
-                        <h5  className='original-price'>Rp. { originalPrice.toLocaleString() }</h5>
-                        <h5>Ditawar Rp. { bidPrice.toLocaleString() }</h5>
+                        <h5  className='original-price'>Rp. { Number(originalPrice)?.toLocaleString() }</h5>
+                        {
+                            bidPrice > 0 && (
+                                <h5>Ditawar Rp. { Number(bidPrice)?.toLocaleString() }</h5>
+                            )
+                        }
                     </Content>
                 </WrapperDiv>
             )
