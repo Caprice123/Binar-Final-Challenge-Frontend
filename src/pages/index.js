@@ -43,10 +43,10 @@ import { statusActions } from '../store/status';
 
 // services
 import { getAllCategories, getProducts } from '../services/product';
+import { updateNotifications } from '../services/notifications';
 
 // pages
-import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../types/pages';
-import { updateNotifications } from '../services/notifications';
+import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, ERROR_404_ROUTE, ERROR_500_ROUTE, LOGIN_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../types/pages';
 
 const Home = () => {
     /**************************************************************/
@@ -141,9 +141,30 @@ const Home = () => {
         }catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE, {
+                        state: {
+                            message: "Unauthorized"
+                        }
+                    })
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
 
@@ -219,9 +240,18 @@ const Home = () => {
             } catch(err){
                 console.log(err)
                 const error = JSON.parse(err.message)
-                dispatch(statusActions.setError({
-                    message: error.message,
-                }))
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
         }
         dispatch(statusActions.setError({

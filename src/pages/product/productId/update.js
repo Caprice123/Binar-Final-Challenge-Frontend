@@ -34,7 +34,7 @@ import { getProductOneByID } from '../../../services/product'
 import { Wrapper, Content } from '../../../pagesStyle/product/productId/update.styles'
 
 // pages
-import { DAFTAR_JUAL_ROUTE } from '../../../types/pages'
+import { DAFTAR_JUAL_ROUTE, LOGIN_ROUTE, ERROR_404_ROUTE, ERROR_500_ROUTE } from '../../../types/pages'
 
 const UpdateProduct = () => {
 	/**************************************************************/
@@ -188,9 +188,26 @@ const UpdateProduct = () => {
 		} catch(err){
 			console.log(err)
 			const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+			const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
 		}
 	}
 
@@ -243,16 +260,20 @@ const UpdateProduct = () => {
 	// for getting all categories
 	useEffect(() => {
         const fetchImage = async (image_url) => {
-            if (image_url){
-                const response = await fetch(image_url);
-                // here image is url/location of image
-                const blob = await response.blob();
-                const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
-                return {
-					file,
-					imageUrl: URL.createObjectURL(file)
+			try{
+				if (image_url){
+					const response = await fetch(image_url);
+					// here image is url/location of image
+					const blob = await response.blob();
+					const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
+					return {
+						file,
+						imageUrl: URL.createObjectURL(file)
+					}
 				}
-            }
+			} catch(err){
+				navigate(ERROR_500_ROUTE)
+			}
         }
 
 		const fetchCategories = async () => {
@@ -283,9 +304,26 @@ const UpdateProduct = () => {
 			} catch(err){
 				console.log(err)
 				const error = JSON.parse(err.message)
-				dispatch(statusActions.setError({
-					message: error.message,
-				}))
+				const statusCode = error.statusCode
+				switch (statusCode){
+					case 401:
+						navigate(LOGIN_ROUTE)
+						break
+						
+					case 404:
+						navigate(ERROR_404_ROUTE)
+						break
+				
+					case 500:
+						navigate(ERROR_500_ROUTE)
+						break
+					
+					default:
+						dispatch(statusActions.setError({
+							message: error.message,
+						}))
+						break
+				}
 			}
 		}
 
@@ -294,7 +332,7 @@ const UpdateProduct = () => {
 		}))
 		
 		fetchCategories()
-	}, [dispatch, productId])
+	}, [dispatch, navigate, productId])
 	/**************************************************************/
 
 	return (

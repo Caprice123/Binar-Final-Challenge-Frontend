@@ -32,6 +32,9 @@ import { statusActions } from '../../../store/status'
 import { acceptBid, acceptTransaction, rejectBid } from '../../../services/bids'
 import { getProductBidByProductID } from '../../../services/product'
 
+// pages
+import { ERROR_404_ROUTE, ERROR_500_ROUTE, LOGIN_ROUTE } from '../../../types/pages'
+
 const ProductBid = () => {
     
     /**************************************************************/
@@ -110,9 +113,26 @@ const ProductBid = () => {
         } catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     
@@ -151,9 +171,26 @@ const ProductBid = () => {
         } catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     
@@ -199,9 +236,26 @@ const ProductBid = () => {
         } catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }   
     
@@ -255,9 +309,26 @@ const ProductBid = () => {
             } catch(err){
                 console.log(err)
                 const error = JSON.parse(err.message)
-                dispatch(statusActions.setError({
-                    message: error.message,
-                }))
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 401:
+                        navigate(LOGIN_ROUTE)
+                        break
+                        
+                    case 404:
+                        navigate(ERROR_404_ROUTE)
+                        break
+                
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
         }
         dispatch(statusActions.setError({
@@ -265,7 +336,7 @@ const ProductBid = () => {
         }))
 
         fetchData()
-	}, [dispatch, productId])
+	}, [dispatch, navigate, productId])
     /**************************************************************/
 
 

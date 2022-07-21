@@ -30,6 +30,9 @@ import { statusActions } from '../../store/status'
 // services
 import { getCurrentUser, updateUser } from '../../services/user'
 
+// pages
+import { ERROR_404_ROUTE, ERROR_500_ROUTE, LOGIN_ROUTE } from '../../types/pages'
+
 const InfoProfile = () => {
     /**************************************************************/
     // REDUX STATE
@@ -164,9 +167,22 @@ const InfoProfile = () => {
         } catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     
@@ -194,12 +210,16 @@ const InfoProfile = () => {
     // for setting default value on input field tag
     useEffect(() => {
         const fetchImage = async (image_url) => {
-            if (image_url){
-                const response = await fetch(image_url);
-                // here image is url/location of image
-                const blob = await response.blob();
-                const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
-                setImage(file)
+            try{
+                if (image_url){
+                    const response = await fetch(image_url);
+                    // here image is url/location of image
+                    const blob = await response.blob();
+                    const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
+                    setImage(file)
+                }
+            } catch (err){
+                navigate(ERROR_500_ROUTE)
             }
         }
 
@@ -225,9 +245,30 @@ const InfoProfile = () => {
             } catch(err){
                 console.log(err)
                 const error = JSON.parse(err.message)
-                dispatch(statusActions.setError({
-                    message: error.message,
-                }))
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 401:
+                        navigate(LOGIN_ROUTE, {
+                            state: {
+                                message: "You are not authorized"
+                            }
+                        })
+                        break
+
+                    case 404:
+                        navigate(ERROR_404_ROUTE)
+                        break
+                
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
 
         }

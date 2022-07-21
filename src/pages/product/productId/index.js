@@ -8,6 +8,7 @@ import Navbar from '../../../components/Navbar'
 import Preview from '../../../components/Preview'
 import Input from '../../../components/Input'
 import ActionButton from '../../../components/ActionButton'
+import AccountDropdown from '../../../components/AccountDropdown'
 import BorderOnlyButton from '../../../components/BorderOnlyButton'
 import Popup from '../../../components/Popup'
 import Notif from '../../../components/Notif/index'
@@ -25,6 +26,7 @@ import { Wrapper, Content } from '../../../pagesStyle/product/productId/index.st
 // helpers
 import { validateNumber } from '../../../helpers/validator/validateNumber'
 import { objectToQueryString } from '../../../helpers/converter/objectToQuery'
+import { dateToString } from '../../../helpers/converter/dateToString'
 
 // hooks
 import { useNotifications } from '../../../hooks/useNotifications'
@@ -38,13 +40,11 @@ import { statusActions } from '../../../store/status'
 
 // services
 import { addBidPrice, deleteProduct, getProductOneByID } from '../../../services/product'
+import { checkBid } from '../../../services/bids'
+import { updateNotifications } from '../../../services/notifications'
 
 // pages
-import { LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE, UPDATE_PRODUCT_ROUTE } from '../../../types/pages'
-import AccountDropdown from '../../../components/AccountDropdown'
-import { checkBid } from '../../../services/bids'
-import { dateToString } from '../../../helpers/converter/dateToString'
-import { updateNotifications } from '../../../services/notifications'
+import { LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE, UPDATE_PRODUCT_ROUTE, ERROR_404_ROUTE, ERROR_500_ROUTE } from '../../../types/pages'
 
 const InfoProduct = () => {
     /**************************************************************/
@@ -160,9 +160,26 @@ const InfoProduct = () => {
         } catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
 
@@ -209,9 +226,26 @@ const InfoProduct = () => {
         }catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
 
@@ -237,9 +271,26 @@ const InfoProduct = () => {
         } catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     /**************************************************************/
@@ -285,11 +336,23 @@ const InfoProduct = () => {
                 setProduct(response)
                 setIsDisabled(bidsCount > 0)
             } catch(err){
-                console.log(err)
                 const error = JSON.parse(err.message)
-                dispatch(statusActions.setError({
-                    message: error.message,
-                }))
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 404:
+                        navigate(ERROR_404_ROUTE)
+                        break
+                
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
         }
 
@@ -443,7 +506,7 @@ const InfoProduct = () => {
             </Slider>
             <Content>
                 {
-                    product ? (
+                    product && (
                         <>
                             <Preview active={true}
                                     images={product.images}
@@ -511,48 +574,42 @@ const InfoProduct = () => {
                                     }
                                     />
                             {
-                                isLoggedIn ? (
-                                    currentUser.user.id !== product.user_id && (
-                                        <Popup show={show}
-                                            onClick={onClick}
-                                            >
-                                            <form onSubmit={onSubmit}>
-                                                <h4>Masukkan Harga Tawarmu</h4>
-                                                <p className='mb-4'>
-                                                    Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
-                                                </p>
-                                                <SellerInfo imageUrl={product.images[0]}
-                                                            sellerName={product.name}
-                                                            sellerCity={`Rp. ${product.price.toLocaleString()}`}
-                                                            width="100%"
-                                                            additionalClass="my-3"
-                                                            style={{ background: "var(--grey-color)" }}
-                                                            withShadow
-                                                            />
-
-                                                <Input type="text"
-                                                        text="Harga Tawar"
-                                                        placeholder="Rp 0,00"
-                                                        value={`Rp. ${bidPrice.toLocaleString()}`}
-                                                        onChange={onChange}
-                                                        required
+                                isLoggedIn && currentUser.user.id !== product.user_id && (
+                                    <Popup show={show}
+                                        onClick={onClick}
+                                        >
+                                        <form onSubmit={onSubmit}>
+                                            <h4>Masukkan Harga Tawarmu</h4>
+                                            <p className='mb-4'>
+                                                Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
+                                            </p>
+                                            <SellerInfo imageUrl={product.images[0]}
+                                                        sellerName={product.name}
+                                                        sellerCity={`Rp. ${product.price.toLocaleString()}`}
+                                                        width="100%"
+                                                        additionalClass="my-3"
+                                                        style={{ background: "var(--grey-color)" }}
+                                                        withShadow
                                                         />
-                                                <ActionButton text="Kirim"
-                                                                width="100%"
-                                                                color="var(--primary-purple-04)"
-                                                                onClick={onSubmit}
-                                                                style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                                                                />
-                                            </form>
-                                        </Popup>
-                                    )
-                                ) : (
-                                <></>
+
+                                            <Input type="text"
+                                                    text="Harga Tawar"
+                                                    placeholder="Rp 0,00"
+                                                    value={`Rp. ${bidPrice.toLocaleString()}`}
+                                                    onChange={onChange}
+                                                    required
+                                                    />
+                                            <ActionButton text="Kirim"
+                                                            width="100%"
+                                                            color="var(--primary-purple-04)"
+                                                            onClick={onSubmit}
+                                                            style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                                                            />
+                                        </form>
+                                    </Popup>
                                 )
                             }
                         </>
-                    ) : (
-                        <></>
                     )
                 }
                 

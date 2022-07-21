@@ -24,6 +24,7 @@ import { Wrapper, Content } from '../../pagesStyle/product/sold.styles.js'
 
 // helpers
 import { objectToQueryString } from '../../helpers/converter/objectToQuery'
+import { dateToString } from '../../helpers/converter/dateToString'
 
 // hooks
 import { useFlashMessage } from '../../hooks/useFlashMessage'
@@ -37,11 +38,10 @@ import { statusActions } from '../../store/status'
 
 // services
 import { getProducts } from '../../services/product'
+import { updateNotifications } from '../../services/notifications'
 
 // pages
-import { BID_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
-import { dateToString } from '../../helpers/converter/dateToString'
-import { updateNotifications } from '../../services/notifications'
+import { BID_ROUTE, DAFTAR_JUAL_ROUTE, ERROR_404_ROUTE, ERROR_500_ROUTE, LOGIN_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
 
 const SoldProducts = () => {
     /**************************************************************/
@@ -133,9 +133,26 @@ const SoldProducts = () => {
         }catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     
@@ -199,9 +216,18 @@ const SoldProducts = () => {
             } catch(err){
                 console.log(err)
                 const error = JSON.parse(err.message)
-                dispatch(statusActions.setError({
-                    message: error.message,
-                }))
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
         }
 
@@ -209,7 +235,7 @@ const SoldProducts = () => {
             message: "",
         }))
         fetchData()
-    }, [dispatch, currentUser.user.id])
+    }, [dispatch, navigate, currentUser.user.id])
     /**************************************************************/
     
     const navLinks = [
