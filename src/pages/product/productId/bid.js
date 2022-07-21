@@ -32,8 +32,6 @@ import { statusActions } from '../../../store/status'
 import { acceptBid, acceptTransaction, rejectBid } from '../../../services/bids'
 import { getProductBidByProductID } from '../../../services/product'
 
-// pages
-import { HOME_ROUTE } from '../../../types/pages'
 const ProductBid = () => {
     
     /**************************************************************/

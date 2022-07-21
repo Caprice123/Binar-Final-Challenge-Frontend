@@ -177,7 +177,7 @@ export const updateProduct = createAsyncThunk(
             })
             formData.append("productId", productId)
 
-            const [responsePut, responseProductImage] = await Promise.all([
+            const [responsePut, _] = await Promise.all([
                 api.put(
                     `/api/v1/products/${productId}`,
                     requestBody,
