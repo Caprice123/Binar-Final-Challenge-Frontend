@@ -40,7 +40,7 @@ export const rejectBid = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            throw new Error(errorMessage)
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -61,7 +61,7 @@ export const acceptTransaction = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            throw new Error(errorMessage)
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -83,7 +83,7 @@ export const acceptBid = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            throw new Error(errorMessage)
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )

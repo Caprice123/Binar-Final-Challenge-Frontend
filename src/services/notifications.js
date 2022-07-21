@@ -14,7 +14,7 @@ export const getNotifications = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            throw new Error(errorMessage)
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -33,7 +33,7 @@ export const updateNotifications = createAsyncThunk(
             return data
         } catch(err){
             const errorMessage = err.response.data
-            throw new Error(errorMessage)
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )

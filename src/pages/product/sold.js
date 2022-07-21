@@ -131,8 +131,10 @@ const SoldProducts = () => {
             navigate(helperRedirectUrl(notification), { replace: true })
 
         }catch(err){
+            console.log(err)
+            const error = JSON.parse(err.message)
             dispatch(statusActions.setError({
-                message: err.message
+                message: error.message,
             }))
         }
     }
@@ -196,8 +198,9 @@ const SoldProducts = () => {
                 setProducts(response)
             } catch(err){
                 console.log(err)
+                const error = JSON.parse(err.message)
                 dispatch(statusActions.setError({
-                    message: err.message,
+                    message: error.message,
                 }))
             }
         }
@@ -232,27 +235,27 @@ const SoldProducts = () => {
         const productId = notification.products.product_id
         switch(notification.message){
             case "Penawaran terkirim":
-                return `/product/${productId}`
+                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda dalam negosiasi":
-                return `/product/${productId}`
+                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda ditolak":
-                return `/product/${productId}`
+                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda diterima":
-                return `/product/${productId}`
+                return `${PRODUCTS_ROUTE}/${productId}`
                 
 
             case "Produk ditawar":
-                return `/product/${productId}/bid`
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Melanjutkan penawaran":
-                return `/product/${productId}/bid`
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Menolak penawaran":
-                return `/product/${productId}/bid`
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Menyelesaikan penawaran":
-                return `/product/${productId}/bid`
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
 
 
             default:
-                return `/product/${productId}`
+                return `${PRODUCTS_ROUTE}/${productId}`
         }        
     }
     

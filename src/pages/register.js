@@ -123,8 +123,9 @@ const Registrasi = () => {
             })
         } catch(err){
             console.log(err);
+            const error = JSON.parse(err.message)
             dispatch(statusActions.setError({
-                message: err.message,
+                message: error.message,
             }))
         }
     }

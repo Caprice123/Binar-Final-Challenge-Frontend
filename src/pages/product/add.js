@@ -182,9 +182,10 @@ const AddProduct = () => {
 			})
 		} catch(err){
 			console.log(err)
-			dispatch(statusActions.setError({
-				message: err.message,
-			}))
+			const error = JSON.parse(err.message)
+            dispatch(statusActions.setError({
+                message: error.message,
+            }))
 		}
 	}
 
@@ -252,8 +253,9 @@ const AddProduct = () => {
 				setAvailableCategories(response)
 			} catch(err){
 				console.log(err)
+				const error = JSON.parse(err.message)
 				dispatch(statusActions.setError({
-					message: err.message,
+					message: error.message,
 				}))
 			}
 		}
