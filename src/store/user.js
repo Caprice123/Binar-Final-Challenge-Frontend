@@ -47,45 +47,17 @@ const userSlice = createSlice({
     }, 
     extraReducers: {
         // getCurrentUser
-        [getCurrentUser.pending]: (state) => {
-            state.loading = true
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
         [getCurrentUser.fulfilled]: (state, action) => {
-            state.loading = false
-            state.error = ""
             state.currentUser.user = action.payload
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
-        [getCurrentUser.rejected]: (state, action) => {
-            console.log(action.error.message)
-            state.loading = false
-            state.error = ""
             localStorage.setItem("userState", JSON.stringify(state))
         },
 
         // login
-        [login.pending]: (state) => {
-            state.loading = true
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
         [login.fulfilled]: (state, action) => {
-            console.log(action.payload)
-            state.loading = false
-            state.error = ""
             state.currentUser = action.payload
             state.isLoggedIn = true
             localStorage.setItem("userState", JSON.stringify(state))
-        },
-        [login.rejected]: (state, action) => {
-            const { message: errorMessage } = JSON.parse(action.error.message)
-            console.log(action)
-            state.loading = false
-            state.error = errorMessage
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
+        }
     }
 })
 

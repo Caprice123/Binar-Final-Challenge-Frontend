@@ -1,27 +1,48 @@
+// react router dom
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Provider } from 'react-redux'
 
+// react redux
+import { Provider } from 'react-redux'
 import store from './store';
+
+// home pages
+import Home from './pages';
+
+// auth pages
 import Login from './pages/login';
 import Registrasi from './pages/register';
+import Logout from './pages/logout';
 
-
-import AddProduct from './pages/product/add';
-
-import GlobalStyle from './GlobalStyle';
+// user routes
 import InfoProfile from './pages/user/profile';
+
+// product routes
+import AddProduct from './pages/product/add';
 import InfoProduct from './pages/product/productId';
-import ProductBid from './pages/product/productId/bid';
-import ProtectedRoute from './auth-components/ProtectedRoute';
+import UpdateProduct from './pages/product/productId/update';
 import ListProducts from './pages/product';
 import Wishlist from './pages/product/wishlist';
 import SoldProducts from './pages/product/sold';
-import Home from './pages';
-import { GoogleOAuthProvider } from '@react-oauth/google'
-import { ADD_PRODUCT_ROUTE, BID_ROUTE, DAFTAR_JUAL_ROUTE, HOME_ROUTE, LOGIN_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, REGISTER_ROUTE, SOLD_PRODUCT_ROUTE, UPDATE_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from './types/pages';
-import Logout from './pages/logout';
-import UpdateProduct from './pages/product/productId/update';
+
+// bid routes
+import ProductBid from './pages/product/productId/bid';
+
+// error routes
+import Error404 from './pages/errors/404';
+import Error500 from './pages/errors/500';
+
+// styles
+import GlobalStyle from './GlobalStyle';
+
+// auth-components
+import ProtectedRoute from './auth-components/ProtectedRoute';
 import PhoneProtectedRoute from './auth-components/PhoneProtectedRoute';
+
+// pages
+import { ADD_PRODUCT_ROUTE, BID_ROUTE, DAFTAR_JUAL_ROUTE, HOME_ROUTE, LOGIN_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, REGISTER_ROUTE, SOLD_PRODUCT_ROUTE, UPDATE_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from './types/pages';
+
+// others
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 function App() {
 	return (
@@ -112,6 +133,16 @@ function App() {
 								</PhoneProtectedRoute>
 							</ProtectedRoute>
 						} 
+					/>
+
+					{/* ERROR ROUTES */}
+					<Route exact path="/404" element={
+							<Error404 />
+						}
+					/>
+					<Route exact path="/500" element={
+							<Error500 />
+						}
 					/>
 				</Routes>
 				<GlobalStyle />

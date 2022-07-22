@@ -31,7 +31,7 @@ import {useGoogleLogin } from '@react-oauth/google'
 import { useFlashMessage } from '../hooks/useFlashMessage';
 
 // pages
-import { HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
+import { ERROR_500_ROUTE, HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
 
 // others
 import axios from 'axios'
@@ -127,9 +127,18 @@ const Login = () => {
         } catch(err){
             console.log(err);
             const error = JSON.parse(err.message)
-            dispatch(statusActions.setError({
-                message: error.message,
-            }))
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
 
