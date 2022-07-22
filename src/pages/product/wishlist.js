@@ -6,7 +6,6 @@ import Notif from '../../components/Notif'
 import NotifItems from '../../components/NotifItems'
 import Slider from '../../components/Slider'
 import ImagePreview from '../../components/ImagePreview'
-import Image from '../../200774.jpg'
 import NoImage from '../../assets/images/no-image-found.jpg'
 import ImagePerson from '../../assets/images/belumadaminat.png'
 import SellerInfo from '../../components/SellerInfo'
@@ -37,11 +36,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { statusActions } from '../../store/status'
 
 // services
-import { getCurrentUser } from '../../services/user'
 import { getWishlist } from '../../services/product'
 
 // pages
-import { BID_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import { BID_ROUTE, LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, ERROR_404_ROUTE, ERROR_500_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, SOLD_PRODUCT_ROUTE, USER_PROFILE_ROUTE, WISHLIST_ROUTE } from '../../types/pages'
+import { dateToString } from '../../helpers/converter/dateToString'
+import { updateNotifications } from '../../services/notifications'
 
 const Wishlist = () => {
     /**************************************************************/
@@ -113,8 +113,47 @@ const Wishlist = () => {
     }
 
     // onMarkAsRead for calling api that will make specific notification is read
-    const onMarkAsRead = (notificationId) => {
+    const onMarkAsRead = (e, notification) => {
+        e.preventDefault()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
+            dispatch(updateNotifications({
+                notificationId: notification.id,
+            })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(helperRedirectUrl(notification), { replace: true })
+
+        }catch(err){
+            console.log(err)
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
+        }
     }
 
     // onClickEdit for navigating to edit user profile page
@@ -124,7 +163,7 @@ const Wishlist = () => {
 
     // onSearch for navigating to home page everytime search in navbar is clicked
     const onSearch = (value) => {
-        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
+        navigate(`/?${objectToQueryString({ search: value, category: '' })}`)
     }
     
     // onCloseAlertError for resetting error when close button alert for errror message is clicked
@@ -162,8 +201,6 @@ const Wishlist = () => {
                 dispatch(statusActions.setLoading({
                     status: true,
                 }))
-
-                await dispatch(getCurrentUser()).unwrap()
     
                 const response = await dispatch(
                     getWishlist()
@@ -174,16 +211,27 @@ const Wishlist = () => {
                 }))
                 setProducts(response)
             } catch(err){
-                dispatch(statusActions.setError({
-                    message: err.message,
-                }))
+                console.log(err)
+                const error = JSON.parse(err.message)
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
         }
         dispatch(statusActions.setError({
             message: "",
         }))
         fetchData()
-    }, [dispatch, currentUser.user.id])
+    }, [dispatch, navigate, currentUser.user.id])
     /**************************************************************/
     
     
@@ -205,6 +253,35 @@ const Wishlist = () => {
             mobileComponent: <p onClick={() => onClickSlider(true, "Account")} style={{ cursor: "pointer" }}>Akun Saya</p>
         }, 
     ]
+
+    const helperRedirectUrl = (notification) => {
+        const productId = notification.products.product_id
+        switch(notification.message){
+            case "Penawaran terkirim":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda dalam negosiasi":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda ditolak":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda diterima":
+                return `${PRODUCTS_ROUTE}/${productId}`
+                
+
+            case "Produk ditawar":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Melanjutkan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Menolak penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Menyelesaikan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+
+
+            default:
+                return `${PRODUCTS_ROUTE}/${productId}`
+        }        
+    }
+    
 
     return (
         <Wrapper>
@@ -229,15 +306,14 @@ const Wishlist = () => {
                 {
                     notifications.map((data, id) => (
                         <div key={id}>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${id}`}
-                                        seen={data.read}
-                                        imageUrl={Image}
+                            <NotifItems seen={data.read}
+                                        imageUrl={data.images.name}
                                         actionName={data.title}
-                                        time={data.createdAt}
+                                        time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
                                         bidPrice={data.bids.request_price}
-                                        onClick={() => onMarkAsRead(data.id)}
+                                        onClick={(e) => onMarkAsRead(data)}
                                         />
                         </div>
                     ))

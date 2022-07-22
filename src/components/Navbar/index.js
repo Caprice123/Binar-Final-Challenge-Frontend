@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { HOME_ROUTE, LOGIN_ROUTE } from '../../types/pages'
 import ActionButton from '../ActionButton'
 
-import { validateString } from '../../helpers/validateString'
+import { validateString } from '../../helpers/validator/validateString'
 // styles
 import { Wrapper, Content, Actions } from './Navbar.styles'
 
@@ -54,8 +54,8 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
         validateString(value, setSearchName)
     }
 
-    const onClickSearchButton = () => {
-        console.log(searchName)
+    const onClickSearchButton = (e) => {
+        e.preventDefault()
         onSearch(searchName)
     }
 
@@ -77,7 +77,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                 </p>
                 <Actions className="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div className="navbar-nav w-100 d-flex justify-content-between align-items-center">
-                        <div className="d-flex navbar-nav">
+                        <form onSubmit={onClickSearchButton} className="d-flex navbar-nav">
                             <Link className="navbar-brand" 
                                     to={HOME_ROUTE}>        
                             </Link>
@@ -99,7 +99,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                                     </>
                                 )
                             }
-                        </div>
+                        </form>
                         <div className="nav-links d-flex align-items-center">
                             {
                                 !isLoggedIn ? (

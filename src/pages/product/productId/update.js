@@ -14,11 +14,11 @@ import Navbar from '../../../components/Navbar'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import Alert from '../../../components/Alert'
 
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // helpers
-import { validateNumber } from '../../../helpers/validateNumber'
-import { validateSizeFile } from '../../../helpers/validateSizeFile'
+import { validateNumber } from '../../../helpers/validator/validateNumber'
+import { validateSizeFile } from '../../../helpers/validator/validateSizeFile'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,13 +28,13 @@ import { statusActions } from '../../../store/status'
 
 // services
 import { getAllCategories, updateProduct } from '../../../services/product'
+import { getProductOneByID } from '../../../services/product'
 
 // styles
-import { Wrapper, Content } from '../../../pagesStyle/product/update.styles'
+import { Wrapper, Content } from '../../../pagesStyle/product/productId/update.styles'
 
 // pages
-import { DAFTAR_JUAL_ROUTE, HOME_ROUTE } from '../../../types/pages'
-import { getProductOneByID } from '../../../services/product'
+import { DAFTAR_JUAL_ROUTE, LOGIN_ROUTE, ERROR_404_ROUTE, ERROR_500_ROUTE } from '../../../types/pages'
 
 const UpdateProduct = () => {
 	/**************************************************************/
@@ -140,7 +140,8 @@ const UpdateProduct = () => {
 	}
 
 	// onSubmit for calling addProduc api when user click 'terbitkan' button 
-	const onSubmit = async () => {
+	const onSubmit = async (e) => {
+		e.preventDefault()
 		if (name.length === 0){
 			alert("Tolong isi nama product")
 			return
@@ -166,7 +167,7 @@ const UpdateProduct = () => {
 			}))
 
 			const categoryId = availableCategories.find(cat => cat.name === category).id
-			const product = await dispatch(updateProduct({
+			await dispatch(updateProduct({
                 productId,
 				name,
 				price,
@@ -186,9 +187,27 @@ const UpdateProduct = () => {
 			})
 		} catch(err){
 			console.log(err)
-			dispatch(statusActions.setError({
-				message: err.message,
-			}))
+			const error = JSON.parse(err.message)
+			const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
 		}
 	}
 
@@ -241,16 +260,20 @@ const UpdateProduct = () => {
 	// for getting all categories
 	useEffect(() => {
         const fetchImage = async (image_url) => {
-            if (image_url){
-                const response = await fetch(image_url);
-                // here image is url/location of image
-                const blob = await response.blob();
-                const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
-                return {
-					file,
-					imageUrl: URL.createObjectURL(file)
+			try{
+				if (image_url){
+					const response = await fetch(image_url);
+					// here image is url/location of image
+					const blob = await response.blob();
+					const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
+					return {
+						file,
+						imageUrl: URL.createObjectURL(file)
+					}
 				}
-            }
+			} catch(err){
+				navigate(ERROR_500_ROUTE)
+			}
         }
 
 		const fetchCategories = async () => {
@@ -277,13 +300,30 @@ const UpdateProduct = () => {
                 setDescription(initialProduct.description)
                 setCategory(initialProduct.category.name)
                 const files = await Promise.all(initialProduct.images.map(image => fetchImage(image)))
-                console.log(files)
                 setProductImages(files)
 			} catch(err){
 				console.log(err)
-				dispatch(statusActions.setError({
-					message: err.message,
-				}))
+				const error = JSON.parse(err.message)
+				const statusCode = error.statusCode
+				switch (statusCode){
+					case 401:
+						navigate(LOGIN_ROUTE)
+						break
+						
+					case 404:
+						navigate(ERROR_404_ROUTE)
+						break
+				
+					case 500:
+						navigate(ERROR_500_ROUTE)
+						break
+					
+					default:
+						dispatch(statusActions.setError({
+							message: error.message,
+						}))
+						break
+				}
 			}
 		}
 
@@ -292,7 +332,7 @@ const UpdateProduct = () => {
 		}))
 		
 		fetchCategories()
-	}, [dispatch, productId])
+	}, [dispatch, navigate, productId])
 	/**************************************************************/
 
 	return (
@@ -312,10 +352,8 @@ const UpdateProduct = () => {
 					/>
             
 			<Navbar	centeredText="Lengkapi Detail Product"/>
-			<Content className="mx-auto position-relative">
-				<Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
-					<i className="fa-solid fa-arrow-left-long"></i>
-				</Link>
+			<Content className="mx-auto position-relative" onSubmit={onSubmit}>
+				<i className="back-icon fa-solid fa-arrow-left-long py-3" onClick={onClickGoBack} style={{ cursor: "pointer" }}></i>
 				<Input type="text" 
 						text="Nama Product" 
 						placeholder="Nama Product" 

@@ -14,11 +14,11 @@ import Navbar from '../../components/Navbar'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import Alert from '../../components/Alert'
 
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // helpers
-import { validateNumber } from '../../helpers/validateNumber'
-import { validateSizeFile } from '../../helpers/validateSizeFile'
+import { validateNumber } from '../../helpers/validator/validateNumber'
+import { validateSizeFile } from '../../helpers/validator/validateSizeFile'
 
 // redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,7 +33,7 @@ import { addProduct, getAllCategories } from '../../services/product'
 import { Wrapper, Content } from '../../pagesStyle/product/add.styles'
 
 // pages
-import { DAFTAR_JUAL_ROUTE, HOME_ROUTE } from '../../types/pages'
+import { DAFTAR_JUAL_ROUTE, ERROR_500_ROUTE } from '../../types/pages'
 
 const AddProduct = () => {
 	/**************************************************************/
@@ -136,7 +136,8 @@ const AddProduct = () => {
 	}
 
 	// onSubmit for calling addProduc api when user click 'terbitkan' button 
-	const onSubmit = async () => {
+	const onSubmit = async (e) => {
+		e.preventDefault()
 		if (name.length === 0){
 			alert("Tolong isi nama product")
 			return
@@ -162,7 +163,7 @@ const AddProduct = () => {
 			}))
 
 			const categoryId = availableCategories.find(cat => cat.name === category).id
-			const product = await dispatch(addProduct({
+			await dispatch(addProduct({
 				name,
 				price,
 				categoryId,
@@ -181,9 +182,19 @@ const AddProduct = () => {
 			})
 		} catch(err){
 			console.log(err)
-			dispatch(statusActions.setError({
-				message: err.message,
-			}))
+			const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+			switch (statusCode){
+				case 500:
+					navigate(ERROR_500_ROUTE)
+					break
+				
+				default:
+					dispatch(statusActions.setError({
+						message: error.message,
+					}))
+					break
+			}
 		}
 	}
 
@@ -251,9 +262,19 @@ const AddProduct = () => {
 				setAvailableCategories(response)
 			} catch(err){
 				console.log(err)
-				dispatch(statusActions.setError({
-					message: err.message,
-				}))
+				const error = JSON.parse(err.message)
+				const statusCode = error.statusCode
+                switch (statusCode){
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
 			}
 		}
 
@@ -262,7 +283,7 @@ const AddProduct = () => {
 		}))
 		
 		fetchCategories()
-	}, [dispatch])
+	}, [dispatch, navigate])
 	/**************************************************************/
 
 	return (
@@ -282,10 +303,8 @@ const AddProduct = () => {
 					/>
             
 			<Navbar	centeredText="Lengkapi Detail Product"/>
-			<Content className="mx-auto position-relative">
-				<Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
-					<i className="fa-solid fa-arrow-left-long"></i>
-				</Link>
+			<Content className="mx-auto position-relative" onSubmit={onSubmit}>
+				<i className="back-icon fa-solid fa-arrow-left-long py-3" onClick={onClickGoBack} style={{ cursor: "pointer" }}></i>
 				<Input type="text" 
 						text="Nama Product" 
 						placeholder="Nama Product" 

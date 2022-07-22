@@ -14,7 +14,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from '../assets/css/auth.module.css'
 
 // helpers
-import { validateEmail } from '../helpers/validateEmail';
+import { validateEmail } from '../helpers/validator/validateEmail';
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,7 +31,7 @@ import {useGoogleLogin } from '@react-oauth/google'
 import { useFlashMessage } from '../hooks/useFlashMessage';
 
 // pages
-import { HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
+import { ERROR_500_ROUTE, HOME_ROUTE, REGISTER_ROUTE } from '../types/pages';
 
 // others
 import axios from 'axios'
@@ -88,7 +88,8 @@ const Login = () => {
     }
 
     // onSubmit for calling api when user click login button
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
+        e.preventDefault()
         if (email.length === 0){
             alert("Tolong isi email")
             return
@@ -125,9 +126,19 @@ const Login = () => {
             })
         } catch(err){
             console.log(err);
-            dispatch(statusActions.setError({
-                message: err.message,
-            }))
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
 
@@ -145,6 +156,7 @@ const Login = () => {
 
     const googleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
+            console.log(tokenResponse)
             const userInfo = await axios.get(
                 'https://www.googleapis.com/oauth2/v3/userinfo',
                 { headers: { Authorization: 'Bearer ' + tokenResponse.access_token } },
@@ -177,12 +189,14 @@ const Login = () => {
 					color="var(--white-color)" 
 					text={flashMessage} 
 					onClick={onCloseFlash} 
+                    id="flash-message"
 					/>
             <Alert active={error.length > 0} 
                     backgroundColor="var(--redalert-background)" 
                     color="var(--redalert-font)" 
                     text={error} 
-                    onClick={onCloseAlert} 
+                    onClick={onCloseAlert}
+                    id="error-message" 
                     />
             
             <div className={styles.page_auth + " vh-100"}>
@@ -196,39 +210,42 @@ const Login = () => {
                         <div className="col-lg-6 col-12">
                             <div className={styles.auth_form_wrapper + " mx-auto"}>
                                 <h3 className="title fw-bold">Masuk</h3>
-                                   
-                                <Input type="email"
-                                        text="Email"
-                                        placeholder="handayani@gmail.com"
-                                        value={email}
-                                        onChange={onChange}
-                                        required
-                                        />
-                                <Input type="password"
-                                        text="Password"
-                                        placeholder="Masukan password anda"
-                                        value={password}
-                                        onChange={onChange}
-                                        required
-                                        />
-                                <ActiveButton width="100%"
-                                                color="var(--primary-purple-04)"
-                                                text="Masuk"
-                                                style={{ margin: "1.5rem 0" }}
-                                                onClick={onSubmit}
-                                                />
+                                <form  onSubmit={onSubmit}>
+                                    <Input type="email"
+                                            text="Email"
+                                            placeholder="handayani@gmail.com"
+                                            value={email}
+                                            onChange={onChange}
+                                            required
+                                            />
+                                    <Input type="password"
+                                            text="Password"
+                                            placeholder="Masukan password anda"
+                                            value={password}
+                                            onChange={onChange}
+                                            required
+                                            />
+                                    <ActiveButton width="100%"
+                                                    color="var(--primary-purple-04)"
+                                                    text="Masuk"
+                                                    style={{ margin: "1.5rem 0" }}
+                                                    onClick={onSubmit}
+                                                    id="submit-btn"
+                                                    />
+                                </form>
                                  <ActiveButton width="100%"
                                                 color="var(--primary-purple-04)"
                                                 text="Masuk dengan Google"
                                                 icon={<FcGoogle className="me-3"/>}
                                                 style={{ margin: "1.5rem 0" }}
                                                 onClick={googleLogin}
+                                                id="login-via-google"
                                                 />
                                 <div className={styles.footer}>
                                     <p className='text-center mt-3'>
                                         Belum punya akun? 
                                     
-                                        <Link to={REGISTER_ROUTE} className={`${styles.text_purple} ms-3`}>
+                                        <Link to={REGISTER_ROUTE} className={`${styles.text_purple} ms-3`} id="register-btn">
                                             Daftar disini
                                         </Link>
                                     

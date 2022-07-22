@@ -2,18 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 // components
 import Navbar from '../../../components/Navbar'
-import Notif from '../../../components/Notif'
 import SellerInfo from '../../../components/SellerInfo'
 import BorderOnlyButton from '../../../components/BorderOnlyButton'
 import ActionButton from '../../../components/ActionButton'
 import InputRadio from '../../../components/InputRadio'
-import Image from '../../../200774.jpg'
 import NotifItems from '../../../components/NotifItems'
 import Popup from '../../../components/Popup'
 import LoadingSpinner from '../../../components/LoadingSpinner'
 import Alert from '../../../components/Alert'
 
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // styles
 import { Wrapper, Content } from '../../../pagesStyle/product/productId/bid.styles'
@@ -31,57 +29,39 @@ import { useDispatch, useSelector } from 'react-redux'
 import { statusActions } from '../../../store/status'
 
 // services
-import { acceptBid, acceptTransaction, rejectBid, updateStatusBid } from '../../../services/bids'
+import { acceptBid, acceptTransaction, rejectBid } from '../../../services/bids'
 import { getProductBidByProductID } from '../../../services/product'
 
 // pages
-import { HOME_ROUTE, DAFTAR_JUAL_ROUTE } from '../../../types/pages'
+import { ERROR_404_ROUTE, ERROR_500_ROUTE, LOGIN_ROUTE } from '../../../types/pages'
+
 const ProductBid = () => {
-    const [product, setProduct] = useState({})
-
-    const navLinks = [
-        {
-            type: "text",
-            to: DAFTAR_JUAL_ROUTE,
-            additionalIcon: <i className="fa-solid fa-list"></i>,
-            mobileComponent: <p>Daftar Jual</p>
-        }, {
-            type: "others",
-            to: "/notifications",
-            additionalIcon: <Notif datas={product ? product.bids : []} />,
-            mobileComponent: <p>Notifications</p>
-        }, {
-            type: "text",
-            to: "",
-            additionalIcon: <i className="fa-solid fa-user"></i>,
-            mobileComponent: <p>Akun Saya</p>
-        }, 
-    ]
-
+    
     /**************************************************************/
     // REDUX STATE
     const { currentUser } = useSelector(state => state.user)
     const { loading, error } = useSelector(state => state.status)
     /**************************************************************/
-
-
+    
+    
     /**************************************************************/
     // STATE
     // FLASH STATE
     const [flashMessage, setFlashMessage] = useFlashMessage("")
-
+    
     // POPUP STATE
     const [isRejectApprove, setIsRejectApprove] = useState(false)
     const [isAcceptApprove, setIsAcceptApprove] = useState(false)
     const [isUpdateStatusApprove, setIsUpdateStatusApprove] = useState(false)
-
+    
     // UPDATE STATUS
     const [updateStatus, setUpdateStatus] = useState("sold")
     
     // MAIN STATE
+    const [product, setProduct] = useState({})
     const [selectedBids, setSelectedBids] = useState({})
     /**************************************************************/
-
+    
 
     /**************************************************************/
     // REACT-ROUTER-DOM HOOKS
@@ -132,9 +112,27 @@ const ProductBid = () => {
             setProduct(responseProduct)
         } catch(err){
             console.log(err)
-            dispatch(statusActions.setError({
-                message: err.message,
-            }))
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     
@@ -172,9 +170,27 @@ const ProductBid = () => {
             setProduct(responseProduct)
         } catch(err){
             console.log(err)
-            dispatch(statusActions.setError({
-                message: err.message,
-            }))
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     
@@ -219,9 +235,27 @@ const ProductBid = () => {
             setProduct(responseProduct)
         } catch(err){
             console.log(err)
-            dispatch(statusActions.setError({
-                message: err.message,
-            }))
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }   
     
@@ -247,6 +281,10 @@ const ProductBid = () => {
     const onCloseFlash = () => {
         setFlashMessage("")
     }
+
+    const onClickGoBack = () => {
+        navigate(-1)
+    }
     /**************************************************************/
 
 
@@ -270,9 +308,27 @@ const ProductBid = () => {
                 setProduct(response)
             } catch(err){
                 console.log(err)
-                dispatch(statusActions.setError({
-                    message: err.message,
-                }))
+                const error = JSON.parse(err.message)
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 401:
+                        navigate(LOGIN_ROUTE)
+                        break
+                        
+                    case 404:
+                        navigate(ERROR_404_ROUTE)
+                        break
+                
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
         }
         dispatch(statusActions.setError({
@@ -280,7 +336,7 @@ const ProductBid = () => {
         }))
 
         fetchData()
-	}, [dispatch, productId])
+	}, [dispatch, navigate, productId])
     /**************************************************************/
 
 
@@ -302,10 +358,8 @@ const ProductBid = () => {
             
             <Navbar centeredText="Info Penawar" 
                     />
-            <Content className="mx-auto position-relative"> 
-                <Link to={HOME_ROUTE} className="back-icon py-3">
-					<i className="fa-solid fa-arrow-left-long"></i>
-				</Link>
+            <Content className="mx-auto position-relative">
+                <i className="fa-solid fa-arrow-left-long back-icon py-3" onClick={onClickGoBack}></i>
                 <SellerInfo width="100%"
                             imageUrl={product.images ? product?.images[0].name : ""}
                             sellerName={product.name ? product.name : ""}
@@ -332,22 +386,20 @@ const ProductBid = () => {
                                                 bid.status === "pending" || bid.status === "waiting_for_negotiation" ? (
                                                     <>
                                                         <BorderOnlyButton text={bid.status === "pending" ? "Tolak" : "Status"}
-                                                                            width="30%"
+                                                                            width="35%"
                                                                             color="var(--primary-purple-04)"
                                                                             style={{ padding: "5px 12px"}}
-                                                                            onClick={bid.status === "pending" ? () => {{
-                                                                                onRejectApproval(true)         
-                                                                            }} : () => {
-                                                                                onUpdateStatusApproval(true)
-                                                                            }}
+                                                                            onClick={bid.status === "pending" 
+                                                                            ? () => onRejectApproval(true)        
+                                                                            : () => onUpdateStatusApproval(true)}
                                                                             />
                                                         <ActionButton text={bid.status === "pending" ? "Terima" : "Hubungi di WA"}
-                                                                            width="30%"
+                                                                            width="35%"
                                                                             color="var(--primary-purple-04)"
                                                                             style={{ padding: "5px 12px", marginLeft: "1rem" }} 
-                                                                            onClick={bid.status === "pending" ? () => {
-                                                                                onAcceptApproval(true)
-                                                                            } : () => onCallByWA(bid.user.phone)}
+                                                                            onClick={bid.status === "pending" 
+                                                                            ? () => onAcceptApproval(true) 
+                                                                            : () => onCallByWA(bid.user.phone)}
                                                                             />
                                                     </>
                                                 ) : (
@@ -401,14 +453,14 @@ const ProductBid = () => {
                     <div className='product-match my-3 py-3'>
                         <h4 className='text-center'>Product Match</h4>
                         <SellerInfo width="100%"
-                                    imageUrl={currentUser.user.image_url}
-                                    sellerName="Nama Pembeli"
-                                    sellerCity="Kota"
+                                    imageUrl={selectedBids?.user?.image}
+                                    sellerName={selectedBids?.user?.name}
+                                    sellerCity={selectedBids?.user?.city}
                                     />
-                        <NotifItems imageUrl={Image}
-                                    productName="Jam Tangan Casio"
-                                    originalPrice={Number("250000")}
-                                    bidPrice={Number("200000")}
+                        <NotifItems imageUrl={product.images ? product?.images[0].name : ""}
+                                    productName={product.name}
+                                    originalPrice={product.price}
+                                    bidPrice={selectedBids?.request_price}
                                     />
                     </div>
                     <ActionButton text="Hubungi via WA"

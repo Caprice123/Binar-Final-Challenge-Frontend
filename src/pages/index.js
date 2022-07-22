@@ -29,11 +29,11 @@ import "swiper/css/navigation";
 
 // helpers
 import { objectToQueryString } from '../helpers/converter/objectToQuery';
+import { dateToString } from '../helpers/converter/dateToString';
 
 // hooks
 import { useFlashMessage } from '../hooks/useFlashMessage';
 import { useNotifications } from '../hooks/useNotifications';
-
 
 // redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -43,9 +43,10 @@ import { statusActions } from '../store/status';
 
 // services
 import { getAllCategories, getProducts } from '../services/product';
+import { updateNotifications } from '../services/notifications';
 
 // pages
-import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../types/pages';
+import { ADD_PRODUCT_ROUTE, DAFTAR_JUAL_ROUTE, ERROR_404_ROUTE, ERROR_500_ROUTE, LOGIN_ROUTE, LOGOUT_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE } from '../types/pages';
 
 const Home = () => {
     /**************************************************************/
@@ -120,8 +121,51 @@ const Home = () => {
     }
 
     // onMarkAsRead for calling api that will make specific notification is read
-    const onMarkAsRead = (notificationId) => {
+    const onMarkAsRead = (e, notification) => {
+        e.preventDefault()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
+            dispatch(updateNotifications({
+                notificationId: notification.id,
+            })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(helperRedirectUrl(notification), { replace: true })
+
+        }catch(err){
+            console.log(err)
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE, {
+                        state: {
+                            message: "Unauthorized"
+                        }
+                    })
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
+        }
     }
 
     // onOpen for keep track the state of navbar
@@ -151,7 +195,7 @@ const Home = () => {
     const onSearch = (value) => {
         navigate(`/?${objectToQueryString({
             ...search,
-            name: value
+            search: value
         })}`)
     }
     /**************************************************************/
@@ -194,19 +238,29 @@ const Home = () => {
                 setAvailableCategories(responseGetAllCategories)
                 setProducts(responseGetProducts)
             } catch(err){
-                dispatch(statusActions.setError({
-                    message: err.message
-                }))
+                console.log(err)
+                const error = JSON.parse(err.message)
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
         }
         dispatch(statusActions.setError({
             message: ""
         }))
 
-        const locationSearch = location.search.slice(1)
-        const queryParams = Object.fromEntries(new URLSearchParams(locationSearch))
+        const queryParams = Object.fromEntries(new URLSearchParams(location.search))
         const searchParams = {
-            name: queryParams.name || "",
+            search: queryParams.search || "",
             category: queryParams.category || ""
         }
 
@@ -238,6 +292,34 @@ const Home = () => {
     ]
     /**************************************************************/
 
+    const helperRedirectUrl = (notification) => {
+        const productId = notification.products.product_id
+        switch(notification.message){
+            case "Penawaran terkirim":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda dalam negosiasi":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda ditolak":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda diterima":
+                return `${PRODUCTS_ROUTE}/${productId}`
+                
+
+            case "Produk ditawar":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Melanjutkan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Menolak penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Menyelesaikan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+
+
+            default:
+                return `${PRODUCTS_ROUTE}/${productId}`
+        }        
+    }
+
     return (
         <Wrapper>
             <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
@@ -248,15 +330,15 @@ const Home = () => {
                 {
                     notifications.map((data) => (
                         <div key={data.id}>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${data.products.id}`}
+                            <NotifItems redirectTo={helperRedirectUrl(data)}
                                         seen={data.read}
-                                        imageUrl={Image}
+                                        imageUrl={data.images.name}
                                         actionName={data.title}
-                                        time={data.createdAt}
+                                        time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
                                         bidPrice={data.bids.request_price}
-                                        onClick={() => onMarkAsRead(data.id)}
+                                        onClick={(e) => onMarkAsRead(e, data)}
                                         />
                         </div>
                     ))

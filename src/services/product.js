@@ -114,7 +114,7 @@ export const addProduct = createAsyncThunk(
             return dataAddProduct
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -123,8 +123,8 @@ export const addBidPrice = createAsyncThunk(
     'product/addBidPrice',
     async (payload) => {
         console.log(payload)
-        const { productId, bidPrice } = payload
         try{
+            const { productId, bidPrice } = payload
             const response = await api.post(
                 `/api/v1/products/${productId}/bids`,
                 {
@@ -136,7 +136,7 @@ export const addBidPrice = createAsyncThunk(
             return datas
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -153,7 +153,7 @@ export const getAllCategories = createAsyncThunk(
             return datas
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -177,7 +177,7 @@ export const updateProduct = createAsyncThunk(
             })
             formData.append("productId", productId)
 
-            const [responsePut, responseProductImage] = await Promise.all([
+            const [responsePut, _] = await Promise.all([
                 api.put(
                     `/api/v1/products/${productId}`,
                     requestBody,
@@ -194,7 +194,7 @@ export const updateProduct = createAsyncThunk(
             return datas
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )
@@ -207,13 +207,14 @@ export const deleteProduct = createAsyncThunk(
 
             const response = await api.delete(
                 `/api/v1/products/${productId}`,
+                authHeader()
             )
             
             const datas = response.data
             return datas
         } catch(err){
             const errorMessage = err.response.data
-            throw Error(JSON.stringify(errorMessage))
+            throw new Error(JSON.stringify(errorMessage))
         }
     }
 )

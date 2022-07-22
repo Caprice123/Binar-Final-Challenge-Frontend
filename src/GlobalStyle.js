@@ -59,6 +59,13 @@ const GlobalStyle = createGlobalStyle`
         font-weight: 400;
         line-height: 18px;
     }
+    .btn:focus,.form-control:focus{
+        box-shadow: none !important;
+        outline: none !important;
+    }
 
+    .form-control:focus{
+        border-color: transparent !important;
+    }
 `
 export default GlobalStyle

@@ -12,10 +12,10 @@ import Textarea from '../../components/Textarea'
 import LoadingSpinner from '../../components/LoadingSpinner'
 import Alert from '../../components/Alert'
 
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 // helpers
-import { validatePhoneNumber } from '../../helpers/validatePhoneNumber'
+import { validatePhoneNumber } from '../../helpers/validator/validatePhoneNumber'
 
 // styles
 import { Wrapper, Content } from '../../pagesStyle/user/profile.styles'
@@ -31,7 +31,7 @@ import { statusActions } from '../../store/status'
 import { getCurrentUser, updateUser } from '../../services/user'
 
 // pages
-import { HOME_ROUTE } from '../../types/pages'
+import { ERROR_404_ROUTE, ERROR_500_ROUTE, LOGIN_ROUTE } from '../../types/pages'
 
 const InfoProfile = () => {
     /**************************************************************/
@@ -115,7 +115,8 @@ const InfoProfile = () => {
     }
 
     // onSubmit for calling updateUserProfile api when user click save button
-    const onSubmit =async () => {
+    const onSubmit =async (e) => {
+        e.preventDefault()
         if(name.length === 0){
             alert("Tolong isi nama anda")
             return
@@ -148,22 +149,40 @@ const InfoProfile = () => {
                 updateUser(payload)
             ).unwrap()
 
+            await dispatch(
+                getCurrentUser()
+            ).unwrap()
+
             dispatch(statusActions.setLoading({
                 status: false,
             }))
 
+            if (location.search){
+                const queryParams = Object.fromEntries(new URLSearchParams(location.search))
+                if (queryParams.next){
+                    return navigate(queryParams.next)
+                }
+            }
             setFlashMessage("Successfully updated profile")
-            // navigate(location.pathname, {
-            //     state: {
-            //         message: "Successfully updated profile"
-            //     },
-            //     replace: true
-            // })
         } catch(err){
             console.log(err)
-            dispatch(statusActions.setError({
-                message: err.message
-            }))
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     
@@ -191,23 +210,26 @@ const InfoProfile = () => {
     // for setting default value on input field tag
     useEffect(() => {
         const fetchImage = async (image_url) => {
-            if (image_url){
-                const response = await fetch(image_url);
-                // here image is url/location of image
-                const blob = await response.blob();
-                const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
-                setImage(file)
+            try{
+                if (image_url){
+                    const response = await fetch(image_url);
+                    // here image is url/location of image
+                    const blob = await response.blob();
+                    const file = new File([blob], image_url.split("/").pop(), {type: blob.type});
+                    setImage(file)
+                }
+            } catch (err){
+                navigate(ERROR_500_ROUTE)
             }
         }
 
         const getUser = async () => {
-            let user
             try{
                 dispatch(statusActions.setLoading({
                     status: true,
                 }))
 
-                user = await dispatch(
+                const user = await dispatch(
                     getCurrentUser()
                 ).unwrap()
 
@@ -215,16 +237,38 @@ const InfoProfile = () => {
                     status: false,
                 }))
 
-                setName(user.name)
-                setCity(user.city)
-                setAddress(user.address)
+                setName(user.name ? user.name : "")
+                setCity(user.city ? user.city : "")
+                setAddress(user.address ? user.address : "")
                 validatePhoneNumber(user.phone ? user.phone : "", "0", setPhone)
                 await fetchImage(user.image_url)
             } catch(err){
                 console.log(err)
-                dispatch(statusActions.setError({
-                    message: err.message
-                }))
+                const error = JSON.parse(err.message)
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 401:
+                        navigate(LOGIN_ROUTE, {
+                            state: {
+                                message: "You are not authorized"
+                            }
+                        })
+                        break
+
+                    case 404:
+                        navigate(ERROR_404_ROUTE)
+                        break
+                
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
 
         }
@@ -266,18 +310,13 @@ const InfoProfile = () => {
 					onClick={onCloseFlash} 
 					/>
             
-            <Navbar centeredText="Lengkapi Info Akun"
-                    />
-                
-            <Content className='mx-auto position-relative'>
-                <Link to={HOME_ROUTE} className="back-icon py-3" onClick={onClickGoBack}>
-					<i className="fa-solid fa-arrow-left-long"></i>
-				</Link>
+            <Navbar centeredText="Lengkapi Info Akun" />
+            <Content className='mx-auto position-relative' onSubmit={onSubmit}>
+                <i className="back-icon fa-solid fa-arrow-left-long py-3" onClick={onClickGoBack} style={{ cursor: "pointer" }}></i>
                 <div className='py-3 d-flex justify-content-center align-items-center'>
                     {
                         image ? (
                             <ImagePreview url={URL.createObjectURL(image)}
-
                                             onDelete={onDeleteImage}
                                             />
 
@@ -312,18 +351,17 @@ const InfoProfile = () => {
                 <Input type="text" 
 						text="No Handphone" 
 						placeholder="contoh: +628123456789" 
-						value={`${phone}`} 
+						value={phone} 
 						onChange={onChange}
 						required
 						/>
-
-                <div className='my-4'>
-                    <ActionButton text="Simpan"
-                                    width="100%"
-                                    color="var(--primary-purple-04)"
-                                    onClick={onSubmit}
-                                    />
-                </div>
+                <ActionButton text="Simpan"
+                                width="100%"
+                                color="var(--primary-purple-04)"
+                                textColor="var(--white-color)"
+                                onClick={onSubmit}
+                                className='my-4'
+                                />
             </Content>
         </Wrapper>
     )

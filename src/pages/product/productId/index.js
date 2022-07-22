@@ -8,12 +8,12 @@ import Navbar from '../../../components/Navbar'
 import Preview from '../../../components/Preview'
 import Input from '../../../components/Input'
 import ActionButton from '../../../components/ActionButton'
+import AccountDropdown from '../../../components/AccountDropdown'
 import BorderOnlyButton from '../../../components/BorderOnlyButton'
 import Popup from '../../../components/Popup'
 import Notif from '../../../components/Notif/index'
 import SellerInfo from '../../../components/SellerInfo'
 import Alert from '../../../components/Alert'
-import Image from '../../../200774.jpg'
 import NoImage from '../../../assets/images/no-image-found.jpg'
 import Slider from '../../../components/Slider'
 import NotifItems from '../../../components/NotifItems'
@@ -24,8 +24,9 @@ import LoadingSpinner from '../../../components/LoadingSpinner'
 import { Wrapper, Content } from '../../../pagesStyle/product/productId/index.styles'
 
 // helpers
-import { validateNumber } from '../../../helpers/validateNumber'
+import { validateNumber } from '../../../helpers/validator/validateNumber'
 import { objectToQueryString } from '../../../helpers/converter/objectToQuery'
+import { dateToString } from '../../../helpers/converter/dateToString'
 
 // hooks
 import { useNotifications } from '../../../hooks/useNotifications'
@@ -39,11 +40,11 @@ import { statusActions } from '../../../store/status'
 
 // services
 import { addBidPrice, deleteProduct, getProductOneByID } from '../../../services/product'
+import { checkBid } from '../../../services/bids'
+import { updateNotifications } from '../../../services/notifications'
 
 // pages
-import { LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE, UPDATE_PRODUCT_ROUTE } from '../../../types/pages'
-import AccountDropdown from '../../../components/AccountDropdown'
-import { checkBid } from '../../../services/bids'
+import { LOGIN_ROUTE, DAFTAR_JUAL_ROUTE, PRODUCTS_ROUTE, USER_PROFILE_ROUTE, LOGOUT_ROUTE, UPDATE_PRODUCT_ROUTE, ERROR_404_ROUTE, ERROR_500_ROUTE } from '../../../types/pages'
 
 const InfoProduct = () => {
     /**************************************************************/
@@ -131,7 +132,8 @@ const InfoProduct = () => {
     }
 
     // onSubmit for calling addBidPrice api when user click add bid price
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
+        e.preventDefault()
         if (bidPrice === 0){
             alert("Please insert bid price")
             return
@@ -157,9 +159,27 @@ const InfoProduct = () => {
             setFlashMessage("Successfully bid the project")
         } catch(err){
             console.log(err)
-            dispatch(statusActions.setError({
-                message: err.message,
-            }))
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
 
@@ -182,12 +202,51 @@ const InfoProduct = () => {
 
     // onSearch for navigating to home page and search for specific name
     const onSearch = (value) => {
-        navigate(`/?${objectToQueryString({ name: value, category: '' })}`)
+        navigate(`/?${objectToQueryString({ search: value, category: '' })}`)
     }
     
     // onMarkAsRead for calling api that will make specific notification is read
-    const onMarkAsRead = (notificationId) => {
+    const onMarkAsRead = (e, notification) => {
+        e.preventDefault()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
+            dispatch(updateNotifications({
+                notificationId: notification.id,
+            })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(helperRedirectUrl(notification), { replace: true })
+
+        }catch(err){
+            console.log(err)
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
+        }
     }
 
     const onDeleteProduct = async () => {
@@ -211,9 +270,27 @@ const InfoProduct = () => {
             })
         } catch(err){
             console.log(err)
-            dispatch(statusActions.setError({
-                message: err.message,
-            }))
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 401:
+                    navigate(LOGIN_ROUTE)
+                    break
+                    
+                case 404:
+                    navigate(ERROR_404_ROUTE)
+                    break
+            
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
     /**************************************************************/
@@ -259,10 +336,23 @@ const InfoProduct = () => {
                 setProduct(response)
                 setIsDisabled(bidsCount > 0)
             } catch(err){
-                console.log(err)
-                dispatch(statusActions.setError({
-                    message: err.message,
-                }))
+                const error = JSON.parse(err.message)
+                const statusCode = error.statusCode
+                switch (statusCode){
+                    case 404:
+                        navigate(ERROR_404_ROUTE)
+                        break
+                
+                    case 500:
+                        navigate(ERROR_500_ROUTE)
+                        break
+                    
+                    default:
+                        dispatch(statusActions.setError({
+                            message: error.message,
+                        }))
+                        break
+                }
             }
         }
 
@@ -313,6 +403,35 @@ const InfoProduct = () => {
         return () => navigate(LOGIN_ROUTE)
     }
 
+    const helperRedirectUrl = (notification) => {
+        const productId = notification.products.product_id
+        switch(notification.message){
+            case "Penawaran terkirim":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda dalam negosiasi":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda ditolak":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda diterima":
+                return `${PRODUCTS_ROUTE}/${productId}`
+                
+
+            case "Produk ditawar":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Melanjutkan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Menolak penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Menyelesaikan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+
+
+            default:
+                return `${PRODUCTS_ROUTE}/${productId}`
+        }        
+    }
+    
+
     return (
         <Wrapper>
             <LoadingSpinner active={loading} />
@@ -344,15 +463,15 @@ const InfoProduct = () => {
                 {
                     notifications.map((data) => (
                         <div key={data.id}>
-                            <NotifItems redirectTo={`${PRODUCTS_ROUTE}/${data.products.id}`}
+                            <NotifItems redirectTo={helperRedirectUrl(data)}
                                         seen={data.read}
-                                        imageUrl={Image}
+                                        imageUrl={data.images.name}
                                         actionName={data.title}
-                                        time={data.createdAt}
+                                        time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
                                         bidPrice={data.bids.request_price}
-                                        onClick={() => onMarkAsRead(data.id)}
+                                        onClick={(e) => onMarkAsRead(e, data)}
                                         />
                         </div>
                     ))
@@ -387,7 +506,7 @@ const InfoProduct = () => {
             </Slider>
             <Content>
                 {
-                    product ? (
+                    product && (
                         <>
                             <Preview active={true}
                                     images={product.images}
@@ -455,11 +574,11 @@ const InfoProduct = () => {
                                     }
                                     />
                             {
-                                isLoggedIn ? (
-                                    currentUser.user.id !== product.user_id && (
-                                        <Popup show={show}
-                                            onClick={onClick}
-                                            >
+                                isLoggedIn && currentUser.user.id !== product.user_id && (
+                                    <Popup show={show}
+                                        onClick={onClick}
+                                        >
+                                        <form onSubmit={onSubmit}>
                                             <h4>Masukkan Harga Tawarmu</h4>
                                             <p className='mb-4'>
                                                 Harga tawaranmu akan diketahui penjual, jike penjual cocok kamu akan segera dihubungi penjual.
@@ -486,15 +605,11 @@ const InfoProduct = () => {
                                                             onClick={onSubmit}
                                                             style={{ marginTop: "1rem", marginBottom: "1rem" }}
                                                             />
-                                        </Popup>
-                                    )
-                                ) : (
-                                <></>
+                                        </form>
+                                    </Popup>
                                 )
                             }
                         </>
-                    ) : (
-                        <></>
                     )
                 }
                 

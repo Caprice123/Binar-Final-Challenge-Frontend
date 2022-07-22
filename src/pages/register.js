@@ -13,8 +13,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import styles from '../assets/css/auth.module.css'
 
 // helpers
-import { validateString } from '../helpers/validateString';
-import { validateEmail } from '../helpers/validateEmail';
+import { validateString } from '../helpers/validator/validateString';
+import { validateEmail } from '../helpers/validator/validateEmail';
 
 // react redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -78,7 +78,8 @@ const Registrasi = () => {
     }
 
     // onSubmit for calling register api when user click register button
-    const onSubmit = async () => {
+    const onSubmit = async (e) => {
+        e.preventDefault()
         if (name.length === 0){
             alert("Tolong isi nama")
             return
@@ -122,9 +123,19 @@ const Registrasi = () => {
             })
         } catch(err){
             console.log(err);
-            dispatch(statusActions.setError({
-                message: err.message,
-            }))
+            const error = JSON.parse(err.message)
+            const statusCode = error.statusCode
+            switch (statusCode){
+                case 500:
+                    navigate(ERROR_500_ROUTE)
+                    break
+                
+                default:
+                    dispatch(statusActions.setError({
+                        message: error.message,
+                    }))
+                    break
+            }
         }
     }
 
@@ -168,7 +179,7 @@ const Registrasi = () => {
                         <div className={styles.auth_right + " col-lg-6 col-12"}>
                             <div className={styles.auth_form_wrapper + " mx-auto"}>
                                 <h3 className="title fw-bold">Daftar</h3>
-                                <form action="">
+                                <form onSubmit={onSubmit}>
                                     <Input type="text"
                                             text="Nama"
                                             placeholder="Masukan nama anda"
@@ -195,6 +206,7 @@ const Registrasi = () => {
                                                     text="Masuk"
                                                     style={{ margin: "1.5rem 0" }}
                                                     onClick={onSubmit}
+                                                    id="submit-btn"
                                                     />
                                 </form>
                                 <div className={styles.footer}>

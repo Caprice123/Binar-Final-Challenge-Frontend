@@ -1,5 +1,9 @@
 import React, { useEffect, useRef } from 'react'
-import Image from '../../200774.jpg'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { dateToString } from '../../helpers/converter/dateToString'
+import { updateNotifications } from '../../services/notifications'
+import { statusActions } from '../../store/status'
 import { PRODUCTS_ROUTE } from '../../types/pages'
 import NotifItems from '../NotifItems'
 
@@ -8,9 +12,33 @@ import { Wrapper, Content } from './Notif.styles'
 const Notif = ({ datas }) => {
     const notifRef = useRef(null)
     const containerRef = useRef(null)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    const onMarkAsRead = (notificationId) => {
+    const onMarkAsRead = (e, notification) => {
+        e.preventDefault()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
+            dispatch(updateNotifications({
+                notificationId: notification.id,
+            })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(helperRedirectUrl(notification), { replace: true })
+
+        }catch(err){
+            console.log(err)
+            const error = JSON.parse(err.message)
+            dispatch(statusActions.setError({
+                message: error.message,
+            }))
+        }
     }
 
     const onClick = () => {
@@ -30,6 +58,34 @@ const Notif = ({ datas }) => {
 
         return () => window.removeEventListener("resize", onResize)
     }, [])
+
+    const helperRedirectUrl = (notification) => {
+        const productId = notification.products.product_id
+        switch(notification.title){
+            case "Penawaran terkirim":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda dalam negosiasi":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda ditolak":
+                return `${PRODUCTS_ROUTE}/${productId}`
+            case "Penawaran anda diterima":
+                return `${PRODUCTS_ROUTE}/${productId}`
+                
+
+            case "Produk ditawar":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Melanjutkan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Menolak penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+            case "Menyelesaikan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+
+
+            default:
+                return `${PRODUCTS_ROUTE}/${productId}`
+        }        
+    }
 
     return (
         <Wrapper ref={containerRef} className='position-relative'>
@@ -54,15 +110,15 @@ const Notif = ({ datas }) => {
                     datas.map((data, id) => (
                         <>
                             <NotifItems key={data.id}
-                                        redirectTo={`${PRODUCTS_ROUTE}/${data.products.id}`}
+                                        redirectTo={helperRedirectUrl(data)}
                                         seen={data.read}
-                                        imageUrl={Image}
+                                        imageUrl={data.images.name}
                                         actionName={data.title}
-                                        time={data.createdAt}
+                                        time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
                                         bidPrice={data.bids.request_price}
-                                        onClick={() => onMarkAsRead(data.id)}
+                                        onClick={(e) => onMarkAsRead(e, data)}
                                         />                          
                             { 
                                 id < datas.length - 1 && (
