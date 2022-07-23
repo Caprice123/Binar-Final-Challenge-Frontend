@@ -69,6 +69,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                         aria-expanded="false" 
                         aria-label="Toggle navigation"
                         onClick={onOpen}
+                        id="toggle-navbar"
                         >
                         <span className="navbar-toggler-icon"></span>
                 </button>
@@ -90,6 +91,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                                                 aria-label="Search"
                                                 value={searchName}
                                                 onChange={onChange}
+                                                id="Search"
                                                 />
                                         <button className="btn btn-outline-success search-btn" 
                                                 type="submit"
@@ -107,6 +109,7 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
                                                     icon={<i className="fa-solid fa-arrow-right-to-bracket me-3" style={{ color: "var(--white-color)" }}></i>}
                                                     text="Masuk"
                                                     onClick={() => navigate(LOGIN_ROUTE)}
+                                                    id="Masuk"
                                                     />
                                 ) : (
                                     <>
@@ -160,16 +163,28 @@ const Navbar = ({ isOffcanvasOn, withSearchBar, centeredText, navLinks, onClick,
 
                 <div ref={offcanvasRef} className="offcanvas offcanvas-start" tabIndex="-1" data-bs-scroll="true" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
                     <div className="offcanvas-header">
-                        <h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">Secondhand</h5>
+                        <Link to={HOME_ROUTE}><h5 className="offcanvas-title" id="offcanvasWithBothOptionsLabel">Secondhand</h5></Link>
                         <button ref={closeButtonRef} onClick={onClose} className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body">
                         { 
-                            navLinks?.map((navLink, id) => (
-                                <div key={id}>
-                                    { navLink.mobileComponent }
+                            isLoggedIn ? (
+                                navLinks?.map((navLink, id) => (
+                                    <div key={id}>
+                                        { navLink.mobileComponent }
+                                    </div>
+                                ))
+                            ) : (
+                                <div>
+                                    <ActionButton color="var(--primary-purple-04)"
+                                                    width="75%"
+                                                    icon={<i className="fa-solid fa-arrow-right-to-bracket me-3" style={{ color: "var(--white-color)" }}></i>}
+                                                    text="Masuk"
+                                                    onClick={() => navigate(LOGIN_ROUTE)}
+                                                    id="Masuk"
+                                                    />
                                 </div>
-                            ))
+                            )
                         }
                     </div>
                 </div>

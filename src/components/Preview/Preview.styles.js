@@ -35,6 +35,13 @@ export const Wrapper = styled.div`
         background-color: var(--white-color);
         border-radius: 50%;
     }
+
+    @media screen and (max-width: 992px) {
+        i.fa-xmark{
+            top: 1rem;
+            right: 1rem;
+        }
+    }
 `
 
 export const Content = styled.div`
@@ -155,9 +162,13 @@ export const LeftSection = styled.div`
 
         .image-preview{
             width: 100%;
+            min-height: 350px;
             margin: 0 auto;
             border-radius: 0;
 
+            .swiper{
+                height: 350px;
+            }
 
             .swiper-pagination{
                 transform: translateY(-50px);

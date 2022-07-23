@@ -240,17 +240,17 @@ const Wishlist = () => {
             type: "text",
             to: DAFTAR_JUAL_ROUTE,
             additionalIcon: <i className="fa-solid fa-list"></i>,
-            mobileComponent: <Link to={DAFTAR_JUAL_ROUTE}>Daftar Jual</Link>
+            mobileComponent: <Link to={DAFTAR_JUAL_ROUTE} id="daftar-jual-navbar">Daftar Jual</Link>
         }, {
             type: "others",
             to: "",
             additionalIcon: <Notif datas={notifications} />,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")} style={{ cursor: "pointer" }}>Notifications</p>
+            mobileComponent: <p onClick={() => onClickSlider(true, "Notifications")} style={{ cursor: "pointer" }} id="notification-navbar">Notifications</p>
         }, {
             type: "text",
             to: "",
             additionalIcon: <AccountDropdown />,
-            mobileComponent: <p onClick={() => onClickSlider(true, "Account")} style={{ cursor: "pointer" }}>Akun Saya</p>
+            mobileComponent: <p onClick={() => onClickSlider(true, "Account")} style={{ cursor: "pointer" }} id="user-profile-navbar">Akun Saya</p>
         }, 
     ]
 
@@ -295,7 +295,7 @@ const Wishlist = () => {
             <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
                 <div className="title d-flex justify-content-between py-4">
                     <h4>Notifications</h4>
-                    <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Notifications")} aria-label="Close"></button>
+                    <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Notifications")} aria-label="Close" id="close-button-notification-navbar"></button>
                 </div>
                 {
                     notifications.map((data, id) => (
@@ -317,7 +317,7 @@ const Wishlist = () => {
             <Slider topic="Account" active={isSliderAccountOn} slideFrom="left">
                 <div className="title d-flex justify-content-between py-4">
                     <h4>Akun Saya</h4>
-                    <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Account")} aria-label="Close"></button>
+                    <button className="btn-close text-reset" onClick={() => onClickSlider(false, "Account")} aria-label="Close" id="close-button-user-profile-navbar"></button>
                 </div>
                 <div className="content d-flex flex-column">
                     <ImagePreview url={currentUser.user.image_url ? currentUser.user.image_url : NoImage} />

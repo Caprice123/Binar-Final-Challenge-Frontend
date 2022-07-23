@@ -3,7 +3,7 @@ import { Wrapper, Content } from './Slider.styles'
 
 const Slider = ({ topic, active, slideFrom, children }) => {
     return (
-        <Wrapper className={`${active ? "show" : ""} ${topic}-slider`} slideFrom={slideFrom}>
+        <Wrapper className={`${active ? "show" : ""} ${topic}-slider`} slideFrom={slideFrom} id={`${topic}-slider`}>
             <Content>
                 { children }
             </Content>

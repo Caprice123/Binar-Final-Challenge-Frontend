@@ -22,7 +22,7 @@ const ActionButton = ({ width, color, textColor, icon, text, onClick, disabled, 
                         </span>
                     )
                 }
-                { text }
+                { disabled ? "Menunggu respon penjual" : text }
 
         </Wrapper>
     )

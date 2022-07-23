@@ -14,6 +14,12 @@ export const Content = styled.form`
         left: -10vw;
     }
 
+    .grid{
+        div{
+            width: 100%;
+        }
+    }
+
     @media screen and (max-width: 992px) {
         max-width: initial;
         width: 90%;

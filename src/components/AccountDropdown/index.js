@@ -28,19 +28,19 @@ const AccountDropdown = () => {
 
     return (
         <Wrapper ref={containerRef} className='position-relative'>
-            <button className="position-relative" onClick={onClick}>
+            <button className="position-relative" onClick={onClick} id="account-dropdown">
                 <i className="fa-solid fa-user"></i>
             </button>
             <Content ref={dropdownRef} className="pb-3">
-                <Link to={USER_PROFILE_ROUTE} className='pt-3 pb-1 pe-3'>
+                <Link to={USER_PROFILE_ROUTE} className='pt-3 pb-1 pe-3' id="ubah-akun">
                     Ubah Akun
                 </Link>
                 <hr />
-                <Link to={USER_PROFILE_ROUTE} className='pt-3 pb-1 pe-3'>
+                <Link to={USER_PROFILE_ROUTE} className='pt-3 pb-1 pe-3' id="pengaturan-akun">
                     Pengaturan Akun
                 </Link>
                 <hr />
-                <Link to={LOGOUT_ROUTE} className='pt-3 pb-1 pe-3'>
+                <Link to={LOGOUT_ROUTE} className='pt-3 pb-1 pe-3' id="login-akun">
                     Logout Akun
                 </Link>
                 <hr />
