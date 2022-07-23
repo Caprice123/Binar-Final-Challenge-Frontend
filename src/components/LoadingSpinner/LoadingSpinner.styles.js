@@ -31,7 +31,7 @@ export const Dot = styled.div`
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background-color: #7126B5;
+    background-color: var(--primary-purple-04);
 
     :nth-child(1){
         animation: movingDots 3s linear infinite;
@@ -62,7 +62,7 @@ export const Dot = styled.div`
         }
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 992px){
         width: 12.5px;
         height: 12.5px;
     }

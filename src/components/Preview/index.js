@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
 // components
-import Image from '../../200774.jpg'
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper";
 
@@ -14,18 +12,19 @@ import "swiper/css/navigation";
 import { Wrapper, Content, LeftSection, RightSection } from './Preview.styles'
 import SellerInfo from '../SellerInfo';
 
-const Preview = ({ active, images, name, price, category, description, onClose, actionButtons, mobileButton }) => {
+const Preview = ({ active, images, name, price, category, owner, description, onClose, actionButtons, mobileButton }) => {
     const [isMobile, setIsMobile] = useState(false)
     useEffect(() => {
         const checkMobile = () => {
             const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
-            setIsMobile(vw <= 768)
+            setIsMobile(vw <= 992)
         }
         window.addEventListener("resize", checkMobile)
         checkMobile()
     }, [])
+    
     return (
-        <Wrapper className={active && "active"}>
+        <Wrapper className={active ? "active" : ""}>
             <Content className="position-relative py-5">
                 <LeftSection className='d-flex justify-content-center'>
                     <div className="image-preview d-flex me-5 position-relative">
@@ -49,7 +48,7 @@ const Preview = ({ active, images, name, price, category, description, onClose, 
                         { 
                             images.map((image, id) => (
                                 <SwiperSlide key={id}>
-                                    <img src={image.imageUrl} alt="preview" />
+                                    <img src={image} alt="preview" />
                                 </SwiperSlide>
                             ))
                         }
@@ -65,17 +64,19 @@ const Preview = ({ active, images, name, price, category, description, onClose, 
                             <p className="my-1">{category}</p>
                             <h5 className="mt-2">Rp {price.toLocaleString()}</h5>
                             {
-                                actionButtons.map((button) => (
-                                    button
+                                actionButtons.map((button, id) => (
+                                    <div key={id}>
+                                        {button}
+                                    </div>    
                                 ))
                             }
                         </div>
                         
 
                         <SellerInfo width="90%"
-                                    imageUrl={Image}
-                                    sellerName="Nama Penjual"
-                                    sellerCity="Kota"
+                                    imageUrl={owner.image_url}
+                                    sellerName={owner.name}
+                                    sellerCity={owner.city}
                                     additionalClass="my-5"
                                     withShadow
                                     />
@@ -83,12 +84,18 @@ const Preview = ({ active, images, name, price, category, description, onClose, 
                 </LeftSection>
                 
                 <RightSection className='d-flex justify-content-center'>
-                    <div className='description d-flex flex-column me-5 align-items-center my-5'>
+                    <div className='description d-flex flex-column me-5 my-5'>
                         <label>Description</label>
-                        <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        </p>
+                        {
+                            description.split("\n").map((paragraph, id) => (
+                                <p key={id}>
+                                    {
+                                        paragraph
+                                    }
+                                </p>
+                            ))
+
+                        }
                     </div>
                     <div className='empty ms-5'>&nbsp;</div>
 

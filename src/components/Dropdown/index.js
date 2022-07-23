@@ -67,6 +67,7 @@ const Dropdown = ({ text, placeholder, value, options, onSelect, required, elast
                             onClick={onClick}
                             onChange={onChange}
                             autoComplete="off" 
+                            onFocus={onClick}
                             />
                             ): (
                     <input type="text" 
@@ -74,6 +75,7 @@ const Dropdown = ({ text, placeholder, value, options, onSelect, required, elast
                             value={value}
                             id={text.replace(" ", "_")}
                             onClick={onClick} 
+                            onFocus={onClick}
                             readOnly
                             />
                 )

@@ -4,13 +4,14 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
     position: absolute;
     top: 0%;
-    left: 100%;
+    left: 100vw;
     width: 100vw;
     height: calc(100vh - var(--navbar-height));
     z-index: 100;
-    background-color: white;
+    background-color: var(--white-color);
     transition: 0.5s;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     margin-top: var(--navbar-height);
     
     &.active{
@@ -31,13 +32,13 @@ export const Wrapper = styled.div`
         align-items: center;
         cursor: pointer;
         z-index: 100;
-        background-color: white;
+        background-color: var(--white-color);
         border-radius: 50%;
     }
 `
 
 export const Content = styled.div`
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         padding: 0 !important;
     }
 
@@ -87,10 +88,10 @@ export const LeftSection = styled.div`
         }
 
         .swiper-pagination-bullet{
-            border: 1px solid white;
+            border: 1px solid var(--white-color);
         }
         .swiper-pagination-bullet-active{
-            background-color: white;
+            background-color: var(--white-color);
         }
     }
 
@@ -149,7 +150,7 @@ export const LeftSection = styled.div`
         }
     }
     
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         display: block !important;
 
         .image-preview{
@@ -171,7 +172,7 @@ export const LeftSection = styled.div`
             transform: translateY(-50px);
             .overview{
                 
-                background-color: white;
+                background-color: var(--white-color);
                 *{
                     width: 90%;
                 }
@@ -204,6 +205,7 @@ export const RightSection = styled.div`
         width: 45%;
         box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
         border-radius: 16px;
+        min-height: 50vh;
 
         *{
             padding: 12px 16px;
@@ -227,7 +229,7 @@ export const RightSection = styled.div`
         width: 25%;
     }
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         transform: translateY(-50px);
         .description{
             margin-top: 0 !important;

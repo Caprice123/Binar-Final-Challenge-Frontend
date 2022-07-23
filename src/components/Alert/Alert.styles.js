@@ -16,7 +16,7 @@ export const Wrapper = styled.div`
         cursor: pointer;
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 992px){
         min-width: initial;
         width: calc(90% + 5px);
         transform: translate(calc(-50% + 2.5px), -100%);

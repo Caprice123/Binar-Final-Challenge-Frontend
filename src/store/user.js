@@ -2,13 +2,21 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { City } from 'country-state-city'
 
-import { getCurrentUser, updateUser, login, register } from '../services/user'
+import { getCurrentUser, login } from '../services/user'
 
 const defaultState = {
-    currentUser: {},
+    currentUser: {
+        user: {
+            address: null,
+            city: null,
+            email: null,
+            id: null,
+            name: null,
+            phone: null,
+        },
+        token: null,
+    },
     availableCities: [],
-    loading: false,
-    error: "",
     isLoggedIn: false
 }
 
@@ -30,83 +38,26 @@ const userSlice = createSlice({
         clearError: (state) => {
             state.error = ""
             localStorage.setItem("userState", JSON.stringify(state))
+        },
+        logout: (state) => {
+            state.currentUser = defaultState.currentUser
+            state.isLoggedIn = false
+            localStorage.setItem("userState", JSON.stringify(state))
         }
     }, 
     extraReducers: {
         // getCurrentUser
-        [getCurrentUser.pending]: (state) => {
-            state.loading = true
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
         [getCurrentUser.fulfilled]: (state, action) => {
-            state.loading = false
-            state.error = ""
             state.currentUser.user = action.payload
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
-        [getCurrentUser.rejected]: (state, action) => {
-            console.log(action.error.message)
-            state.loading = false
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
-
-        // updateUser
-        [updateUser.pending]: (state) => {
-            state.loading = true
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
-        [updateUser.fulfilled]: (state) => {
-            state.loading = false
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
-        [updateUser.rejected]: (state, action) => {
-            console.log(action.error.message)
-            state.loading = false
-            state.error = ""
             localStorage.setItem("userState", JSON.stringify(state))
         },
 
         // login
-        [login.pending]: (state) => {
-            state.loading = true
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
         [login.fulfilled]: (state, action) => {
-            console.log(action.payload)
-            state.loading = false
-            state.error = ""
             state.currentUser = action.payload
             state.isLoggedIn = true
             localStorage.setItem("userState", JSON.stringify(state))
-        },
-        [login.rejected]: (state, action) => {
-            console.log(action)
-            state.loading = false
-            state.error = action.error.message
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
-
-        // register
-        [register.pending]: (state) => {
-            state.loading = true
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
-        [register.fulfilled]: (state) => {
-            state.loading = false
-            state.error = ""
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
-        [register.rejected]: (state, action) => {
-            state.loading = false
-            state.error = action.error.message
-            localStorage.setItem("userState", JSON.stringify(state))
-        },
+        }
     }
 })
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
     max-width: 360px;
     
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 992px){
         margin: 0;
         height: 100vh;
         max-width: initial;
@@ -14,12 +14,12 @@ export const Wrapper = styled.div`
 export const Content = styled.div`
     border-radius: 16px;
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 992px){
         position: absolute;
         top: none;
         left: 0;
         bottom: 0;
-        background-color: white;
+        background-color: var(--white-color);
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         border-bottom-left-radius: 0;

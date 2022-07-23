@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Wrapper = styled.nav`
     max-width: 100vw;
-    background-color: white;
+    background-color: var(--white-color);
     min-height: var(--navbar-height);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
 `
@@ -17,6 +17,25 @@ export const Content = styled.div`
         transform: translate(-50%, -50%);
         text-align: center;
         font-weight: 900;
+    }
+
+    input{
+        background: var(--grey-color) !important;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-color:  var(--grey-color);
+    }
+
+    .search-btn{
+        background: var(--grey-color) !important;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        color: grey;
+        border-color: var(--grey-color);
     }
 
     .offcanvas{
@@ -34,21 +53,21 @@ export const Content = styled.div`
     }
 
     .offcanvas-body{
-        a{
+        *{
             padding: 0;
             margin: 7.5px 0 !important;
 
         }
     }
 
-    @media screen and (min-width: 769px) {
+    @media screen and (min-width: calc(992px + 1px)) {
         
         .offcanvas{
             display: none;
         }        
     }
 
-    @media screen and (max-width: 768px){
+    @media screen and (max-width: 992px){
         width: 90%;
         .centered-text{
             font-size: 12px;
@@ -73,7 +92,7 @@ export const Actions = styled.div`
             }  
         }
     }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 992px) {
         display: none;
     }
 `

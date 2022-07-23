@@ -1,10 +1,12 @@
 import React from 'react'
+
+import NoImage from '../../assets/images/no-image-found.jpg'
 import { Wrapper } from './ImagePreview.styles'
 
 const ImagePreview = ({ url, imageIndex, onDelete }) => {
     return (
         <Wrapper className="position-relative">
-            <img src={url}
+            <img src={url ? url : NoImage}
                     alt="preview" 
                     />
 

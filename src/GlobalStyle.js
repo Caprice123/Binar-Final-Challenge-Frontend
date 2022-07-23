@@ -7,13 +7,16 @@ const GlobalStyle = createGlobalStyle`
         --primary-purple-01: #E2D4F0;
         --primary-purple-04: #7126B5;
         --primary-purple-05: #4B1979;
-        
+        --grey-color: #EEEEEE;
 
         --alert-success: #73CA5C;
-        --redalert-background: #f1dbdc;
-        --redalert-font: #D00C1A;
+        --redalert-font: #f1dbdc;
+        --redalert-background: #D00C1A;
+        --white-color: #ffffff;
 
         --navbar-height: 67.5px;
+
+        --tablet-size: 992px;
     }
     html{
         scroll-behavior: smooth;
@@ -56,6 +59,13 @@ const GlobalStyle = createGlobalStyle`
         font-weight: 400;
         line-height: 18px;
     }
+    .btn:focus,.form-control:focus{
+        box-shadow: none !important;
+        outline: none !important;
+    }
 
+    .form-control:focus{
+        border-color: transparent !important;
+    }
 `
 export default GlobalStyle

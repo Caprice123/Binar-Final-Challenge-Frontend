@@ -6,7 +6,7 @@ import { Wrapper } from './BorderOnlyButton.styles'
 const BorderOnlyButton = ({ width, color, text, onClick, ...additionalProps }) => {
     return (
         <Wrapper type="button" 
-                    className="btn btn-outline-primary"
+                    className="border-only-button btn btn-outline-primary"
                     width={width}
                     color={color}
                     onClick={onClick}

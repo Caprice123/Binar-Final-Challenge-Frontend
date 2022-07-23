@@ -21,6 +21,7 @@ export const WrapperDiv = styled.div`
     width: 90%;
     margin: 0 auto;
     transition: 0.5s;
+    
     &.seen{
         background-color: var(--neutral-02);
     }

@@ -1,5 +1,10 @@
 import React, { useEffect, useRef } from 'react'
-import Image from '../../200774.jpg'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { dateToString } from '../../helpers/converter/dateToString'
+import { updateNotifications } from '../../services/notifications'
+import { statusActions } from '../../store/status'
+import { PRODUCTS_ROUTE } from '../../types/pages'
 import NotifItems from '../NotifItems'
 
 import { Wrapper, Content } from './Notif.styles'
@@ -7,9 +12,33 @@ import { Wrapper, Content } from './Notif.styles'
 const Notif = ({ datas }) => {
     const notifRef = useRef(null)
     const containerRef = useRef(null)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    const onMarkAsRead = () => {
+    const onMarkAsRead = (e, notification) => {
+        e.preventDefault()
+        try{
+            dispatch(statusActions.setLoading({
+                status: true,
+            }))
 
+            dispatch(updateNotifications({
+                notificationId: notification.id,
+            })).unwrap()
+
+            dispatch(statusActions.setLoading({
+                status: false,
+            }))
+
+            navigate(helperRedirectUrl(notification), { replace: true })
+
+        }catch(err){
+            console.log(err)
+            const error = JSON.parse(err.message)
+            dispatch(statusActions.setError({
+                message: error.message
+            }))
+        }
     }
 
     const onClick = () => {
@@ -18,14 +47,39 @@ const Notif = ({ datas }) => {
 
 
     useEffect(() => {
-        window.addEventListener("click", e => {
+        const onResize = (e) => {
             if (containerRef.current){
                 if (!containerRef.current.contains(e.target)){
                     notifRef.current.classList.remove("show")
                 }
             }
-        })
+        }
+        window.addEventListener("click", onResize)
+
+        return () => window.removeEventListener("resize", onResize)
     }, [])
+
+    const helperRedirectUrl = (notification) => {
+        const productId = notification.products.product_id
+        switch(notification.title){
+            case "Penawaran terkirim":
+            case "Penawaran anda dalam negosiasi":
+            case "Penawaran anda ditolak":
+            case "Penawaran anda diterima":
+                return `${PRODUCTS_ROUTE}/${productId}`
+                
+
+            case "Produk ditawar":
+            case "Melanjutkan penawaran":
+            case "Menolak penawaran":
+            case "Menyelesaikan penawaran":
+                return `${PRODUCTS_ROUTE}/${productId}/bid`
+
+
+            default:
+                return `${PRODUCTS_ROUTE}/${productId}`
+        }        
+    }
 
     return (
         <Wrapper ref={containerRef} className='position-relative'>
@@ -33,9 +87,9 @@ const Notif = ({ datas }) => {
                 <i className="fa-solid fa-bell"></i>
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     { 
-                        datas.filter(data => data.seen).length > 99 
+                        datas.filter(data => !data.read).length > 99 
                         ? "99+" 
-                        : datas.filter(data => data.seen).length 
+                        : datas.filter(data => !data.read).length 
                     }
                 </span>
             </button>
@@ -49,16 +103,17 @@ const Notif = ({ datas }) => {
                 {
                     datas.map((data, id) => (
                         <>
-                            <NotifItems redirectTo={`/product/${id}`}
-                                        seen={data.seen}
-                                        imageUrl={Image}
-                                        actionName="Penawaran Produk"
-                                        time={"20 Apr, 14:04"}
-                                        productName={"Jam Tangan Casio"}
-                                        originalPrice={250000}
-                                        bidPrice={200000}
-                                        onClick={onMarkAsRead}
-                                        />                            
+                            <NotifItems key={data.id}
+                                        redirectTo={helperRedirectUrl(data)}
+                                        seen={data.read}
+                                        imageUrl={data.images?.name}
+                                        actionName={data.title}
+                                        time={dateToString(data.createdAt)}
+                                        productName={data.products.name}
+                                        originalPrice={data.products.price}
+                                        bidPrice={data.bids?.request_price}
+                                        onClick={(e) => onMarkAsRead(e, data)}
+                                        />                          
                             { 
                                 id < datas.length - 1 && (
                                     <hr />

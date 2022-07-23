@@ -5,7 +5,7 @@ import { Wrapper } from './Grid.styles'
 
 const Grid = ({ maxSize, children, ...additionalProps }) => {
     return (
-        <Wrapper maxSize={maxSize} {...additionalProps}>
+        <Wrapper className='grid' maxSize={maxSize} {...additionalProps}>
             { children }
         </Wrapper>
     )

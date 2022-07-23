@@ -1,6 +1,6 @@
 import React from 'react'
 
-
+import NoImage from '../../assets/images/no-image-found.jpg'
 import { WrapperLink, WrapperDiv, Content, Title } from './NotifItems.styles'
 
 const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName, originalPrice, bidPrice, onClick  }) => {
@@ -12,7 +12,7 @@ const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName,
                         className={`notif-items d-flex py-3 px-2 align-items-center ${seen ? "seen" : "not-seen"}`} 
                         onClick={onClick}
                         >
-                    <img src={imageUrl} 
+                    <img src={imageUrl ? imageUrl : NoImage} 
                             alt="test"
                             className='me-3'
                             />
@@ -22,8 +22,12 @@ const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName,
                             <p>{ time }</p>
                         </Title>
                         <h5>{ productName }</h5>
-                        <h5 className='original-price'>Rp. { originalPrice.toLocaleString() }</h5>
-                        <h5>Ditawar Rp. { bidPrice.toLocaleString() }</h5>
+                        <h5 className='original-price'>Rp. { Number(originalPrice)?.toLocaleString() }</h5>
+                        {
+                            bidPrice > 0 && (
+                                <h5>Ditawar Rp. { Number(bidPrice)?.toLocaleString() }</h5>
+                            )
+                        }
                     </Content>
                 </WrapperLink>
             ) : (
@@ -31,7 +35,7 @@ const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName,
                         className={`notif-items d-flex py-3 px-2 align-items-center ${seen ? "seen" : "not-seen"}`} 
                         onClick={onClick}
                         >
-                    <img src={imageUrl} 
+                    <img src={imageUrl ? imageUrl : NoImage} 
                             alt="test"
                             className='me-3'
                             />
@@ -41,8 +45,12 @@ const NotifItems = ({ redirectTo, seen, imageUrl, actionName, time, productName,
                             <p>{ time }</p>
                         </Title>
                         <h5>{ productName }</h5>
-                        <h5  className='original-price'>Rp. { originalPrice.toLocaleString() }</h5>
-                        <h5>Ditawar Rp. { bidPrice.toLocaleString() }</h5>
+                        <h5  className='original-price'>Rp. { Number(originalPrice)?.toLocaleString() }</h5>
+                        {
+                            bidPrice > 0 && (
+                                <h5>Ditawar Rp. { Number(bidPrice)?.toLocaleString() }</h5>
+                            )
+                        }
                     </Content>
                 </WrapperDiv>
             )
