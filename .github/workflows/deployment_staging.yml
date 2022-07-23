@@ -1,0 +1,38 @@
+name: deployment
+on:
+  push: 
+    branches:
+      - staging
+      
+jobs:
+  deployment_staging:
+    runs-on: ubuntu-latest
+    name: Deploy staging
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+        with:
+          path: code
+      
+      - name: checkout actions
+        uses: actions/checkout@v2
+
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+      
+      - name: installing dependencies
+        run: npm install --force
+
+      - name: building 
+        run: CI=false && npm run build --force
+    
+      - name: deploying to vercel
+        run: |
+          npx vercel --token ${VERCEL_TOKEN} --prod
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STAGING }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID_STAGING }}
