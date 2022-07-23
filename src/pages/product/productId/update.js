@@ -204,7 +204,7 @@ const UpdateProduct = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -320,7 +320,7 @@ const UpdateProduct = () => {
 					
 					default:
 						dispatch(statusActions.setError({
-							message: error.message,
+							message: error.message
 						}))
 						break
 				}

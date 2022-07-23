@@ -26,7 +26,7 @@ import { statusActions } from '../store/status';
 import { register } from '../services/user';
 
 // pages
-import { LOGIN_ROUTE } from '../types/pages';
+import { LOGIN_ROUTE, ERROR_500_ROUTE } from '../types/pages';
 const Registrasi = () => {
     /**************************************************************/
     // REDUX STATE
@@ -122,7 +122,6 @@ const Registrasi = () => {
                 }
             })
         } catch(err){
-            console.log(err);
             const error = JSON.parse(err.message)
             const statusCode = error.statusCode
             switch (statusCode){
@@ -134,7 +133,6 @@ const Registrasi = () => {
                     dispatch(statusActions.setError({
                         message: error.message,
                     }))
-                    break
             }
         }
     }
@@ -166,6 +164,7 @@ const Registrasi = () => {
                     color="var(--redalert-font)" 
                     text={error} 
                     onClick={onCloseAlert} 
+                    id="error-message"
                     />
             
             <div className={styles.page_auth + " vh-100"}>

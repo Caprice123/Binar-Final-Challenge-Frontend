@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { City } from 'country-state-city'
-
 const defaultState = {
     loading: false,
     error: "",

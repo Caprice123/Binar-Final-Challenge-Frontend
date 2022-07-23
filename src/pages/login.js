@@ -153,19 +153,6 @@ const Login = () => {
 	const onCloseFlash = () => {
 		setFlashMessage("")
 	}
-
-    const googleLogin = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            console.log(tokenResponse)
-            const userInfo = await axios.get(
-                'https://www.googleapis.com/oauth2/v3/userinfo',
-                { headers: { Authorization: 'Bearer ' + tokenResponse.access_token } },
-            );
-
-            console.log(userInfo);
-        },
-        onError: errorResponse => console.log(errorResponse),
-    });
     /**************************************************************/
 
 
@@ -233,14 +220,6 @@ const Login = () => {
                                                     id="submit-btn"
                                                     />
                                 </form>
-                                 <ActiveButton width="100%"
-                                                color="var(--primary-purple-04)"
-                                                text="Masuk dengan Google"
-                                                icon={<FcGoogle className="me-3"/>}
-                                                style={{ margin: "1.5rem 0" }}
-                                                onClick={googleLogin}
-                                                id="login-via-google"
-                                                />
                                 <div className={styles.footer}>
                                     <p className='text-center mt-3'>
                                         Belum punya akun? 

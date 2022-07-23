@@ -26,7 +26,7 @@ export const updateUser = createAsyncThunk(
     async (payload) => {
         try{
             const { name, city, image, address, phone } = payload
-            console.log(payload)
+            
     
             const payloadPost = {
                 name,
@@ -64,7 +64,7 @@ export const updateUser = createAsyncThunk(
 export const login = createAsyncThunk(
     'user/login',
     async (payload) => {
-        console.log(payload)
+        
         try{
 
             const response = await api.post(
@@ -84,7 +84,7 @@ export const register = createAsyncThunk(
     'user/register',
     async (payload) => {
         try{
-            console.log(payload)
+            
             const response = await api.post(
                 '/api/v1/register', 
                 payload

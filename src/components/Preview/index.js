@@ -22,7 +22,7 @@ const Preview = ({ active, images, name, price, category, owner, description, on
         window.addEventListener("resize", checkMobile)
         checkMobile()
     }, [])
-    console.log(description)
+    
     return (
         <Wrapper className={active ? "active" : ""}>
             <Content className="position-relative py-5">

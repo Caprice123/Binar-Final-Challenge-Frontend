@@ -149,7 +149,7 @@ const Wishlist = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -221,7 +221,7 @@ const Wishlist = () => {
                     
                     default:
                         dispatch(statusActions.setError({
-                            message: error.message,
+                            message: error.message
                         }))
                         break
                 }
@@ -258,21 +258,15 @@ const Wishlist = () => {
         const productId = notification.products.product_id
         switch(notification.message){
             case "Penawaran terkirim":
-                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda dalam negosiasi":
-                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda ditolak":
-                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda diterima":
                 return `${PRODUCTS_ROUTE}/${productId}`
                 
 
             case "Produk ditawar":
-                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Melanjutkan penawaran":
-                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Menolak penawaran":
-                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Menyelesaikan penawaran":
                 return `${PRODUCTS_ROUTE}/${productId}/bid`
 
@@ -307,12 +301,12 @@ const Wishlist = () => {
                     notifications.map((data, id) => (
                         <div key={id}>
                             <NotifItems seen={data.read}
-                                        imageUrl={data.images.name}
+                                        imageUrl={data.images?.name}
                                         actionName={data.title}
                                         time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
-                                        bidPrice={data.bids.request_price}
+                                        bidPrice={data.bids?.request_price}
                                         onClick={(e) => onMarkAsRead(data)}
                                         />
                         </div>

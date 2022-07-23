@@ -75,6 +75,7 @@ const Dropdown = ({ text, placeholder, value, options, onSelect, required, elast
                             value={value}
                             id={text.replace(" ", "_")}
                             onClick={onClick} 
+                            onFocus={onClick}
                             readOnly
                             />
                 )

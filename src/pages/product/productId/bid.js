@@ -33,7 +33,7 @@ import { acceptBid, acceptTransaction, rejectBid } from '../../../services/bids'
 import { getProductBidByProductID } from '../../../services/product'
 
 // pages
-import { ERROR_404_ROUTE, ERROR_500_ROUTE, LOGIN_ROUTE } from '../../../types/pages'
+import { ERROR_404_ROUTE, ERROR_500_ROUTE, HOME_ROUTE, LOGIN_ROUTE } from '../../../types/pages'
 
 const ProductBid = () => {
     
@@ -129,7 +129,7 @@ const ProductBid = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -187,7 +187,7 @@ const ProductBid = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -252,7 +252,7 @@ const ProductBid = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -261,7 +261,6 @@ const ProductBid = () => {
     
     // onCallByWA for open new tab for a buyer phone number
     const onCallByWA = (phone) => {
-        console.log(phone)
         window.open(`https://wa.me/${phone}`, '_blank', 'noopener,noreferrer')
     }
 
@@ -283,7 +282,7 @@ const ProductBid = () => {
     }
 
     const onClickGoBack = () => {
-        navigate(-1)
+        navigate(HOME_ROUTE)
     }
     /**************************************************************/
 
@@ -325,7 +324,7 @@ const ProductBid = () => {
                     
                     default:
                         dispatch(statusActions.setError({
-                            message: error.message,
+                            message: error.message
                         }))
                         break
                 }
@@ -359,7 +358,7 @@ const ProductBid = () => {
             <Navbar centeredText="Info Penawar" 
                     />
             <Content className="mx-auto position-relative">
-                <i className="fa-solid fa-arrow-left-long back-icon py-3" onClick={onClickGoBack}></i>
+                <i className="fa-solid fa-arrow-left-long back-icon py-3" onClick={onClickGoBack} style={{ cursor: "pointer" }}></i>
                 <SellerInfo width="100%"
                             imageUrl={product.images ? product?.images[0].name : ""}
                             sellerName={product.name ? product.name : ""}

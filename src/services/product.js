@@ -26,7 +26,6 @@ export const getProducts = createAsyncThunk(
     async (payload) => {
         
         try{
-            console.log(payload)
             const response = await api.get(
                 `/api/v1/products`,
                 {
@@ -84,7 +83,6 @@ export const addProduct = createAsyncThunk(
     async (payload) => {
         try{
             const { name, price, categoryId, description, productImages } = payload
-            console.log(payload)
             const responseBody = {
                 name,
                 price,
@@ -122,7 +120,7 @@ export const addProduct = createAsyncThunk(
 export const addBidPrice = createAsyncThunk(
     'product/addBidPrice',
     async (payload) => {
-        console.log(payload)
+        
         try{
             const { productId, bidPrice } = payload
             const response = await api.post(
@@ -163,7 +161,7 @@ export const updateProduct = createAsyncThunk(
     async (payload) => {
         try{
             const { productId, name, price, categoryId, description, productImages } = payload
-            console.log(payload)
+            
             const requestBody = {
                 name,
                 price,

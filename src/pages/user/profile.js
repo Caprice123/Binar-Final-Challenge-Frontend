@@ -179,7 +179,7 @@ const InfoProfile = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -265,7 +265,7 @@ const InfoProfile = () => {
                     
                     default:
                         dispatch(statusActions.setError({
-                            message: error.message,
+                            message: error.message
                         }))
                         break
                 }

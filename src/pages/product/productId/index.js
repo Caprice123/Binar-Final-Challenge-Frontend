@@ -176,7 +176,7 @@ const InfoProduct = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -242,7 +242,7 @@ const InfoProduct = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -287,7 +287,7 @@ const InfoProduct = () => {
                 
                 default:
                     dispatch(statusActions.setError({
-                        message: error.message,
+                        message: error.message
                     }))
                     break
             }
@@ -334,7 +334,11 @@ const InfoProduct = () => {
                 }))
 
                 setProduct(response)
-                setIsDisabled(bidsCount > 0)
+                if (response.status === "sold"){
+                    setIsDisabled(true)
+                } else {
+                    setIsDisabled(bidsCount > 0)
+                }
             } catch(err){
                 const error = JSON.parse(err.message)
                 const statusCode = error.statusCode
@@ -349,7 +353,7 @@ const InfoProduct = () => {
                     
                     default:
                         dispatch(statusActions.setError({
-                            message: error.message,
+                            message: error.message
                         }))
                         break
                 }
@@ -385,6 +389,9 @@ const InfoProduct = () => {
     ]
     
     const helperText = () => {
+        if (product.status === "sold"){
+            return "Product Sudah Terjual"
+        }
         if (isLoggedIn){
             if (currentUser.user.id === product.owner.id){
                 return "Edit"
@@ -407,21 +414,15 @@ const InfoProduct = () => {
         const productId = notification.products.product_id
         switch(notification.message){
             case "Penawaran terkirim":
-                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda dalam negosiasi":
-                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda ditolak":
-                return `${PRODUCTS_ROUTE}/${productId}`
             case "Penawaran anda diterima":
                 return `${PRODUCTS_ROUTE}/${productId}`
                 
 
             case "Produk ditawar":
-                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Melanjutkan penawaran":
-                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Menolak penawaran":
-                return `${PRODUCTS_ROUTE}/${productId}/bid`
             case "Menyelesaikan penawaran":
                 return `${PRODUCTS_ROUTE}/${productId}/bid`
 
@@ -465,12 +466,12 @@ const InfoProduct = () => {
                         <div key={data.id}>
                             <NotifItems redirectTo={helperRedirectUrl(data)}
                                         seen={data.read}
-                                        imageUrl={data.images.name}
+                                        imageUrl={data.images?.name}
                                         actionName={data.title}
                                         time={dateToString(data.createdAt)}
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
-                                        bidPrice={data.bids.request_price}
+                                        bidPrice={data.bids?.request_price}
                                         onClick={(e) => onMarkAsRead(e, data)}
                                         />
                         </div>
