@@ -4,6 +4,9 @@ on:
     branches:
       - main
       
+env: 
+  REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+  
 jobs:
   deployment_prodiction:
     runs-on: ubuntu-latest
@@ -28,9 +31,7 @@ jobs:
 
       - name: building 
         run: CI=false && npm run build --force
-        env: 
-          REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-    
+        
       - name: deploying to vercel
         run: |
           npx vercel --token ${VERCEL_TOKEN} --prod
