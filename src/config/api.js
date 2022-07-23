@@ -1,8 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL,
+    baseURL: "https://secondhand-2-binar-final.herokuapp.com",
 })
 
-console.log(process.env.REACT_APP_BASE_URL)
 export default api
