@@ -4,14 +4,14 @@ on:
     branches:
       - main
       
-env: 
-  REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+
   
 jobs:
-  deployment_prodiction:
+  deployment_production:
     runs-on: ubuntu-latest
     name: Deploy production
-
+    env: 
+      REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
     steps:
       - name: checkout code
         uses: actions/checkout@v2
