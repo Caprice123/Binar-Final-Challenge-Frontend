@@ -19,7 +19,7 @@ const InputRadio = ({ value, labelText, additionalLabelText, id, onChange, defau
             </label>
             {
                 additionalLabelText && (
-                    <label className="form-check-label label-text" htmlFor={`flexRadioDefault${id}`}>
+                    <label className="form-check-label label-text" htmlFor={`flexRadioDefault${id}`} style={{ display: "block" }}>
                         Kamu telah sepakat menjual produk ini kepada pembeli
                     </label>
                 )

@@ -396,6 +396,9 @@ const InfoProduct = () => {
             if (currentUser.user.id === product.owner.id){
                 return "Edit"
             }
+            if(isDisabled){
+                return "Menunggu respons penjual"
+            }
         }
         return "Saya tertarik dan ingin nego"
     }
