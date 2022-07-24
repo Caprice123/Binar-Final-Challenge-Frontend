@@ -156,7 +156,7 @@ const InfoProduct = () => {
             }))
             
             setIsDisabled(true)
-            setFlashMessage("Successfully bid the project")
+            setFlashMessage("Successfully bid the product")
         } catch(err){
             console.log(err)
             const error = JSON.parse(err.message)
@@ -337,7 +337,7 @@ const InfoProduct = () => {
                 if (response.status === "sold"){
                     setIsDisabled(true)
                 } else {
-                    setIsDisabled(bidsCount > 0)
+                    setIsDisabled(Number(bidsCount) > 0)
                 }
             } catch(err){
                 const error = JSON.parse(err.message)
@@ -441,12 +441,14 @@ const InfoProduct = () => {
                     backgroundColor="var(--alert-success)" 
                     color="var(--white-color)" 
                     onClick={onClose}
+                    id="flash-message"
                     />
             <Alert active={error.length > 0} 
                     backgroundColor="var(--redalert-background)" 
                     color="var(--redalert-font)" 
                     text={error} 
-                    onClick={onCloseAlert} 
+                    onClick={onCloseAlert}
+                    id="error-message" 
                     />
        
             <Navbar navLinks={navLinks}
@@ -522,12 +524,14 @@ const InfoProduct = () => {
                                                             color="var(--primary-purple-04)"
                                                             onClick={helperOnClick()}
                                                             disabled={isDisabled}
+                                                            id="Action-button"
                                                         />,
                                             currentUser.user.id === product.owner.id && (
                                                 <BorderOnlyButton   text="Delete Product"
                                                                     width="100%"
                                                                     color="var(--primary-purple-04)"
                                                                     onClick={onDeleteProduct}
+                                                                    id="delete-button"
                                                                     />
                                             )
                                         ]

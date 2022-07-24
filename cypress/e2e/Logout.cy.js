@@ -1,5 +1,5 @@
 
-describe("Login route", () => {
+describe("Logout route", () => {
     beforeEach(() => {
         cy.visit("/logout")
     })

@@ -3,24 +3,8 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
     position: fixed;
     background-color: red;
-    top: ${({ slideFrom }) => {
-        if (slideFrom === "top"){
-            return "calc(-100% - 5px)"
-        } else if (slideFrom === "bottom"){
-            return "calc(100% + 5px)"
-        } else{
-            return "0%"
-        }
-    }};
-    left: ${({ slideFrom }) => {
-        if (slideFrom === "left"){
-            return "calc(-100% - 5px)"
-        } else if (slideFrom === "right"){
-            return "calc(100% + 5px)"
-        } else{
-            return "0%"
-        }
-    }};
+    top: 0;
+    left: calc(-100% - 5px);
     width: 100vw;
     height: 100vh;
     z-index: 1000000;

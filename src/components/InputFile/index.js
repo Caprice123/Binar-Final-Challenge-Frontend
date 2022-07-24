@@ -10,7 +10,7 @@ const InputFile = ({ onChange }) => {
         inputFileRef.current.click()
     }
     return (
-        <Wrapper className='d-flex position-relative' onClick={onClick}>
+        <Wrapper className='d-flex position-relative' id="Image-Input" onClick={onClick}>
             <input ref={inputFileRef}
                     type='file'
                     className='d-none'

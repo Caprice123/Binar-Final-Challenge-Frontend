@@ -302,12 +302,14 @@ const InfoProfile = () => {
                     color="var(--redalert-font)" 
                     text={error} 
                     onClick={onCloseAlert} 
+                    id="error-message"
                     />
             <Alert active={flashMessage.length > 0} 
 					backgroundColor="var(--alert-success)" 
 					color="var(--white-color)" 
 					text={flashMessage} 
-					onClick={onCloseFlash} 
+					onClick={onCloseFlash}
+                    id="flash-message" 
 					/>
             
             <Navbar centeredText="Lengkapi Info Akun" />
@@ -331,7 +333,7 @@ const InfoProfile = () => {
 						placeholder="Nama" 
 						value={name} 
 						onChange={onChange}
-						required
+                        required
 						/>
                 <Dropdown text="Kota"
                             placeholder="Pilih Kota"
@@ -361,6 +363,7 @@ const InfoProfile = () => {
                                 textColor="var(--white-color)"
                                 onClick={onSubmit}
                                 className='my-4'
+                                id="Simpan"
                                 />
             </Content>
         </Wrapper>

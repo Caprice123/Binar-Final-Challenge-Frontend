@@ -94,6 +94,7 @@ const Dropdown = ({ text, placeholder, value, options, onSelect, required, elast
                             className="d-flex flex-column justify-content-center"
                             onClick={onSelected} 
                             data-value={name}
+                            id={name}
                             >
                                 { name }
                         </p>

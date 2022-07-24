@@ -294,7 +294,7 @@ const Home = () => {
 
     const helperRedirectUrl = (notification) => {
         const productId = notification.products.product_id
-        switch(notification.message){
+        switch(notification.title){
             case "Penawaran terkirim":
             case "Penawaran anda dalam negosiasi":
             case "Penawaran anda ditolak":

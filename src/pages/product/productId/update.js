@@ -403,11 +403,13 @@ const UpdateProduct = () => {
 									width="40%" 
 									color="var(--primary-purple-04)"
 									onClick={onPreview}
+									id="preview-button"
 									/>
 					<ActionButton text="Terbitkan"
 									width="40%"
 									color="var(--primary-purple-04)"
 									onClick={onSubmit}
+									id="submit-button"
 									/>
 				</div>
 			</Content>
@@ -420,7 +422,7 @@ const UpdateProduct = () => {
 						description={description}
 						onClose={onClosePreview}
 						actionButtons={[
-							<ActionButton text="Terbitakan"
+							<ActionButton text="Terbitkan"
                                             width="90%"
                                             color="var(--primary-purple-04)"
                                             onClick={onSubmit}
@@ -433,7 +435,7 @@ const UpdateProduct = () => {
                                             />
 						]}
 						mobileButton={
-							<ActionButton text="Terbitakan"
+							<ActionButton text="Terbitkan"
                                         width="calc(90% + 5px)"
                                         color="var(--primary-purple-04)"
                                         onClick={onSubmit}

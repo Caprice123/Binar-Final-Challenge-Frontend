@@ -22,9 +22,15 @@ const Preview = ({ active, images, name, price, category, owner, description, on
         window.addEventListener("resize", checkMobile)
         checkMobile()
     }, [])
+
+    useEffect(() => {
+        if (active){
+            window.scrollTo(0,0)
+        }
+    }, [active])
     
     return (
-        <Wrapper className={active ? "active" : ""}>
+        <Wrapper className={active ? "active" : ""} id="preview">
             <Content className="position-relative py-5">
                 <LeftSection className='d-flex justify-content-center'>
                     <div className="image-preview d-flex me-5 position-relative">
@@ -102,7 +108,7 @@ const Preview = ({ active, images, name, price, category, owner, description, on
                 </RightSection>
                 {
                     onClose && (
-                        <i className="fa-solid fa-xmark" 
+                        <i className="fa-solid fa-xmark" id="close-preview"
                             onClick={onClose}>
                         </i>
                     )

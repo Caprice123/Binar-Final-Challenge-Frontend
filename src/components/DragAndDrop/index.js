@@ -10,7 +10,7 @@ const DragAndDrop = ({ onDrop }) => {
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
     
     return (
-        <Wrapper className="d-flex justify-content-center align-items-center position-relative" {...getRootProps()}>
+        <Wrapper className="d-flex justify-content-center align-items-center position-relative" id="Drag-and-Drop" {...getRootProps()}>
             <input {...getInputProps()} />
             {
                 isDragActive ? (

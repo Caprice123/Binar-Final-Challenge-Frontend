@@ -259,7 +259,7 @@ const SoldProducts = () => {
 
     const helperRedirectUrl = (notification) => {
         const productId = notification.products.product_id
-        switch(notification.message){
+        switch(notification.title){
             case "Penawaran terkirim":
             case "Penawaran anda dalam negosiasi":
             case "Penawaran anda ditolak":
@@ -288,12 +288,14 @@ const SoldProducts = () => {
                     color="var(--redalert-font)" 
                     text={error}
                     onClick={onCloseAlertError}
+                    id="error-message"
                     />
             <Alert active={flashMessage.length > 0}
                     backgroundColor="var(--alert-success)"
                     color="var(--white-color)" 
                     text={flashMessage}
                     onClick={onClickAlert}
+                    id="flash-message"
                     />
             <Slider topic="Notifications" active={isSliderNotificationOn} slideFrom="left">
                 <div className="title d-flex justify-content-between py-4">
@@ -311,7 +313,7 @@ const SoldProducts = () => {
                                         productName={data.products.name}
                                         originalPrice={data.products.price}
                                         bidPrice={data.bids?.request_price}
-                                        onClick={(e) => onMarkAsRead(data)}
+                                        onClick={(e) => onMarkAsRead(e, data)}
                                         />
                         </div>
                     ))
@@ -375,17 +377,19 @@ const SoldProducts = () => {
                                                         text="Product"
                                                         icon={<i className="fa-solid fa-cube pe-2"></i>}
                                                         onClick={() => navigate(DAFTAR_JUAL_ROUTE)}
-
+                                                        id="daftar-jual-button"
                                                         />
                                             <ActionButton color={`${uri === "wishlist" ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}`} 
                                                         text="Diminati"
                                                         icon={<i className="fa-solid fa-heart pe-2"></i>}
                                                         onClick={() => navigate(WISHLIST_ROUTE)}
+                                                        id="wishlist-button"
                                                         />
                                             <ActionButton color={`${uri === "sold" ? "var(--primary-purple-04)" : "var(--primary-purple-01)"}`} 
                                                         text="Terjual"
                                                         icon={<i className="fa-solid fa-dollar-sign pe-2"></i>}
                                                         onClick={() => navigate(SOLD_PRODUCT_ROUTE)}
+                                                        id="sold-button"
                                                         />
                                         </div>
                                     )
@@ -396,7 +400,7 @@ const SoldProducts = () => {
                                         <div className='category'>
                                             <h5>Kategori</h5>
 
-                                            <Link to={DAFTAR_JUAL_ROUTE} className={`${uri === "daftar-jual" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={DAFTAR_JUAL_ROUTE} className={`${uri === "daftar-jual" ? "active" : ""} d-flex justify-content-between align-items-center`} id="daftar-jual">
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-cube"></i>
                                                     <p className='px-2'>Semua Product</p>
@@ -404,7 +408,7 @@ const SoldProducts = () => {
                                                 <i className="fa-solid fa-chevron-right"></i>
                                             </Link>
                                             <hr />
-                                            <Link to={WISHLIST_ROUTE} className={`${uri === "wishlist" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={WISHLIST_ROUTE} className={`${uri === "wishlist" ? "active" : ""} d-flex justify-content-between align-items-center`} id="wishlist">
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-heart"></i>
                                                     <p className='px-2'>Diminati</p>
@@ -412,7 +416,7 @@ const SoldProducts = () => {
                                                 <i className="fa-solid fa-chevron-right"></i>
                                             </Link>
                                             <hr />
-                                            <Link to={SOLD_PRODUCT_ROUTE} className={`${uri === "sold" ? "active" : ""} d-flex justify-content-between align-items-center`}>
+                                            <Link to={SOLD_PRODUCT_ROUTE} className={`${uri === "sold" ? "active" : ""} d-flex justify-content-between align-items-center`} id="sold">
                                                 <div className='d-flex align-items-center'>
                                                     <i className="fa-solid fa-dollar-sign"></i>
                                                     <p className='px-2'>Terjual</p>

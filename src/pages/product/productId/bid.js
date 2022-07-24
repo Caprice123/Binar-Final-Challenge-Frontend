@@ -347,12 +347,14 @@ const ProductBid = () => {
                     color="var(--redalert-font)"
                     text={error} 
                     onClick={onCloseAlert} 
+                    id="error-message"
                     />
             <Alert active={flashMessage.length > 0} 
                     backgroundColor="var(--alert-success)" 
                     color="var(--white-color)" 
                     text={flashMessage} 
-                    onClick={onCloseFlash} 
+                    onClick={onCloseFlash}
+                    id="flash-message" 
                     />
             
             <Navbar centeredText="Info Penawar" 
@@ -391,6 +393,7 @@ const ProductBid = () => {
                                                                             onClick={bid.status === "pending" 
                                                                             ? () => onRejectApproval(true)        
                                                                             : () => onUpdateStatusApproval(true)}
+                                                                            id={bid.status === "pending" ? "Tolak" : "Status"}
                                                                             />
                                                         <ActionButton text={bid.status === "pending" ? "Terima" : "Hubungi di WA"}
                                                                             width="35%"
@@ -399,6 +402,7 @@ const ProductBid = () => {
                                                                             onClick={bid.status === "pending" 
                                                                             ? () => onAcceptApproval(true) 
                                                                             : () => onCallByWA(bid.user.phone)}
+                                                                            id={bid.status === "pending" ? "Terima" : "Hubungi-di-WA"}
                                                                             />
                                                     </>
                                                 ) : (
@@ -433,12 +437,14 @@ const ProductBid = () => {
                                             width="45%"
                                             onClick={() => onRejectApproval(false)}
                                             style={{ padding: "5px 12px"}}
+                                            id="No-reject"
                                             />
                         <ActionButton text="Yes"
                                         color="var(--primary-purple-04)"
                                         width="45%"
                                         onClick={onReject}
                                         style={{ padding: "5px 12px"}}
+                                        id="Yes-reject"
                                         />
                     </div>
             </Popup>
@@ -467,6 +473,7 @@ const ProductBid = () => {
                                     color="var(--primary-purple-04)"
                                     onClick={onAccept}
                                     style={{ margin: "1.5rem 0", padding: "7.5px 12px"}}
+                                    id="Yes-accept"
                                     />
             </Popup>
              
@@ -494,6 +501,7 @@ const ProductBid = () => {
                                     color="var(--primary-purple-04)"
                                     onClick={onUpdateStatus}
                                     style={{ margin: "1.5rem 0", padding: "7.5px 12px"}}
+                                    id="update-status-button"
                                     />
             </Popup>
         

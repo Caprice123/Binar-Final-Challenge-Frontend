@@ -76,6 +76,7 @@ describe("Login route", () => {
         // redirect to home page
         cy.url().should('include', '/?search=&category=')
 
+        // waiting for api response
         cy.wait('@getCategories')
         cy.wait('@getProducts')
         cy.wait('@getNotification')

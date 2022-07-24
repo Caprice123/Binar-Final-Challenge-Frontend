@@ -34,7 +34,7 @@ describe("Register route", () => {
     // ERROR TEST CASE
     it('should show alert popup', () => {
         const NewUser = {
-            name: "kelvin",
+            name: "kelvin  cen",
             email: "kelvin@gmail.com",
             password: "kelvin123",
         }
@@ -63,22 +63,28 @@ describe("Register route", () => {
             expect(stub.getCall(1)).to.be.calledWith('Tolong isi email');
         })
 
-        
+        // assert window alert wrong email format
         cy.get("#Email").type("kelvin@")
         cy.get("#Email").type("{enter}").then(() => {
             expect(stub.getCall(2)).to.be.calledWith('Invalid email format');
         })
 
-
+        // inserting correct email format
         cy.get("#Email").clear()
         cy.get("#Email").type(NewUser.email)
+
+        // assert window alert no password
         cy.get("#Email").type("{enter}").then(() => {
             expect(stub.getCall(3)).to.be.calledWith('Tolong isi password');
         })
+        
+        // submitting password
         cy.get("#Password").type(NewUser.password).type("{enter}")
 
+        // waiting for mock api response
         cy.wait('@register')
 
+        // assert url redirect to login
         cy.url().should('include', '/login')
     })
 

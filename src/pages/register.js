@@ -202,7 +202,7 @@ const Registrasi = () => {
                                             />
                                     <ActiveButton width="100%"
                                                     color="var(--primary-purple-04)"
-                                                    text="Masuk"
+                                                    text="Register"
                                                     style={{ margin: "1.5rem 0" }}
                                                     onClick={onSubmit}
                                                     id="submit-btn"
