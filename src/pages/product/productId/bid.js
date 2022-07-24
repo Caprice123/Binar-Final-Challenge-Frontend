@@ -261,7 +261,8 @@ const ProductBid = () => {
     
     // onCallByWA for open new tab for a buyer phone number
     const onCallByWA = (phone) => {
-        window.open(`https://wa.me/${phone}`, '_blank', 'noopener,noreferrer')
+        const phoneNumber = "+62" + phone.slice(1)
+        window.open(`https://wa.me/${phoneNumber}`, '_blank', 'noopener,noreferrer')
     }
 
     // onChange for changing the updateStatus state everytime user click one of radio buttons
